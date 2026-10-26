@@ -68,6 +68,13 @@ Der Check prüft außerdem interne Links (müssen vorerst relativ sein), Sitemap
 - Schriften (Barlow) liegen lokal in `public/assets/fonts/` – keine Verbindung zu Google.
 - Ordner: `public/` = die Website (nur dieser Ordner wird ausgeliefert), `tools/` = Prüfskript, im Hauptordner `index.html` (Weiterleitung zur Startseite), Twitch-Server und Doku.
 
+## Veröffentlichen (GitHub + Vercel)
+
+- Repository: `github.com/CrazYSlayt/TFT-Esport` (privat), Vercel-Projekt importiert es, ausgeliefert wird nur `public/` (`vercel.json`).
+- Änderungen hochladen: **`Änderungen veröffentlichen.cmd`** doppelklicken – Vercel stellt sie danach automatisch live.
+- Solange `vercel.json` den Header `X-Robots-Tag: noindex, nofollow` setzt, ist die Seite für Suchmaschinen gesperrt.
+  Zum echten Start diesen Block entfernen.
+
 ## Offen vor dem Launch
 
 - Interne Links von `….html` auf saubere Adressen umstellen (`/news`), Vercel `cleanUrls`.
