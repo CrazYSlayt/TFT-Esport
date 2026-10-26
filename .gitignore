@@ -1,6 +1,8 @@
 # Twitch credentials - never commit
 twitch.config.json
+# Vercel (lokale Verknüpfung und Tokens)
+.vercel
+.env*
 Thumbs.db
 desktop.ini
 .DS_Store
-.vercel
