@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Nur Seiten, die in die Suche sollen (kein noindex). tools/seo-check.js prüft, dass jede Adresse existiert. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.tftesport.com/</loc></url>
+  <url><loc>https://www.tftesport.com/news</loc></url>
+  <url><loc>https://www.tftesport.com/cups</loc></url>
+  <url><loc>https://www.tftesport.com/twitch</loc></url>
+  <url><loc>https://www.tftesport.com/twitch/live-streams</loc></url>
+</urlset>

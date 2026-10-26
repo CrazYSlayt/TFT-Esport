@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TFT Live Streams – Kanäle &amp; Übertragungen | TFTEsport</title>
+  <meta name="description" content="TFT Live Streams auf Twitch: aktive Kanäle, offizielle Übertragungen, Co-Streams und kuratierte Creator-Empfehlungen." />
+  <link rel="canonical" href="https://www.tftesport.com/twitch" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="TFTEsport" />
+  <meta property="og:locale" content="de_DE" />
+  <meta property="og:title" content="TFT Live Streams – Kanäle &amp; Übertragungen | TFTEsport" />
+  <meta property="og:description" content="TFT Live Streams auf Twitch: aktive Kanäle, offizielle Übertragungen, Co-Streams und kuratierte Creator-Empfehlungen." />
+  <meta property="og:url" content="https://www.tftesport.com/twitch" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="theme-color" content="#f7f3ea" />
+  <link rel="icon" type="image/svg+xml" href="assets/brand/favicon.svg" />
+  <link rel="preload" href="assets/fonts/Barlow-800-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body data-page="twitch">
+  <header id="site-header"></header>
+
+  <main class="wrap">
+    <section class="page-head">
+      <p class="eyebrow">Live Streams</p>
+      <h1>TFT Live Streams</h1>
+      <p class="lead">Aktive TFT-Kanäle, offizielle Übertragungen und Creator-Empfehlungen – such dir einen gemütlichen Platz und schau mit.</p>
+    </section>
+
+    <section class="twitch-band" aria-labelledby="creators-title">
+      <div class="section-head">
+        <span class="twitch-mark"><span data-icon="twitch"></span></span>
+        <div>
+          <h2 id="creators-title">Kanalempfehlungen</h2>
+          <p class="section-sub">Creator mit Ranked-, Analyse- und Community-Inhalten – kuratiert und auch sichtbar, wenn sie gerade offline sind.</p>
+        </div>
+      </div>
+      <div class="grid-3 show-all" id="creators"></div>
+    </section>
+
+    <section class="section" aria-labelledby="broadcasts-title">
+      <div class="section-head">
+        <div>
+          <h2 id="broadcasts-title">Offizielle Übertragungen &amp; Co-Streams</h2>
+          <p class="section-sub">Offizielle Turnierübertragungen und bestätigte Co-Streams mit Termin und Kanal.</p>
+        </div>
+        <a class="link-arrow" href="cups.html">Alle Turniere<span data-icon="arrow"></span></a>
+      </div>
+      <div class="upcoming-list" id="broadcasts"></div>
+    </section>
+
+    <section class="section" aria-labelledby="live-title">
+      <div class="section-head">
+        <div>
+          <h2 id="live-title">Jetzt live auf Deutsch</h2>
+          <p class="section-sub">Aktuell aktive deutschsprachige TFT-Kanäle mit den meisten Zuschauern.</p>
+        </div>
+        <a class="link-arrow is-twitch" href="twitch/live-streams.html">Alle Live-Streams<span data-icon="arrow"></span></a>
+      </div>
+      <div id="live-now"></div>
+    </section>
+
+    <section class="section" aria-labelledby="plan-title">
+      <div class="section-head"><h2 id="plan-title">Geplanter Aufbau</h2></div>
+      <div class="plan">
+        <p class="plan-label"><span data-icon="info"></span>Geplant</p>
+        <ul>
+          <li>Aktuell aktive TFT-Kanäle auf Twitch</li>
+          <li>Offizielle Übertragungen und bestätigte Co-Streams</li>
+          <li>Creator mit Ranked-, Analyse- und Community-Inhalten</li>
+          <li>Kanalvorschau, Sprache, Beschreibung und Twitch-Link</li>
+          <li>Filter nach Sprache und Stream-Art</li>
+          <li>Kuratierte Kanalempfehlungen, auch wenn diese offline sind</li>
+        </ul>
+      </div>
+    </section>  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="assets/js/data.js"></script>
+
+  <script src="assets/data/turniere.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/twitch.js"></script>
+</body>
+</html>

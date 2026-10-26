@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TFT Turniere &amp; Cups – Kalender &amp; Anmeldung | TFTEsport</title>
+  <meta name="description" content="TFT Turniere und Cups: offizielle Wettbewerbe, regionale Turniere und Streamer-Cups nach Datum, Region und Rang filtern." />
+  <link rel="canonical" href="https://www.tftesport.com/cups" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="TFTEsport" />
+  <meta property="og:locale" content="de_DE" />
+  <meta property="og:title" content="TFT Turniere &amp; Cups – Kalender &amp; Anmeldung | TFTEsport" />
+  <meta property="og:description" content="TFT Turniere und Cups: offizielle Wettbewerbe, regionale Turniere und Streamer-Cups nach Datum, Region und Rang filtern." />
+  <meta property="og:url" content="https://www.tftesport.com/cups" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="theme-color" content="#f7f3ea" />
+  <link rel="icon" type="image/svg+xml" href="assets/brand/favicon.svg" />
+  <link rel="preload" href="assets/fonts/Barlow-800-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body data-page="cups">
+  <header id="site-header"></header>
+
+  <main class="wrap">
+    <section class="page-head">
+      <p class="eyebrow">Turniere</p>
+      <h1>TFT Turniere &amp; Cups</h1>
+      <p class="lead">Offizielle Wettbewerbe, regionale Turniere und kleinere Streamer-Cups – finde passende Termine nach Datum, Region und Rang.</p>
+    </section>
+
+    <div class="cups-toolbar">
+      <div class="seg" role="group" aria-label="Ansicht">
+        <button type="button" data-view="kalender" aria-pressed="true"><span data-icon="calendar"></span>Kalender</button>
+        <button type="button" data-view="liste" aria-pressed="false"><span data-icon="list"></span>Liste</button>
+      </div>
+      <span class="result-count" id="cups-count" aria-live="polite"></span>
+    </div>
+
+    <form class="cup-filters" id="cup-filters" aria-label="Turniere filtern">
+      <label class="field" id="range-field"><span>Zeitraum</span>
+        <select name="zeitraum">
+          <option value="kommend">Alle kommenden</option>
+          <option value="7">Nächste 7 Tage</option>
+          <option value="30">Nächste 30 Tage</option>
+          <option value="tag">Bestimmter Tag …</option>
+          <option value="alle">Auch vergangene</option>
+        </select>
+      </label>
+      <label class="field"><span>Region</span><select name="region" id="f-region"></select></label>
+      <label class="field"><span>Teilnahme</span><select name="teilnahme" id="f-req"></select></label>
+      <label class="field"><span>Art</span><select name="art" id="f-level"></select></label>
+      <label class="check"><input type="checkbox" name="offen" value="1" />Nur offene Anmeldung</label>
+      <div class="filter-foot">
+        <label class="field date-field" id="date-field"><span>Datum</span><input type="date" name="datum" /></label>
+        <button type="button" class="reset-btn" id="reset-filters">Filter zurücksetzen</button>
+      </div>
+    </form>
+
+    <section class="cups-results" id="cups-results" aria-label="Turniere"></section>
+
+    <section class="section" aria-labelledby="first-title">
+      <div class="plan-grid">
+        <div class="plan">
+          <p class="plan-label"><span data-icon="info"></span>Geplant</p>
+          <h3 id="first-title">Finde deinen ersten Cup</h3>
+          <ul>
+            <li>Einstieg mit Teilnahmehilfe: Wie finde ich einen passenden Cup, wie melde ich mich an, was brauche ich?</li>
+          </ul>
+        </div>
+        <div class="plan">
+          <p class="plan-label"><span data-icon="info"></span>Angebot</p>
+          <h3>Welche Turniere du hier findest</h3>
+          <ul>
+            <li>Offizielle Wettbewerbe</li>
+            <li>Regionale Turniere</li>
+            <li>Kleinere Streamer-Cups</li>
+            <li>Gegebenenfalls eigene Cups</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <p class="editor-note"><span data-icon="shield"></span>Alle Turniere trägt ausschließlich die Redaktion ein und prüft sie – Besucher erstellen keine Turniere. Die Anmeldung läuft direkt beim Veranstalter.</p>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/data/turniere.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/cups.js"></script>
+</body>
+</html>

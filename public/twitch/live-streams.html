@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alle TFT Live-Streams auf Twitch | TFTEsport</title>
+  <meta name="description" content="Alle TFT Live-Streams auf Twitch: nach Sprache filtern, nach Zuschauern sortiert und direkt auf der Seite anschauen." />
+  <link rel="canonical" href="https://www.tftesport.com/twitch/live-streams" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="TFTEsport" />
+  <meta property="og:locale" content="de_DE" />
+  <meta property="og:title" content="Alle TFT Live-Streams auf Twitch | TFTEsport" />
+  <meta property="og:description" content="Alle TFT Live-Streams auf Twitch: nach Sprache filtern, nach Zuschauern sortiert und direkt auf der Seite anschauen." />
+  <meta property="og:url" content="https://www.tftesport.com/twitch/live-streams" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="theme-color" content="#f7f3ea" />
+  <link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg" />
+  <link rel="preload" href="../assets/fonts/Barlow-800-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body data-page="streams">
+  <header id="site-header"></header>
+
+  <main class="wrap">
+    <nav class="crumbs" aria-label="Brotkrümel">
+      <a href="../index.html">Start</a><span data-icon="chevronRight"></span><a href="../twitch.html">Live Streams</a><span data-icon="chevronRight"></span><span>Alle Streams</span>
+    </nav>
+    <section class="page-head">
+      <p class="eyebrow">Live Streams</p>
+      <h1>Alle TFT-Streams auf Twitch</h1>
+      <p class="lead">Alle Teamfight-Tactics-Streams, die gerade auf Twitch laufen – die meisten Zuschauer zuerst. Ein Klick öffnet den Stream direkt hier.</p>
+    </section>
+
+    <div class="streams-bar">
+      <div class="live-summary" id="live-summary"><span class="rec-dot"></span>Streams werden geladen …</div>
+    </div>
+    <div id="source-note"></div>
+
+    <div class="lang-bar">
+      <div class="chips chips-boxed" id="lang-chips" role="group" aria-label="Nach Sprache filtern"></div>
+      <button type="button" class="chip" id="pros-only" aria-pressed="false" hidden>Nur Pros</button>
+    </div>
+
+    <section aria-labelledby="all-title">
+      <div class="section-head">
+        <h2 id="all-title">Alle TFT-Streams</h2>
+        <span class="result-count" id="grid-sub"></span>
+      </div>
+      <div class="stream-grid" id="stream-grid"></div>
+      <div class="load-more-wrap"><button type="button" class="btn btn-ghost" id="load-more" hidden>Mehr Streams</button></div>
+    </section>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="../assets/js/data.js"></script>
+
+  <script src="../assets/data/turniere.js"></script>
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/streams.js"></script>
+</body>
+</html>

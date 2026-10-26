@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Turniere bearbeiten – TFTEsport</title>
+  <!-- Eingabemaske für die Redaktion: liest public/assets/data/turniere.js und schreibt die Datei beim Speichern neu.
+       Liegt bewusst außerhalb von public/ und wird nicht veröffentlicht. Speichern direkt in die Datei: Chrome oder Edge. -->
+  <link rel="stylesheet" href="public/assets/css/fonts.css" />
+  <link rel="stylesheet" href="public/assets/css/style.css" />
+  <style>
+    body { background: var(--bg); }
+    .ed-top { position: sticky; top: 0; z-index: 20; background: var(--green-deep); color: #fff; }
+    .ed-top .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; min-height: 68px; }
+    .ed-top h1 { color: #fff; font-size: 24px; margin-right: auto; display: flex; align-items: center; gap: 10px; }
+    .ed-top h1 .crown { width: 32px; height: 27px; color: #fff; --crown-cut: var(--green-deep); }
+    .ed-status { font-size: 15px; color: #cfe0d6; }
+    .ed-status.dirty { color: var(--peach); font-weight: 700; }
+    .ed-top .btn-ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.4); }
+    .ed-top .btn-save { background: var(--apricot); color: #fff; }
+    .ed-top .btn-save:hover { background: var(--apricot-deep); }
+    .ed-main { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 24px; padding-top: 24px; padding-bottom: 60px; align-items: start; }
+    .ed-list { position: sticky; top: 92px; display: grid; gap: 10px; max-height: calc(100vh - 110px); overflow-y: auto; padding-right: 4px; }
+    .ed-list input { min-height: 42px; padding: 0 12px; border-radius: 11px; border: 1.5px solid var(--line-strong); background: var(--surface); }
+    .ed-group { margin: 8px 0 0; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+    .ed-item { display: grid; gap: 2px; width: 100%; text-align: left; padding: 10px 12px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface); cursor: pointer; }
+    .ed-item:hover { border-color: var(--green); }
+    .ed-item.sel { border-color: var(--green); background: var(--sage); }
+    .ed-item b { color: var(--green-deep); font-size: 16px; }
+    .ed-item small { color: var(--muted); font-size: 13px; }
+    .ed-item.warn small::after { content: ' · unvollständig'; color: var(--apricot-deep); font-weight: 700; }
+    .ed-form { display: grid; gap: 18px; }
+    .ed-card { display: grid; gap: 14px; padding: 20px 22px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); }
+    .ed-card h2 { font-size: 21px; display: flex; align-items: center; gap: 8px; }
+    .ed-card h2 .i { color: var(--apricot-deep); }
+    .ed-card.key { background: var(--sage); border-color: var(--sage-line); }
+    .ed-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .ed-row-3 { grid-template-columns: 2fr 1fr 1fr; }
+    .f { display: grid; gap: 6px; min-width: 0; }
+    .f > span { font-size: 14px; font-weight: 700; color: var(--green-deep); }
+    .f > small { color: var(--muted); font-size: 13px; }
+    .f input, .f select, .f textarea { width: 100%; min-height: 44px; padding: 8px 12px; border-radius: 11px; border: 1.5px solid var(--line-strong); background: var(--surface); font: inherit; font-size: 16px; color: var(--ink); }
+    .f textarea { min-height: 76px; resize: vertical; line-height: 1.45; }
+    .f input:focus, .f select:focus, .f textarea:focus { outline: none; border-color: var(--green); }
+    .f.req > span::after { content: ' *'; color: var(--apricot-deep); }
+    .dt { display: grid; grid-template-columns: 1fr 120px; gap: 8px; }
+    .days { display: grid; gap: 10px; }
+    .day { display: grid; grid-template-columns: 1.2fr 1fr 1fr 110px auto; gap: 8px; align-items: end; }
+    .day .icon-btn { width: 44px; height: 44px; }
+    .add-btn { justify-self: start; border: 1.5px dashed var(--line-strong); background: var(--surface); border-radius: 11px; padding: 9px 14px; font-weight: 700; color: var(--green-deep); cursor: pointer; }
+    .ed-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .btn-danger { background: var(--surface); color: #b3261e; border: 1.5px solid #e8b4b0; }
+    .ed-msg { display: none; }
+    .ed-msg.show { display: flex; }
+    .ed-msg ul { margin: 4px 0 0; padding-left: 18px; }
+    .ed-id { font-size: 13px; color: var(--muted); }
+    .ed-empty { padding: 40px; text-align: center; color: var(--muted); }
+    @media (max-width: 900px) { .ed-main { grid-template-columns: 1fr; } .ed-list { position: static; max-height: none; } .ed-row, .ed-row-3, .day { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header class="ed-top">
+    <div class="wrap">
+      <h1><svg class="crown" viewBox="0 0 48 40" aria-hidden="true"><path fill="currentColor" d="M24 2.5 30.5 15 40 6.5l-2.8 22.5H10.8L8 6.5 17.5 15z"/><path fill="currentColor" d="M10.5 32h27a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-27A1.5 1.5 0 0 1 9 36.5v-3a1.5 1.5 0 0 1 1.5-1.5z"/></svg>Turniere bearbeiten</h1>
+      <span class="ed-status" id="status">Alles gespeichert</span>
+      <a class="btn btn-ghost" href="public/cups.html" target="_blank" rel="noopener">Seite ansehen</a>
+      <button class="btn btn-save" type="button" id="save">Speichern</button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="notice ed-msg" id="msg" role="status"></div>
+  </div>
+
+  <main class="wrap ed-main">
+    <aside class="ed-list" aria-label="Turniere">
+      <button class="btn btn-primary" type="button" id="new">+ Neues Turnier</button>
+      <input type="search" id="find" placeholder="Turnier suchen …" aria-label="Turnier suchen" />
+      <div id="list"></div>
+    </aside>
+
+    <section id="editor" aria-live="polite"></section>
+  </main>
+
+  <script src="public/assets/js/data.js"></script>
+  <script src="public/assets/data/turniere.js"></script>
+  <script>
+  (function () {
+    const D = window.TFTE;
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+    const DRAFT = 'tftesport_turniere_entwurf';
+
+    // Feste Reihenfolge der Felder in der Datei
+    const KEYS = ['id', 'name', 'level', 'region', 'organizer', 'requirement', 'eligibility', 'rank', 'signupStart', 'signupDeadline',
+      'signupUrl', 'days', 'format', 'prize', 'streamUrl', 'info', 'sources', 'checked'];
+    const blank = () => ({ id: '', name: '', level: 'offiziell', region: 'emea', organizer: '', requirement: 'offen', eligibility: '', rank: '',
+      signupStart: '', signupDeadline: '', signupUrl: '', days: [{ from: '', to: '', label: '' }], format: '', prize: '', streamUrl: '', info: '',
+      sources: [], checked: '' });
+    const normalize = (c) => { const b = blank(), o = {}; KEYS.forEach((k) => { o[k] = c[k] !== undefined ? c[k] : b[k]; }); return o; };
+
+    let cups = (D.cups || []).map(normalize);
+    let sel = cups.length ? 0 : -1;
+    let dirty = false;
+
+    /* ---------- Entwurf: ungespeicherte Änderungen überleben ein versehentliches Schließen ---------- */
+    try {
+      const draft = JSON.parse(localStorage.getItem(DRAFT) || 'null');
+      if (draft && JSON.stringify(draft) !== JSON.stringify(cups)) {
+        message('info', `<span><strong>Ungespeicherte Änderungen gefunden.</strong> Du hattest Änderungen, die noch nicht gespeichert wurden.
+          <button type="button" class="reset-btn" id="restore">Wiederherstellen</button> <button type="button" class="reset-btn" id="discard">Verwerfen</button></span>`);
+        $('restore').onclick = () => { cups = draft.map(normalize); sel = cups.length ? 0 : -1; markDirty(); renderAll(); hideMsg(); };
+        $('discard').onclick = () => { localStorage.removeItem(DRAFT); hideMsg(); };
+      }
+    } catch (_) { /* kein Speicher – egal */ }
+
+    function markDirty() {
+      dirty = true;
+      $('status').textContent = 'Ungespeicherte Änderungen';
+      $('status').classList.add('dirty');
+      try { localStorage.setItem(DRAFT, JSON.stringify(cups)); } catch (_) { /* egal */ }
+    }
+    function markSaved(text) {
+      dirty = false;
+      $('status').textContent = text;
+      $('status').classList.remove('dirty');
+      try { localStorage.removeItem(DRAFT); } catch (_) { /* egal */ }
+    }
+    window.addEventListener('beforeunload', (e) => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+    function message(kind, html) { const m = $('msg'); m.innerHTML = html; m.className = `notice ed-msg show ${kind}`; m.scrollIntoView({ block: 'nearest' }); }
+    function hideMsg() { $('msg').className = 'notice ed-msg'; }
+
+    /* ---------- Hilfen ---------- */
+    const firstDay = (c) => (c.days || []).map((d) => d.from).filter(Boolean).sort()[0] || '';
+    const lastDay = (c) => (c.days || []).map((d) => (d.to || d.from)).filter(Boolean).sort().pop() || '';
+    const fmt = (iso) => (iso ? iso.slice(0, 10).split('-').reverse().join('.') : '–');
+    const slug = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ß/g, 'ss').replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    function problems(c) {
+      const p = [];
+      if (!c.name.trim()) p.push('Name fehlt');
+      if (!firstDay(c)) p.push('Mindestens ein Spieltag mit Datum fehlt');
+      if (c.signupDeadline && lastDay(c) && c.signupDeadline.slice(0, 10) > lastDay(c).slice(0, 10)) p.push('Anmeldeschluss liegt nach dem letzten Spieltag');
+      (c.days || []).forEach((d, i) => { if (d.from && d.to && d.to < d.from.slice(0, 10)) p.push(`Spieltag ${i + 1}: „bis“ liegt vor „von“`); });
+      if (!c.sources.length) p.push('Keine Quelle angegeben');
+      return p;
+    }
+
+    /* ---------- Liste ---------- */
+    function renderList() {
+      const q = $('find').value.trim().toLowerCase();
+      const now = today();
+      const order = cups.map((c, i) => ({ c, i })).filter(({ c }) => !q || c.name.toLowerCase().includes(q))
+        .sort((a, b) => (firstDay(a.c) || '9').localeCompare(firstDay(b.c) || '9'));
+      const item = ({ c, i }) => `<button type="button" class="ed-item ${i === sel ? 'sel' : ''} ${problems(c).length ? 'warn' : ''}" data-i="${i}">
+          <b>${esc(c.name || 'Neues Turnier')}</b><small>${fmt(firstDay(c))}${lastDay(c) && lastDay(c) !== firstDay(c) ? ` – ${fmt(lastDay(c))}` : ''}</small></button>`;
+      const coming = order.filter(({ c }) => !lastDay(c) || lastDay(c).slice(0, 10) >= now);
+      const past = order.filter(({ c }) => lastDay(c) && lastDay(c).slice(0, 10) < now);
+      $('list').innerHTML = (coming.length ? `<p class="ed-group">Kommend (${coming.length})</p>${coming.map(item).join('')}` : '') +
+        (past.length ? `<p class="ed-group">Vorbei (${past.length})</p>${past.map(item).join('')}` : '') ||
+        '<p class="ed-group">Keine Turniere</p>';
+    }
+    $('list').addEventListener('click', (e) => { const b = e.target.closest('[data-i]'); if (!b) return; sel = Number(b.dataset.i); renderAll(); window.scrollTo(0, 0); });
+    $('find').addEventListener('input', renderList);
+
+    /* ---------- Formular ---------- */
+    const opts = (list, v) => list.map((x) => `<option value="${x.id}" ${x.id === v ? 'selected' : ''}>${esc(x.label)}</option>`).join('');
+    const split = (v) => ({ d: (v || '').slice(0, 10), t: (v || '').slice(11, 16) });
+    const field = (name, label, value, { req, hint, type = 'text', area } = {}) => `<label class="f ${req ? 'req' : ''}"><span>${label}</span>
+        ${area ? `<textarea data-k="${name}" rows="${area}">${esc(value)}</textarea>` : `<input type="${type}" data-k="${name}" value="${esc(value)}" />`}
+        ${hint ? `<small>${hint}</small>` : ''}</label>`;
+    const dateTime = (name, label, value, hint) => { const v = split(value); return `<label class="f"><span>${label}</span>
+        <span class="dt"><input type="date" data-dt="${name}" data-part="d" value="${v.d}" /><input type="time" data-dt="${name}" data-part="t" value="${v.t}" aria-label="${label} Uhrzeit" /></span>
+        ${hint ? `<small>${hint}</small>` : ''}</label>`; };
+
+    function renderEditor() {
+      const box = $('editor');
+      if (sel < 0 || !cups[sel]) { box.innerHTML = '<div class="ed-card ed-empty">Wähle links ein Turnier aus oder lege ein neues an.</div>'; return; }
+      const c = cups[sel];
+      const p = problems(c);
+      box.innerHTML = `<div class="ed-form">
+        ${p.length ? `<div class="notice"><span><strong>Noch offen:</strong> ${p.map(esc).join(' · ')}</span></div>` : ''}
+
+        <div class="ed-card">
+          <h2>Grunddaten</h2>
+          ${field('name', 'Name des Turniers', c.name, { req: true })}
+          <div class="ed-row">
+            <label class="f req"><span>Art</span><select data-k="level">${opts(D.cupLevels, c.level)}</select></label>
+            <label class="f req"><span>Region</span><select data-k="region">${opts(D.regions, c.region)}</select></label>
+          </div>
+          ${field('organizer', 'Veranstalter', c.organizer, { hint: 'z. B. Riot Games oder Name des Streamers' })}
+          ${field('info', 'Kurzbeschreibung', c.info, { area: 2, hint: 'Ein bis zwei Sätze, erscheint oben auf der Turnierseite.' })}
+        </div>
+
+        <div class="ed-card key">
+          <h2>Die fünf Kernfragen</h2>
+          <label class="f req"><span>Teilnahme (für den Filter)</span><select data-k="requirement">${opts(D.requirements, c.requirement)}</select></label>
+          ${field('eligibility', 'Wer darf teilnehmen?', c.eligibility, { area: 2, hint: 'z. B. „Alle Spieler auf EUW mit Discord-Account“' })}
+          ${field('rank', 'Gibt es Rangbeschränkungen?', c.rank, { area: 2, hint: 'z. B. „Gold bis Diamant (Stichtag 01.11.)“ oder „Keine – alle Ränge zugelassen“' })}
+          <div class="ed-row">
+            ${dateTime('signupStart', 'Anmeldung ab', c.signupStart, 'Optional.')}
+            ${dateTime('signupDeadline', 'Wann endet die Anmeldung?', c.signupDeadline, 'Leer lassen, wenn es keine Anmeldung gibt. Uhrzeit optional, deutsche Zeit.')}
+          </div>
+          <div class="f"><span>Wann wird gespielt?</span>
+            <div class="days">${(c.days || []).map((d, i) => { const f = split(d.from); return `<div class="day">
+              <label class="f"><small>Bezeichnung (optional)</small><input type="text" data-day="${i}" data-part="label" value="${esc(d.label)}" placeholder="z. B. Woche 1" /></label>
+              <label class="f"><small>von</small><input type="date" data-day="${i}" data-part="from" value="${f.d}" /></label>
+              <label class="f"><small>bis (optional)</small><input type="date" data-day="${i}" data-part="to" value="${esc((d.to || '').slice(0, 10))}" /></label>
+              <label class="f"><small>Start (optional)</small><input type="time" data-day="${i}" data-part="time" value="${f.t}" /></label>
+              <button type="button" class="icon-btn" data-delday="${i}" aria-label="Spieltag entfernen" title="Spieltag entfernen">✕</button>
+            </div>`; }).join('')}</div>
+            <button type="button" class="add-btn" id="addday">+ Weitere Spieltage</button>
+          </div>
+          ${field('signupUrl', 'Wo meldet man sich an?', c.signupUrl, { type: 'url', hint: 'Link zur Anmeldung beim Veranstalter. Leer lassen, wenn nur Qualifizierte spielen.' })}
+        </div>
+
+        <div class="ed-card">
+          <h2>Weitere Infos</h2>
+          ${field('format', 'Format & Ablauf', c.format, { area: 3 })}
+          <div class="ed-row">
+            ${field('prize', 'Preisgeld', c.prize, { hint: 'Optional, z. B. „500 €“' })}
+            ${field('streamUrl', 'Link zur Übertragung', c.streamUrl, { type: 'url', hint: 'Optional, z. B. Twitch-Kanal' })}
+          </div>
+        </div>
+
+        <div class="ed-card">
+          <h2>Quelle &amp; Prüfung</h2>
+          <label class="f req"><span>Quellen des Veranstalters</span><textarea data-k="sources" rows="3">${esc(c.sources.join('\n'))}</textarea>
+            <small>Eine Adresse pro Zeile – Ankündigung, Regelwerk oder Turnierseite.</small></label>
+          <div class="ed-row">
+            ${field('checked', 'Zuletzt geprüft', c.checked, { type: 'date' })}
+            <div class="f"><span>&nbsp;</span><button type="button" class="btn btn-ghost" id="checkedtoday">Heute geprüft</button></div>
+          </div>
+        </div>
+
+        <div class="ed-actions">
+          ${c.id ? `<a class="btn btn-ghost" href="public/cups/turnier.html?id=${encodeURIComponent(c.id)}" target="_blank" rel="noopener">Turnierseite ansehen</a>` : ''}
+          <button type="button" class="btn btn-ghost" id="dup">Duplizieren</button>
+          <button type="button" class="btn btn-danger" id="del">Löschen</button>
+          <span class="ed-id">${c.id ? `ID: ${esc(c.id)}` : 'ID wird beim Speichern aus dem Namen erzeugt'}</span>
+        </div>
+      </div>`;
+    }
+
+    // Eingaben direkt ins Turnier übernehmen
+    $('editor').addEventListener('input', (e) => {
+      const c = cups[sel];
+      if (!c) return;
+      const el = e.target;
+      if (el.dataset.k) {
+        c[el.dataset.k] = el.dataset.k === 'sources' ? el.value.split('\n').map((s) => s.trim()).filter(Boolean) : el.value;
+      } else if (el.dataset.dt) {
+        const box = el.closest('.dt');
+        const d = box.querySelector('[data-part="d"]').value, t = box.querySelector('[data-part="t"]').value;
+        c[el.dataset.dt] = d ? d + (t ? `T${t}` : '') : '';
+      } else if (el.dataset.day) {
+        const row = el.closest('.day'), i = Number(el.dataset.day);
+        const from = row.querySelector('[data-part="from"]').value, time = row.querySelector('[data-part="time"]').value;
+        c.days[i] = { from: from ? from + (time ? `T${time}` : '') : '', to: row.querySelector('[data-part="to"]').value, label: row.querySelector('[data-part="label"]').value };
+      } else return;
+      markDirty();
+      renderList();
+    });
+    $('editor').addEventListener('change', () => { if (cups[sel]) { renderList(); } });
+    $('editor').addEventListener('click', (e) => {
+      const c = cups[sel];
+      if (!c) return;
+      if (e.target.id === 'addday') { c.days.push({ from: '', to: '', label: '' }); markDirty(); renderEditor(); return; }
+      if (e.target.dataset.delday) { c.days.splice(Number(e.target.dataset.delday), 1); if (!c.days.length) c.days.push({ from: '', to: '', label: '' }); markDirty(); renderEditor(); renderList(); return; }
+      if (e.target.id === 'checkedtoday') { c.checked = today(); markDirty(); renderEditor(); return; }
+      if (e.target.id === 'dup') {
+        const copy = JSON.parse(JSON.stringify(c)); copy.id = ''; copy.name = `${c.name} (Kopie)`;
+        cups.push(copy); sel = cups.length - 1; markDirty(); renderAll(); return;
+      }
+      if (e.target.id === 'del') {
+        if (!confirm(`„${c.name || 'Neues Turnier'}“ wirklich löschen? Das wird erst mit „Speichern“ endgültig.`)) return;
+        cups.splice(sel, 1); sel = cups.length ? 0 : -1; markDirty(); renderAll();
+      }
+    });
+    $('new').addEventListener('click', () => { cups.push(blank()); sel = cups.length - 1; markDirty(); renderAll(); window.scrollTo(0, 0); });
+
+    function renderAll() { renderList(); renderEditor(); }
+
+    /* ---------- Speichern ---------- */
+    function prepare() {
+      const used = new Set();
+      cups.forEach((c) => {
+        c.days = (c.days || []).filter((d) => d.from || d.to || d.label);
+        if (!c.id) {
+          const year = (firstDay(c) || today()).slice(0, 4);
+          let base = slug(`${c.name} ${year}`) || 'turnier', id = base, n = 2;
+          while (used.has(id) || cups.some((x) => x !== c && x.id === id)) id = `${base}-${n++}`;
+          c.id = id;
+        }
+        used.add(c.id);
+      });
+    }
+    function fileText() {
+      const list = cups.map(normalize).sort((a, b) => (firstDay(a) || '9').localeCompare(firstDay(b) || '9'));
+      return `/*\n * TFTEsport – Turniere. Diese Datei wird von „Turniere bearbeiten.html“ (Hauptordner) geschrieben.\n` +
+        ` * Von Hand ändern geht auch – Format siehe Kommentar in assets/js/data.js (cups).\n */\n` +
+        `window.TFTE.cups = ${JSON.stringify(list, null, 2)};\n`;
+    }
+
+    // Dateizugriff merken (IndexedDB), damit der Speicherort nur einmal gewählt werden muss
+    const idb = (mode, fn) => new Promise((res, rej) => {
+      const r = indexedDB.open('tftesport-editor', 1);
+      r.onupgradeneeded = () => r.result.createObjectStore('h');
+      r.onerror = () => rej(r.error);
+      r.onsuccess = () => { const tx = r.result.transaction('h', mode); const q = fn(tx.objectStore('h')); tx.oncomplete = () => res(q && q.result); tx.onerror = () => rej(tx.error); };
+    });
+    const getHandle = () => idb('readonly', (s) => s.get('turniere')).catch(() => null);
+    const putHandle = (h) => idb('readwrite', (s) => s.put(h, 'turniere')).catch(() => null);
+
+    function download(text) {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([text], { type: 'text/javascript' }));
+      a.download = 'turniere.js';
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+      markSaved('Heruntergeladen – Datei noch ersetzen');
+      message('info', '<span><strong>Datei heruntergeladen.</strong> Dein Browser kann nicht direkt speichern. Bitte die heruntergeladene <b>turniere.js</b> nach <b>TFT Esport › public › assets › data</b> kopieren und die alte Datei ersetzen. Einfacher geht es mit Chrome oder Edge.</span>');
+    }
+
+    $('save').addEventListener('click', async () => {
+      const bad = cups.map((c) => ({ c, p: problems(c).filter((x) => x !== 'Keine Quelle angegeben') })).filter((x) => x.p.length);
+      if (bad.length) {
+        message('', `<span><strong>Noch nicht gespeichert.</strong> Bitte zuerst ergänzen:<ul>${bad.map(({ c, p }) => `<li><b>${esc(c.name || 'Neues Turnier')}</b>: ${p.map(esc).join(', ')}</li>`).join('')}</ul></span>`);
+        return;
+      }
+      prepare();
+      const text = fileText();
+      if (!window.showSaveFilePicker) { download(text); renderAll(); return; }
+      try {
+        let h = await getHandle();
+        if (h && (await h.requestPermission({ mode: 'readwrite' })) !== 'granted') h = null;
+        if (!h) {
+          message('info', '<span><strong>Einmalig:</strong> Wähle im Fenster den Ordner <b>TFT Esport › public › assets › data</b> und dort die Datei <b>turniere.js</b> zum Ersetzen.</span>');
+          h = await window.showSaveFilePicker({ suggestedName: 'turniere.js', types: [{ description: 'Turnierdaten', accept: { 'text/javascript': ['.js'] } }] });
+          if (h.name !== 'turniere.js') { message('', '<span><strong>Falsche Datei.</strong> Bitte genau <b>turniere.js</b> im Ordner public › assets › data wählen.</span>'); return; }
+          await putHandle(h);
+        }
+        const w = await h.createWritable();
+        await w.write(text);
+        await w.close();
+        hideMsg();
+        markSaved(`Gespeichert um ${new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}`);
+        renderAll();
+      } catch (err) {
+        if (err && err.name === 'AbortError') { hideMsg(); return; }
+        download(text);
+        renderAll();
+      }
+    });
+
+    renderAll();
+  })();
+  </script>
+</body>
+</html>

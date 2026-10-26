@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TFT News – Meldungen, Turniere &amp; Szene | TFTEsport</title>
+  <meta name="description" content="TFT News auf Deutsch: offizielle Meldungen, Turniere und Ergebnisse, Twitch-Szene und verständliche Erklärungen." />
+  <link rel="canonical" href="https://www.tftesport.com/news" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="TFTEsport" />
+  <meta property="og:locale" content="de_DE" />
+  <meta property="og:title" content="TFT News – Meldungen, Turniere &amp; Szene | TFTEsport" />
+  <meta property="og:description" content="TFT News auf Deutsch: offizielle Meldungen, Turniere und Ergebnisse, Twitch-Szene und verständliche Erklärungen." />
+  <meta property="og:url" content="https://www.tftesport.com/news" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="theme-color" content="#f7f3ea" />
+  <link rel="icon" type="image/svg+xml" href="assets/brand/favicon.svg" />
+  <link rel="preload" href="assets/fonts/Barlow-800-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body data-page="news">
+  <header id="site-header"></header>
+
+  <main class="wrap">
+    <section class="page-head">
+      <p class="eyebrow">News</p>
+      <h1>TFT News aus der Szene</h1>
+      <p class="lead">Offizielle Meldungen, Turniere, Neues aus der Twitch-Szene und Orientierung – kurz eingeordnet, gut lesbar.</p>
+    </section>
+
+    <section class="section-intro" aria-labelledby="areas-title">
+      <div class="section-head"><h2 id="areas-title">Was du hier findest</h2></div>
+      <div class="plan-grid plan-grid-4">
+        <div class="plan">
+          <span class="tag tag-offiziell">Offiziell</span>
+          <h3>Offizielle Meldungen</h3>
+          <ul><li>Wichtige Informationen von Riot, zusammengefasst mit Originalquelle</li></ul>
+        </div>
+        <div class="plan">
+          <span class="tag tag-turniere">Turniere</span>
+          <h3>Turniere &amp; Ergebnisse</h3>
+          <ul><li>Ankündigungen, Qualifikationen, Änderungen und Rückblicke</li></ul>
+        </div>
+        <div class="plan">
+          <span class="tag tag-szene">Twitch &amp; Szene</span>
+          <h3>Twitch &amp; Szene</h3>
+          <ul><li>Creator-News, Aktionen und besondere TFT-Momente</li></ul>
+        </div>
+        <div class="plan">
+          <span class="tag tag-orientierung">Orientierung</span>
+          <h3>Orientierung</h3>
+          <ul><li>Verständliche Erklärungen zu Wettbewerben und Teilnahme</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="filter-bar">
+      <div class="chips" id="news-filter" role="group" aria-label="Nach Kategorie filtern"></div>
+      <span class="result-count" id="news-count" aria-live="polite"></span>
+    </div>
+
+    <section aria-label="Artikel">
+      <div class="news-grid" id="news-list"></div>
+    </section>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="assets/js/data.js"></script>
+
+  <script src="assets/data/turniere.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/news.js"></script>
+</body>
+</html>

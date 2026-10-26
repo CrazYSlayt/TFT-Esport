@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TFT News, Turniere &amp; Live Streams – TFTEsport</title>
+  <meta name="description" content="TFT News, Turniere, Live Matches und Twitch-Streams an einem Ort: dein gemütlicher Treffpunkt für Spieler und Zuschauer." />
+  <link rel="canonical" href="https://www.tftesport.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="TFTEsport" />
+  <meta property="og:locale" content="de_DE" />
+  <meta property="og:title" content="TFT News, Turniere &amp; Live Streams – TFTEsport" />
+  <meta property="og:description" content="TFT News, Turniere, Live Matches und Twitch-Streams an einem Ort: dein gemütlicher Treffpunkt für Spieler und Zuschauer." />
+  <meta property="og:url" content="https://www.tftesport.com/" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="theme-color" content="#f7f3ea" />
+  <link rel="icon" type="image/svg+xml" href="assets/brand/favicon.svg" />
+  <link rel="preload" href="assets/fonts/Barlow-800-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"TFTEsport","url":"https://www.tftesport.com/","inLanguage":"de"},{"@type":"Organization","name":"TFTEsport","url":"https://www.tftesport.com/","parentOrganization":{"@type":"Organization","name":"TFTClimb","url":"https://www.tftclimb.com/"}}]}</script>
+</head>
+<body data-page="home">
+  <header id="site-header"></header>
+
+  <main class="wrap">
+    <!-- Titelzeile: kompakt, rechts der nächste Termin -->
+    <section class="home-head">
+      <div class="home-title">
+        <h1>Gute Games. <span class="accent">Gute Gesellschaft.</span></h1>
+        <p class="lead">Dein Platz in der TFT-Szene: News lesen, Turniere entdecken und zusammen TFT schauen.</p>
+      </div>
+      <a class="next-tile" id="next-tile" href="cups.html"></a>
+    </section>
+    <div class="chips home-chips" id="news-chips" role="group" aria-label="News filtern"></div>
+
+    <!-- Einstieg: Titelstory · zwei Artikel · Was steht an? -->
+    <div class="home-hero">
+      <div id="story"></div>
+      <div class="featured" id="featured"></div>
+      <aside class="widget" aria-labelledby="upcoming-title">
+        <div class="widget-head">
+          <div>
+            <h2 id="upcoming-title">Was steht an?</h2>
+            <p>Kommende Turniere mit Anmeldefristen</p>
+          </div>
+          <span data-mascot="widget-mascot"></span>
+        </div>
+        <div class="widget-body">
+          <div class="seg seg-sm" role="group" aria-label="Turniere filtern">
+            <button type="button" data-tab="kommend" aria-pressed="true">Kommend</button>
+            <button type="button" data-tab="offen" aria-pressed="false">Anmeldung offen</button>
+          </div>
+          <div class="upcoming-list" id="upcoming-list"></div>
+          <a class="btn btn-primary btn-block" href="cups.html?ansicht=kalender">Zum Turnierkalender<span data-icon="arrow"></span></a>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Aktuelle News -->
+    <section class="section" aria-labelledby="news-title">
+      <div class="section-head">
+        <h2 class="label-head" id="news-title">Neues aus der Szene</h2>
+        <a class="link-arrow" href="news.html">Alle News<span data-icon="arrow"></span></a>
+      </div>
+      <div class="grid-5" id="home-news"></div>
+    </section>
+
+    <!-- Auf einen Blick: Live Matches, Livestats, Wochenüberblick, Anmeldeschlüsse -->
+    <section class="section" aria-labelledby="glance-title">
+      <div class="section-head">
+        <h2 class="label-head" id="glance-title">TFT auf einen Blick</h2>
+      </div>
+      <div class="glance-grid">
+        <div class="panel">
+          <div class="panel-head"><h3>Anmeldeschlüsse</h3><span>Turniere, bei denen du dich noch anmelden kannst</span></div>
+          <div id="deadlines"></div>
+          <a class="link-arrow" href="cups.html?offen=1">Alle offenen Anmeldungen<span data-icon="arrow"></span></a>
+        </div>
+        <div class="plan">
+          <p class="plan-label"><span data-icon="info"></span>Geplant</p>
+          <h3>Live Matches</h3>
+          <ul>
+            <li>Laufende und bevorstehende Turnier-Lobbys</li>
+            <li>Wettbewerb, Spielphase, Teilnehmer und Startzeit</li>
+            <li>Links zur Übertragung und zur Turnierseite</li>
+          </ul>
+          <a class="link-arrow" href="live-matches.html">Zu Live Matches<span data-icon="arrow"></span></a>
+        </div>
+        <div class="plan">
+          <p class="plan-label"><span data-icon="info"></span>Geplant</p>
+          <h3>Diese Woche in TFT</h3>
+          <ul>
+            <li>Wochenüberblick: die wichtigsten News, Turniere und Momente der Woche auf einen Blick</li>
+          </ul>
+        </div>
+        <div class="plan">
+          <p class="plan-label"><span data-icon="info"></span>Geplant</p>
+          <h3>Livestats von Turnierspielen</h3>
+          <ul>
+            <li>Aktueller Stand und Ergebnisse, sofern zuverlässig verfügbar</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Aktive Streams -->
+    <section class="twitch-band" aria-labelledby="twitch-title">
+      <div class="section-head">
+        <span class="twitch-mark"><span data-icon="twitch"></span></span>
+        <div>
+          <h2 id="twitch-title">Mach’s dir gemütlich. TFT läuft.</h2>
+          <p class="section-sub">Aktive TFT-Streams, Creator und Co-Streams – ein guter Platz zum Zuschauen.</p>
+        </div>
+        <a class="link-arrow is-twitch" href="twitch.html">Alle Live Streams<span data-icon="arrow"></span></a>
+      </div>
+      <div class="grid-3" id="home-creators"></div>
+    </section>
+
+    <!-- Selbst mitspielen -->
+    <section class="cta-band" aria-labelledby="cta-title">
+      <span data-icon="trophy"></span>
+      <div>
+        <h2 id="cta-title">Lieber selbst in die Lobby?</h2>
+        <p>Vom entspannten Community-Cup bis zum nächsten Schritt im Competitive.</p>
+      </div>
+      <a class="btn btn-primary" href="cups.html">Turniere entdecken<span data-icon="arrow"></span></a>
+    </section>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/data/turniere.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/home.js"></script>
+</body>
+</html>

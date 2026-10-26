@@ -1,0 +1,6 @@
+# Twitch credentials - never commit
+twitch.config.json
+Thumbs.db
+desktop.ini
+.DS_Store
+.vercel

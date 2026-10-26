@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Vorlage für Artikel: Datei kopieren nach news/<slug>.html, Platzhalter ersetzen, noindex entfernen,
+       canonical/og:url auf die neue Adresse setzen und den Artikel in assets/js/data.js (articles) eintragen.
+       Regeln: title ≤ 60 Zeichen mit Keyword vorne, description ≤ 134 mit Keyword, genau eine sichtbare H1 ≤ 54.
+       Strukturierte Daten für echte Artikel (in den <head> übernehmen, Platzhalter ersetzen):
+       <script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","headline":"…","description":"…",
+       "datePublished":"2026-…","dateModified":"2026-…","author":{"@type":"Person","name":"…"},"image":"https://www.tftesport.com/assets/img/news/….webp",
+       "publisher":{"@type":"Organization","name":"TFTEsport","url":"https://www.tftesport.com/"},"mainEntityOfPage":"https://www.tftesport.com/news/…"}</script> -->
+  <title>Artikelvorlage | TFTEsport</title>
+  <meta name="description" content="Vorlage für TFT News-Artikel auf TFTEsport: Aufbau mit Kategorie, Schlagzeile, Teaser, Titelbild, Text und Quelle." />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="canonical" href="https://www.tftesport.com/news/vorlage" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="TFTEsport" />
+  <meta property="og:locale" content="de_DE" />
+  <meta property="og:title" content="Artikelvorlage | TFTEsport" />
+  <meta property="og:description" content="Vorlage für TFT News-Artikel auf TFTEsport: Aufbau mit Kategorie, Schlagzeile, Teaser, Titelbild, Text und Quelle." />
+  <meta property="og:url" content="https://www.tftesport.com/news/vorlage" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="theme-color" content="#f7f3ea" />
+  <link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg" />
+  <link rel="preload" href="../assets/fonts/Barlow-800-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body data-page="news">
+  <header id="site-header"></header>
+
+  <main class="wrap">
+    <nav class="crumbs" aria-label="Brotkrümel">
+      <a href="../index.html">Start</a><span data-icon="chevronRight"></span><a href="../news.html">News</a><span data-icon="chevronRight"></span><span>Artikelvorlage</span>
+    </nav>
+
+    <div class="notice template-note"><span data-icon="info"></span><span><strong>Vorlage.</strong> So ist ein Artikel aufgebaut. Alle Felder mit gestricheltem Rahmen sind Platzhalter und werden beim Anlegen eines Artikels ersetzt.</span></div>
+
+    <div class="layout-aside">
+      <article class="article">
+        <header class="article-head">
+          <span class="tag"><span class="ph">Kategorie</span></span>
+          <h1><span class="ph">Platzhalter: Schlagzeile des Artikels</span></h1>
+          <p class="article-teaser"><span class="ph">Teaser: ein bis zwei Sätze, die sagen, worum es geht und warum es für Spieler und Zuschauer wichtig ist.</span></p>
+          <div class="byline">
+            <span><span data-icon="users"></span><span class="ph">Autor</span></span>
+            <span><span data-icon="calendar"></span><span class="ph">TT.MM.JJJJ</span></span>
+            <span><span data-icon="clock"></span><span class="ph">X Min. Lesezeit</span></span>
+          </div>
+        </header>
+
+        <figure class="figure">
+          <div class="ph-img" role="img" aria-label="Bildplatzhalter: Titelbild 16:9"><span><span data-icon="image"></span>Titelbild · 16:9</span></div>
+          <figcaption><span class="ph">Bildunterschrift</span> · Bild: <span class="ph">Quelle / Rechteinhaber</span></figcaption>
+        </figure>
+
+        <div class="prose">
+          <p><span class="ph">Einstieg: Was ist passiert? Die wichtigste Information zuerst – kurz, klar und ohne Fachchinesisch, damit auch Einsteiger mitkommen.</span></p>
+          <p><span class="ph">Einordnung: Was bedeutet das für Ranked, Turniere oder die Szene? Hier ist Platz für Hintergrund und Zusammenhänge.</span></p>
+          <h2><span class="ph">Zwischenüberschrift</span></h2>
+          <p><span class="ph">Weiterer Absatz mit Details, Zahlen oder Stimmen aus der Community.</span></p>
+          <blockquote><span class="ph">Zitat aus einer offiziellen Quelle oder von einer Person aus der Szene.</span></blockquote>
+          <div class="ph-img embed-ph" role="img" aria-label="Platzhalter: Einbettung"><span><span data-icon="play"></span>Optional: Clip, Video oder Social-Post</span></div>
+          <p><span class="ph">Abschluss: Wie geht es weiter? Termine, Links oder ein Hinweis auf passende Turniere und Streams.</span></p>
+          <div class="source-box">
+            <b>Quellen</b>
+            <span><span class="ph">Originalquelle mit Link (z. B. offizielle Riot-Meldung)</span></span>
+          </div>
+        </div>
+      </article>
+
+      <aside class="aside-card" aria-labelledby="more-title">
+        <h2 id="more-title">Verwandte Inhalte</h2>
+        <div class="empty empty-tight empty-on-sage">
+          <span class="empty-ic"><span data-icon="news"></span></span>
+          <div>
+            <p class="empty-title">Noch keine verwandten Inhalte</p>
+            <p class="empty-text">Hier erscheinen später passende Artikel, Turniere, Spieler und Übertragungen.</p>
+          </div>
+        </div>
+        <a class="btn btn-primary btn-block" href="../news.html">Alle News<span data-icon="arrow"></span></a>
+      </aside>
+    </div>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="../assets/js/data.js"></script>
+
+  <script src="../assets/data/turniere.js"></script>
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

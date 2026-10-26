@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Detailseite für alle Turniere: liest das Turnier über ?id=… aus assets/data/turniere.js.
+       noindex, solange die Seite per Skript gefüllt wird; beim Live-Gang erzeugen wir pro Turnier eine eigene Seite mit festen Kopfdaten. -->
+  <title>TFT Turnier – Details | TFTEsport</title>
+  <meta name="description" content="TFT Turnier im Detail: wer teilnehmen darf, Rangbeschränkung, Anmeldeschluss, Spieltermine und Anmeldelink." />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="canonical" href="https://www.tftesport.com/cups/turnier" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="TFTEsport" />
+  <meta property="og:locale" content="de_DE" />
+  <meta property="og:title" content="TFT Turnier – Details | TFTEsport" />
+  <meta property="og:description" content="TFT Turnier im Detail: wer teilnehmen darf, Rangbeschränkung, Anmeldeschluss, Spieltermine und Anmeldelink." />
+  <meta property="og:url" content="https://www.tftesport.com/cups/turnier" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="theme-color" content="#f7f3ea" />
+  <link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg" />
+  <link rel="preload" href="../assets/fonts/Barlow-800-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body data-page="cups">
+  <header id="site-header"></header>
+
+  <main class="wrap">
+    <nav class="crumbs" aria-label="Brotkrümel">
+      <a href="../index.html">Start</a><span data-icon="chevronRight"></span><a href="../cups.html">Turniere</a><span data-icon="chevronRight"></span><span id="crumb-name">Turnier</span>
+    </nav>
+
+    <div class="layout-aside">
+      <article>
+        <header class="article-head">
+          <div class="byline" id="cup-tags"></div>
+          <h1 id="cup-name">Turnier</h1>
+          <p class="article-teaser" id="cup-info"></p>
+        </header>
+
+        <section class="glance" aria-labelledby="glance-title">
+          <h2 id="glance-title">Das Wichtigste auf einen Blick</h2>
+          <div id="cup-facts"></div>
+        </section>
+
+        <div class="prose" id="cup-body"></div>
+      </article>
+
+      <aside class="aside-card" aria-labelledby="signup-title" id="cup-aside">
+        <h2 id="signup-title">Anmeldung</h2>
+      </aside>
+    </div>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/data/turniere.js"></script>
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/turnier.js"></script>
+</body>
+</html>
