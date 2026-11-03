@@ -66,8 +66,8 @@ p { margin: 0; }
 :focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; border-radius: 6px; }
 
 .i { width: 20px; height: 20px; flex: none; }
-/* Breite wie dota2news.com: fast volle Fensterbreite mit ~56 px Rand */
-.wrap { max-width: 1900px; margin: 0 auto; padding: 0 56px; }
+/* Inhalt höchstens 1240 px breit – links und rechts bleibt auf großen Bildschirmen Platz für Werbeflächen */
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
 main.wrap { padding-bottom: 56px; }
 
 /* ---------- Knöpfe und Links ---------- */
@@ -118,12 +118,7 @@ main.wrap { padding-bottom: 56px; }
 .tag-solid { background: var(--gold); color: var(--green-deep); }
 
 /* ---------- Header ---------- */
-.site-header { display: block; min-height: 113px; border-bottom: 1px solid var(--line); background: var(--bg); }
-.topstrip { border-bottom: 1px solid var(--line); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
-.topstrip .wrap { display: flex; justify-content: space-between; align-items: center; min-height: 36px; gap: 16px; }
-.topstrip b { font-weight: 700; color: var(--green-deep); }
-.topstrip a { display: inline-flex; align-items: center; gap: 4px; color: var(--gold-deep); font-weight: 700; text-decoration: none; letter-spacing: .04em; text-transform: none; font-size: 14px; }
-.topstrip a .i { width: 14px; height: 14px; }
+.site-header { display: block; min-height: 77px; border-bottom: 1px solid var(--line); background: var(--bg); }
 
 .header-main { display: flex; align-items: center; gap: 24px; min-height: 76px; }
 .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--green-deep); }
@@ -200,7 +195,7 @@ body.search-open .search-overlay { display: block; }
 .janna-tablet { --jr: 25%; --jl: 20%; }
 .janna-traurig { --jr: 11%; --jl: 19%; }
 .janna-ueberlegen { --jr: 8%; --jl: 28%; }
-:root { --edge: 44px; }   /* Platz bis zum Fensterrand: so weit darf Janna hinaus */
+:root { --edge: 40px; }   /* so weit darf Janna seitlich hinaus (bleibt vor den Werbeflächen) */
 body { overflow-x: clip; }
 
 /* Startseite: Begrüßung – rechts eine hellgrüne Fläche mit Kennzahlen, Janna am rechten Rand */
@@ -579,8 +574,28 @@ h1 .ph, h2 .ph, h3 .ph { font-weight: inherit; }
 .cta-band p { color: var(--ink-soft); margin-top: 4px; }
 .cta-band .btn { margin-left: auto; }
 
+/* ---------- Werbeflächen links und rechts (nur breite Bildschirme) ----------
+   Inhalt 1240 px + 2 × (Fläche + 20 px Abstand) + Rand zum Fenster. Unter 1640 px Fensterbreite keine Flächen. */
+.ad-rail { position: fixed; top: 100px; z-index: 1; display: none; width: 160px; height: 600px; }
+.ad-left { right: calc(50% + 640px); }
+.ad-right { left: calc(50% + 640px); }
+.ad-slot {
+  display: grid; place-content: center; justify-items: center; gap: 6px; height: 100%; padding: 12px; text-align: center;
+  border-radius: var(--radius); border: 1.5px dashed var(--line-strong); background: var(--surface-2); color: var(--muted);
+}
+.ad-slot span { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.ad-slot small { display: grid; gap: 2px; font-size: 13px; }
+.ad-slot b { color: var(--ink-soft); }
+.ad-300 { display: none; }
+@media (min-width: 1640px) { .ad-rail { display: block; } }
+@media (min-width: 1880px) {
+  .ad-rail { width: 300px; }
+  .ad-160 { display: none; }
+  .ad-300 { display: inline; }
+}
+
 /* ---------- Footer ---------- */
-.site-footer { display: block; margin-top: 96px; background: var(--green-deep); color: #e6ece6; --crown-cut: var(--green-deep); }
+.site-footer { position: relative; z-index: 2; display: block; margin-top: 96px; background: var(--green-deep); color: #e6ece6; --crown-cut: var(--green-deep); }
 .site-footer .brand, .site-footer .crown { color: #fff; }
 .site-footer .brand-word { font-size: 24px; }
 .site-footer .crown { width: 36px; height: 30px; }
@@ -746,9 +761,6 @@ body.modal-open .modal-overlay { display: grid; }
 .page-head .btn { justify-self: start; margin-top: 6px; }
 
 /* ---------- Responsive ---------- */
-@media (min-width: 1500px) {
-  .cup-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
 @media (max-width: 1280px) {
   :root { --edge: 24px; }
   .wrap { padding: 0 32px; }
@@ -802,8 +814,7 @@ body.modal-open .modal-overlay { display: grid; }
   :root { --edge: 10px; }
   .wrap { padding: 0 16px; }
   body { font-size: 16.5px; }
-  .site-header { min-height: 101px; }
-  .topstrip .wrap { min-height: 32px; font-size: 11px; }
+  .site-header { min-height: 69px; }
   .header-main { min-height: 68px; gap: 10px; }
   .header-actions .divider, .header-actions .btn { display: none; }
   .brand { gap: 8px; }

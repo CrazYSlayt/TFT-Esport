@@ -383,10 +383,6 @@
     const section = page === 'streams' ? 'twitch' : page;
     el.className = 'site-header';
     el.innerHTML = `
-      <div class="topstrip"><div class="wrap">
-        <span>Zuhause im <b>${esc(D.site.network.name)} Network</b></span>
-        <a href="${D.site.network.url}" target="_blank" rel="noopener">${esc(D.site.network.name)}${icon('external')}</a>
-      </div></div>
       <div class="wrap header-main">
         <button class="icon-btn burger" type="button" aria-label="Menü öffnen" data-open-drawer>${icon('menu')}</button>
         ${brand()}
@@ -471,6 +467,18 @@
     });
   }
 
+  /* ---------- Werbeflächen links und rechts neben dem Inhalt ----------
+     Nur auf breiten Bildschirmen sichtbar (ab 1640 px: 160 × 600, ab 1880 px: 300 × 600), siehe CSS „Werbeflächen“.
+     Bis echte Banner eingebunden sind, stehen dort beschriftete Platzhalter. AD_PLACEHOLDERS = false blendet sie aus. */
+  const AD_PLACEHOLDERS = true;
+  function renderAdRails() {
+    if (!AD_PLACEHOLDERS) return;
+    const slot = (side) => `<aside class="ad-rail ad-${side}" aria-label="Werbefläche">
+        <div class="ad-slot"><span>Anzeige</span><small>Werbefläche <b class="ad-160">160 × 600</b><b class="ad-300">300 × 600</b></small></div>
+      </aside>`;
+    document.body.insertAdjacentHTML('beforeend', slot('left') + slot('right'));
+  }
+
   /* ---------- Footer: Marke, Spalten, Rechtszeile – Janna steht rechts und schaut oben heraus ---------- */
   function renderFooter() {
     const el = document.getElementById('site-footer');
@@ -514,5 +522,6 @@
   renderDrawer();
   renderSearch();
   renderFooter();
+  renderAdRails();
   initWatch();
 })();
