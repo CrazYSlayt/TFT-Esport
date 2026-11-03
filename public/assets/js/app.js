@@ -307,11 +307,11 @@
 
   /* ---------- Navigation ---------- */
   const NAV = [
-    { id: 'news', href: link('news.html'), label: 'News' },
+    { id: 'cups', href: link('cups.html'), label: 'Turniere' },
     { id: 'matches', href: link('live-matches.html'), label: 'Live Matches' },
     { id: 'twitch', href: link('twitch.html'), label: 'Live Streams' },
-    { id: 'cups', href: link('cups.html'), label: 'Turniere' },
-    { id: 'pros', href: link('pro-players.html'), label: 'Pro Players' }
+    { id: 'pros', href: link('pro-players.html'), label: 'Pro Players' },
+    { id: 'news', href: link('news.html'), label: 'News' }
   ];
   const LEGAL = [
     { href: link('ueber-uns.html'), label: 'Über uns' },
