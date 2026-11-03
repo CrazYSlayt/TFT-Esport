@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..', 'public');
-const SITE = 'https://www.tftesport.com';
+const SITE = 'https://www.tft-esports.com';
 const SKIP = new Set(['assets']);
 
 const files = [];

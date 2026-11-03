@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.tftesport.com/sitemap.xml
+Sitemap: https://www.tft-esports.com/sitemap.xml

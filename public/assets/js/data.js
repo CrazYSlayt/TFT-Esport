@@ -7,7 +7,7 @@
 window.TFTE = {
   site: {
     name: 'TFTEsport',
-    url: 'https://www.tftesport.com',          // Platzhalter-Domain aus dem Designkonzept, vor dem Launch bestätigen
+    url: 'https://www.tft-esports.com',          // eigene Domain (seit 03.11.2026), tft-esports.com leitet auf www weiter
     network: { name: 'TFTClimb', url: 'https://www.tftclimb.com' }
   },
 

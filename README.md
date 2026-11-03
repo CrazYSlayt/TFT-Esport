@@ -79,7 +79,8 @@ Der Check prüft außerdem interne Links (müssen vorerst relativ sein), Sitemap
 
 - Interne Links von `….html` auf saubere Adressen umstellen (`/news`), Vercel `cleanUrls`.
 
-- Domain bestätigen (Platzhalter `https://www.tftesport.com` in allen Seiten, `sitemap.xml`, `robots.txt`, `data.js`, `tools/seo-check.js`).
-- Impressum, Datenschutz, Kontakt ausfüllen; Vorschaubild (og:image) und Logo-Datei ergänzen.
+- Domain: `https://www.tft-esports.com` (gekauft 03.11.2026) steht in allen Seiten, `sitemap.xml`, `robots.txt`, `data.js`
+  und `tools/seo-check.js`; `tft-esports.com` leitet auf `www` weiter (Einstellung im Vercel-Projekt).
+- Vorschaubild (og:image) ergänzen.
 - Hosting: Die Twitch-Anbindung läuft bisher nur über `server.ps1`. Für Vercel braucht es eine Serverless-Funktion für `/api/streams`
   (Ausgabeordner ist dann `public/`).
