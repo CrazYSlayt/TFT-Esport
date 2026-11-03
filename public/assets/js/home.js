@@ -132,7 +132,10 @@
   function renderRecent() {
     const past = D.cups.filter(cupPast).sort((a, b) => cupEnd(b) - cupEnd(a)).slice(0, 4);
     $('recent').innerHTML = past.length
-      ? `<ul class="deadline-list">${past.map((c) => `<li><a href="${cupUrl(c)}"><b>${esc(c.name)}</b><span class="is-muted">${esc(fmtDay(ymd(cupEnd(c))))}</span></a></li>`).join('')}</ul>`
+      ? `<ul class="deadline-list">${past.map((c) => {
+          const winner = c.result && c.result.top && c.result.top[0] && c.result.top[0].name;
+          return `<li><a href="${cupUrl(c)}"><b>${esc(c.name)}${winner ? `<small class="winner">${icon('trophy')}${esc(winner)}</small>` : ''}</b><span class="is-muted">${esc(fmtDay(ymd(cupEnd(c))))}</span></a></li>`;
+        }).join('')}</ul>`
       : empty({ ic: 'trophy', cls: 'empty-tight', title: 'Noch keine vergangenen Turniere' });
   }
 

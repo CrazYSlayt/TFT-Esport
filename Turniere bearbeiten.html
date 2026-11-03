@@ -16,10 +16,10 @@
     .ed-top h1 { color: #fff; font-size: 24px; margin-right: auto; display: flex; align-items: center; gap: 10px; }
     .ed-top h1 .crown { width: 32px; height: 27px; color: #fff; --crown-cut: var(--green-deep); }
     .ed-status { font-size: 15px; color: #cfe0d6; }
-    .ed-status.dirty { color: var(--peach); font-weight: 700; }
+    .ed-status.dirty { color: var(--gold); font-weight: 700; }
     .ed-top .btn-ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.4); }
-    .ed-top .btn-save { background: var(--apricot); color: #fff; }
-    .ed-top .btn-save:hover { background: var(--apricot-deep); }
+    .ed-top .btn-save { background: var(--gold); color: var(--green-deep); }
+    .ed-top .btn-save:hover { background: #ffd04a; }
     .ed-main { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 24px; padding-top: 24px; padding-bottom: 60px; align-items: start; }
     .ed-list { position: sticky; top: 92px; display: grid; gap: 10px; max-height: calc(100vh - 110px); overflow-y: auto; padding-right: 4px; }
     .ed-list input { min-height: 42px; padding: 0 12px; border-radius: 11px; border: 1.5px solid var(--line-strong); background: var(--surface); }
@@ -29,11 +29,11 @@
     .ed-item.sel { border-color: var(--green); background: var(--sage); }
     .ed-item b { color: var(--green-deep); font-size: 16px; }
     .ed-item small { color: var(--muted); font-size: 13px; }
-    .ed-item.warn small::after { content: ' · unvollständig'; color: var(--apricot-deep); font-weight: 700; }
+    .ed-item.warn small::after { content: ' · unvollständig'; color: var(--gold-deep); font-weight: 700; }
     .ed-form { display: grid; gap: 18px; }
     .ed-card { display: grid; gap: 14px; padding: 20px 22px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); }
     .ed-card h2 { font-size: 21px; display: flex; align-items: center; gap: 8px; }
-    .ed-card h2 .i { color: var(--apricot-deep); }
+    .ed-card h2 .i { color: var(--gold-deep); }
     .ed-card.key { background: var(--sage); border-color: var(--sage-line); }
     .ed-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
     .ed-row-3 { grid-template-columns: 2fr 1fr 1fr; }
@@ -43,7 +43,7 @@
     .f input, .f select, .f textarea { width: 100%; min-height: 44px; padding: 8px 12px; border-radius: 11px; border: 1.5px solid var(--line-strong); background: var(--surface); font: inherit; font-size: 16px; color: var(--ink); }
     .f textarea { min-height: 76px; resize: vertical; line-height: 1.45; }
     .f input:focus, .f select:focus, .f textarea:focus { outline: none; border-color: var(--green); }
-    .f.req > span::after { content: ' *'; color: var(--apricot-deep); }
+    .f.req > span::after { content: ' *'; color: var(--gold-deep); }
     .dt { display: grid; grid-template-columns: 1fr 120px; gap: 8px; }
     .days { display: grid; gap: 10px; }
     .day { display: grid; grid-template-columns: 1.2fr 1fr 1fr 110px auto; gap: 8px; align-items: end; }
@@ -56,6 +56,11 @@
     .ed-msg ul { margin: 4px 0 0; padding-left: 18px; }
     .ed-id { font-size: 13px; color: var(--muted); }
     .ed-empty { padding: 40px; text-align: center; color: var(--muted); }
+    .res { display: grid; gap: 8px; }
+    .res-row { display: grid; grid-template-columns: 70px minmax(0, 1fr) 120px; gap: 8px; align-items: center; }
+    .res-row b { color: var(--green-deep); font-size: 15px; }
+    .res-row input { width: 100%; min-height: 40px; padding: 6px 12px; border-radius: 11px; border: 1.5px solid var(--line-strong); background: var(--surface); font: inherit; font-size: 16px; }
+    .ed-card.result { border-color: var(--gold-line); }
     @media (max-width: 900px) { .ed-main { grid-template-columns: 1fr; } .ed-list { position: static; max-height: none; } .ed-row, .ed-row-3, .day { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -95,11 +100,20 @@
 
     // Feste Reihenfolge der Felder in der Datei
     const KEYS = ['id', 'name', 'level', 'region', 'organizer', 'requirement', 'eligibility', 'rank', 'signupStart', 'signupDeadline',
-      'signupUrl', 'days', 'format', 'prize', 'streamUrl', 'info', 'sources', 'checked'];
+      'signupUrl', 'days', 'format', 'prize', 'streamUrl', 'info', 'sources', 'checked', 'result'];
+    const RES_PLACES = 8;   // Ergebnis: Platz 1 bis 8 (Finallobby)
+    const blankResult = () => ({ top: [], note: '', source: '' });
     const blank = () => ({ id: '', name: '', level: 'offiziell', region: 'emea', organizer: '', requirement: 'offen', eligibility: '', rank: '',
       signupStart: '', signupDeadline: '', signupUrl: '', days: [{ from: '', to: '', label: '' }], format: '', prize: '', streamUrl: '', info: '',
-      sources: [], checked: '' });
-    const normalize = (c) => { const b = blank(), o = {}; KEYS.forEach((k) => { o[k] = c[k] !== undefined ? c[k] : b[k]; }); return o; };
+      sources: [], checked: '', result: blankResult() });
+    const normalize = (c) => {
+      const b = blank(), o = {};
+      KEYS.forEach((k) => { o[k] = c[k] !== undefined ? c[k] : b[k]; });
+      o.result = { ...blankResult(), ...(o.result || {}) };
+      o.result.top = (o.result.top || []).map((t) => ({ name: t.name || '', points: t.points === undefined ? '' : t.points }));
+      return o;
+    };
+    const hasResult = (r) => r && (r.top.some((t) => t.name.trim()) || r.note.trim());
 
     let cups = (D.cups || []).map(normalize);
     let sel = cups.length ? 0 : -1;
@@ -225,6 +239,20 @@
           </div>
         </div>
 
+        <div class="ed-card result">
+          <h2>Ergebnis (nach dem Turnier)</h2>
+          <p class="ed-id">Erscheint unter „Letzte Ergebnisse“ (Live Matches) und auf der Turnierseite. Leer lassen, solange das Turnier läuft. Punkte sind optional.</p>
+          <div class="res">${Array.from({ length: RES_PLACES }, (_, i) => { const t = c.result.top[i] || { name: '', points: '' }; return `<div class="res-row">
+              <b>Platz ${i + 1}</b>
+              <input type="text" data-res="${i}" data-part="name" value="${esc(t.name)}" placeholder="Spieler oder Team" aria-label="Platz ${i + 1}: Name" />
+              <input type="number" data-res="${i}" data-part="points" value="${esc(t.points)}" placeholder="Punkte" aria-label="Platz ${i + 1}: Punkte" />
+            </div>`; }).join('')}</div>
+          <div class="ed-row">
+            <label class="f"><span>Hinweis (optional)</span><input type="text" data-rk="note" value="${esc(c.result.note)}" placeholder="z. B. Sieg im Checkmate-Finale" /></label>
+            <label class="f"><span>Quelle des Ergebnisses</span><input type="url" data-rk="source" value="${esc(c.result.source)}" placeholder="https://…" /></label>
+          </div>
+        </div>
+
         <div class="ed-card">
           <h2>Quelle &amp; Prüfung</h2>
           <label class="f req"><span>Quellen des Veranstalters</span><textarea data-k="sources" rows="3">${esc(c.sources.join('\n'))}</textarea>
@@ -259,6 +287,13 @@
         const row = el.closest('.day'), i = Number(el.dataset.day);
         const from = row.querySelector('[data-part="from"]').value, time = row.querySelector('[data-part="time"]').value;
         c.days[i] = { from: from ? from + (time ? `T${time}` : '') : '', to: row.querySelector('[data-part="to"]').value, label: row.querySelector('[data-part="label"]').value };
+      } else if (el.dataset.res) {
+        const row = el.closest('.res-row'), i = Number(el.dataset.res);
+        while (c.result.top.length <= i) c.result.top.push({ name: '', points: '' });
+        const pts = row.querySelector('[data-part="points"]').value;
+        c.result.top[i] = { name: row.querySelector('[data-part="name"]').value, points: pts === '' ? '' : Number(pts) };
+      } else if (el.dataset.rk) {
+        c.result[el.dataset.rk] = el.value;
       } else return;
       markDirty();
       renderList();
@@ -298,7 +333,14 @@
       });
     }
     function fileText() {
-      const list = cups.map(normalize).sort((a, b) => (firstDay(a) || '9').localeCompare(firstDay(b) || '9'));
+      const list = cups.map(normalize).sort((a, b) => (firstDay(a) || '9').localeCompare(firstDay(b) || '9')).map((c) => {
+        // Ergebnis nur speichern, wenn etwas eingetragen ist; leere Plätze am Ende weglassen, Punkte nur wenn angegeben
+        if (!hasResult(c.result)) { delete c.result; return c; }
+        let top = c.result.top.map((t) => ({ name: t.name.trim(), points: t.points }));
+        while (top.length && !top[top.length - 1].name) top.pop();
+        c.result = { top: top.map((t) => (t.points === '' ? { name: t.name } : t)), note: c.result.note.trim(), source: c.result.source.trim() };
+        return c;
+      });
       return `/*\n * TFTEsport – Turniere. Diese Datei wird von „Turniere bearbeiten.html“ (Hauptordner) geschrieben.\n` +
         ` * Von Hand ändern geht auch – Format siehe Kommentar in assets/js/data.js (cups).\n */\n` +
         `window.TFTE.cups = ${JSON.stringify(list, null, 2)};\n`;

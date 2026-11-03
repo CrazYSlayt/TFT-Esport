@@ -3,16 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- noindex, solange der Bereich leer ist; mit den ersten Inhalten entfernen und in sitemap.xml aufnehmen -->
-  <title>TFT Live Matches – Turniere live verfolgen | TFTEsport</title>
-  <meta name="description" content="TFT Live Matches: laufende Turnierlobbys, Zwischenstände und der passende Stream an einem Platz." />
-  <meta name="robots" content="noindex, follow" />
+  <title>TFT Live Matches: Turniere heute &amp; Ergebnisse | TFTEsport</title>
+  <meta name="description" content="TFT Live Matches: welche Turniere heute laufen, der Spielplan der Woche, Streams und die letzten Ergebnisse auf einen Blick." />
   <link rel="canonical" href="https://www.tftesport.com/live-matches" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="TFTEsport" />
   <meta property="og:locale" content="de_DE" />
-  <meta property="og:title" content="TFT Live Matches – Turniere live verfolgen | TFTEsport" />
-  <meta property="og:description" content="TFT Live Matches: laufende Turnierlobbys, Zwischenstände und der passende Stream an einem Platz." />
+  <meta property="og:title" content="TFT Live Matches: Turniere heute &amp; Ergebnisse | TFTEsport" />
+  <meta property="og:description" content="TFT Live Matches: welche Turniere heute laufen, der Spielplan der Woche, Streams und die letzten Ergebnisse auf einen Blick." />
   <meta property="og:url" content="https://www.tftesport.com/live-matches" />
   <meta name="twitter:card" content="summary" />
   <meta name="theme-color" content="#213d2c" />
@@ -26,39 +24,52 @@
   <header id="site-header"></header>
 
   <main class="wrap">
-    <section class="page-head" data-janna="caster">
-      <p class="eyebrow">Live Matches</p>
-      <h1>TFT Live Matches</h1>
-      <p class="lead">Laufende Turnierlobbys, Zwischenstände und der passende Stream – alles an einem Platz.</p>
+    <!-- Kopf wie ein Live-Tracker: Pokal, Status, Titel -->
+    <section class="live-head">
+      <span class="live-head-ic" aria-hidden="true"><span data-icon="trophy"></span></span>
+      <div>
+        <p class="live-meta"><span class="live-pill"><span class="nav-dot"></span>Live-Tracker</span><span id="updated"></span></p>
+        <h1>TFT Live Matches: Turniere heute &amp; Ergebnisse</h1>
+        <p class="lead">Welche Turniere heute laufen, wo du zuschauen kannst, was diese Woche ansteht und wer zuletzt gewonnen hat – in deiner Ortszeit.</p>
+      </div>
     </section>
 
-    <div class="empty">
-      <span class="empty-ic"><span data-icon="swords"></span></span>
-      <div>
-        <p class="empty-title">Gerade läuft kein Match</p>
-        <p class="empty-text">Sobald Turniere live sind, findest du hier Lobbys, Zwischenstände und den passenden Stream. Bis dahin: Schau, welche Turniere als Nächstes anstehen.</p>
-        <a class="link-arrow" href="cups.html">Nächste Turniere<span data-icon="arrow"></span></a>
+    <!-- Live jetzt (oder: als Nächstes), Janna kommentiert am rechten Rand -->
+    <section class="live-box" aria-labelledby="live-title">
+      <div class="live-box-head">
+        <h2 id="live-title"></h2>
+        <p id="live-sub"></p>
       </div>
+      <div class="live-cards" id="live-cards"></div>
+      <img class="janna janna-caster at-r" src="assets/img/janna/janna-caster-oben.png" alt="" decoding="async" />
+    </section>
+
+    <!-- Heute · Diese Woche · Letzte Ergebnisse -->
+    <div class="live-cols">
+      <section class="side-card" aria-labelledby="today-title">
+        <div class="panel-head"><h2 id="today-title">Heute</h2><span id="today-date"></span></div>
+        <div id="today"></div>
+      </section>
+      <section class="side-card" aria-labelledby="week-title">
+        <div class="panel-head"><h2 id="week-title">Diese Woche</h2><span>die nächsten 7 Tage</span></div>
+        <div id="week"></div>
+      </section>
+      <section class="side-card" aria-labelledby="results-title">
+        <div class="panel-head"><h2 id="results-title">Letzte Ergebnisse</h2></div>
+        <div id="results"></div>
+        <a class="link-arrow" href="cups.html?ansicht=liste&amp;zeitraum=alle">Alle Turniere, auch vergangene<span data-icon="arrow"></span></a>
+      </section>
     </div>
 
-    <div class="plan">
-      <p class="plan-label"><span data-icon="info"></span>Geplanter Aufbau</p>
-      <ul>
-        <li>Laufende und bevorstehende Turnier-Lobbys</li>
-        <li>Wettbewerb, Spielphase, Teilnehmer und Startzeit</li>
-        <li>Aktueller Stand und Ergebnisse, sofern zuverlässig verfügbar</li>
-        <li>Links zur Übertragung und zur Turnierseite</li>
-        <li>Filter nach Region, Wettbewerb und Status</li>
-        <li>Leerzustand mit nächsten Terminen, wenn gerade nichts läuft</li>
-      </ul>
-    </div>
+    <p class="editor-note"><span data-icon="info"></span>Termine, Streams und Ergebnisse trägt die Redaktion ein und prüft sie an den Veranstalterquellen. Live-Punktestände aus laufenden Lobbys folgen, sobald eine zuverlässige Datenquelle angebunden ist.</p>
   </main>
 
   <footer id="site-footer"></footer>
 
   <script src="assets/js/data.js"></script>
-
   <script src="assets/data/turniere.js"></script>
+  <script src="assets/data/set-termine.js"></script>
   <script src="assets/js/app.js"></script>
+  <script src="assets/js/live.js"></script>
 </body>
 </html>

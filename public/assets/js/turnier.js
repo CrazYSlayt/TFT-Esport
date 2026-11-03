@@ -37,7 +37,15 @@
   steps.sort((a, b) => toDate(a[0]) - toDate(b[0]));
 
   const sources = (c.sources || []).filter(Boolean);
+  // Ergebnis bzw. Zwischenstand, von der Redaktion im Editor eingetragen
+  const top = (c.result && c.result.top ? c.result.top : []).filter((t) => t.name);
+  const result = top.length ? `
+    <h2>${past ? 'Ergebnis' : 'Zwischenstand'}</h2>
+    <ol class="podium podium-full">${top.map((t, i) => `<li class="p${i + 1}"><span class="pos">${i + 1}</span><span class="who">${esc(t.name)}</span>${t.points !== undefined && t.points !== '' ? `<b>${esc(t.points)} P.</b>` : ''}</li>`).join('')}</ol>
+    ${c.result.note ? `<p>${esc(c.result.note)}</p>` : ''}
+    ${c.result.source ? `<p class="muted-note">${icon('info')}Quelle: <a href="${esc(c.result.source)}" target="_blank" rel="noopener">${esc(hostOf(c.result.source))}</a></p>` : ''}` : '';
   $('cup-body').innerHTML = `
+    ${result}
     <h2>Termine</h2>
     <ol class="timeline">${steps.map(([, k, v]) => `<li><b>${esc(k)}</b>${esc(v)}</li>`).join('')}</ol>
     <p class="muted-note">${icon('info')}Termine in deutscher Zeit. Ohne Uhrzeit hat der Veranstalter noch keine genannt.</p>
