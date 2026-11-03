@@ -361,10 +361,11 @@
   };
 
   /* ---------- Navigation ---------- */
+  // mark: kleines Zeichen vor dem Menüpunkt (grüner Live-Punkt bzw. Symbol), wie bei dota2news.com
   const NAV = [
     { id: 'cups', href: link('cups.html'), label: 'Turniere' },
-    { id: 'matches', href: link('live-matches.html'), label: 'Live Matches' },
-    { id: 'twitch', href: link('twitch.html'), label: 'Live Streams' },
+    { id: 'matches', href: link('live-matches.html'), label: 'Live Matches', mark: '<span class="nav-dot" aria-hidden="true"></span>' },
+    { id: 'twitch', href: link('twitch.html'), label: 'Live Streams', mark: icon('radio') },
     { id: 'pros', href: link('pro-players.html'), label: 'Pro Players' },
     { id: 'news', href: link('news.html'), label: 'News' }
   ];
@@ -374,7 +375,10 @@
     { href: link('impressum.html'), label: 'Impressum' },
     { href: link('datenschutz.html'), label: 'Datenschutz' }
   ];
-  const brand = () => `<a class="brand" href="${link('index.html')}" aria-label="${D.site.name} Startseite">${crown()}<span class="brand-word">TFTESPORT<small>.com</small></span></a>`;
+  // Marke: Janna-Kopf als Symbol, dazu der Schriftzug „TFT Esport“ (Esport in Gold)
+  const brand = () => `<a class="brand" href="${link('index.html')}" aria-label="${D.site.name} Startseite">
+      <img class="brand-head" src="${link('assets/brand/janna-kopf.png')}" alt="" width="147" height="160" />
+      <span class="brand-word">TFT<em>Esport</em></span></a>`;
 
   function renderHeader() {
     const el = document.getElementById('site-header');
@@ -383,17 +387,13 @@
     const section = page === 'streams' ? 'twitch' : page;
     el.className = 'site-header';
     el.innerHTML = `
-      <div class="wrap header-main">
-        <button class="icon-btn burger" type="button" aria-label="Menü öffnen" data-open-drawer>${icon('menu')}</button>
+      <div class="wrap header-bar">
+        <button class="hb-cell burger" type="button" aria-label="Menü öffnen" data-open-drawer>${icon('menu')}</button>
         ${brand()}
         <nav class="mainnav" aria-label="Hauptnavigation">
-          ${NAV.map((n) => `<a href="${n.href}" ${section === n.id ? 'class="active" aria-current="page"' : ''}>${n.label}</a>`).join('')}
+          ${NAV.map((n) => `<a href="${n.href}" ${section === n.id ? 'class="active" aria-current="page"' : ''}>${n.mark || ''}${n.label}</a>`).join('')}
         </nav>
-        <div class="header-actions">
-          <button class="icon-btn" type="button" aria-label="Suche öffnen" data-open-search>${icon('search')}</button>
-          <span class="divider" aria-hidden="true"></span>
-          <a class="btn btn-primary" href="${link('cups.html')}">Dabei sein${icon('arrow')}</a>
-        </div>
+        <button class="hb-cell hb-search" type="button" aria-label="Suche öffnen" data-open-search>${icon('search')}<span>Suche</span></button>
       </div>`;
   }
 
@@ -410,7 +410,13 @@
           <a href="${link('index.html')}" ${page === 'home' ? 'aria-current="page"' : ''}>Startseite</a>
           ${NAV.map((n) => `<a href="${n.href}" ${section === n.id ? 'aria-current="page"' : ''}>${n.label}</a>`).join('')}
         </nav>
-        <a class="btn btn-primary btn-block" href="${link('cups.html')}">Dabei sein${icon('arrow')}</a>
+        <p class="drawer-label">Mehr</p>
+        <nav class="drawer-more" aria-label="Mehr">
+          <a href="${link('index.html#set-termine')}">${icon('calendar')}Set-Termine</a>
+          ${LEGAL.slice(0, 2).map((l) => `<a href="${l.href}">${icon(l.label === 'Kontakt' ? 'mail' : 'info')}${l.label}</a>`).join('')}
+          <a href="${D.site.network.url}" target="_blank" rel="noopener">${icon('external')}${esc(D.site.network.name)} – Tools &amp; Coaching</a>
+        </nav>
+        <a class="btn btn-primary btn-block" href="${link('cups.html')}">Alle Turniere${icon('arrow')}</a>
       </aside>`;
     document.body.appendChild(wrap);
     const toggle = (open) => document.body.classList.toggle('drawer-open', open);

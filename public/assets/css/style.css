@@ -49,7 +49,7 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html { -webkit-text-size-adjust: 100%; scroll-padding-top: 24px; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 88px; }   /* Header bleibt oben stehen */
 body {
   margin: 0;
   background: var(--bg);
@@ -117,27 +117,39 @@ main.wrap { padding-bottom: 56px; }
 .tag-community, .tag-orientierung { background: var(--mint); color: #22573f; }
 .tag-solid { background: var(--gold); color: var(--green-deep); }
 
-/* ---------- Header ---------- */
-.site-header { display: block; min-height: 77px; border-bottom: 1px solid var(--line); background: var(--bg); }
-
-.header-main { display: flex; align-items: center; gap: 24px; min-height: 76px; }
-.brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--green-deep); }
-.crown { width: 44px; height: 37px; color: var(--green-deep); }
-.brand-word { font-weight: 800; font-size: 29px; letter-spacing: -.01em; line-height: 1; }
-.brand-word small { font-size: 19px; font-weight: 800; margin-left: 1px; }
-
-.mainnav { display: flex; align-items: center; gap: 6px; margin: 0 8px 0 auto; }
-.mainnav > a {
-  position: relative; display: inline-flex; align-items: center;
-  padding: 10px 14px; border-radius: 10px; white-space: nowrap;
-  font-weight: 700; font-size: 18px; color: var(--green-deep); text-decoration: none;
+/* ---------- Header: dunkelgrüne Leiste wie dota2news.com – Menü · Janna-Kopf + Schriftzug · Navigation · Suche ---------- */
+.site-header {
+  position: sticky; top: 0; z-index: 50; display: block; min-height: 64px; color: #fff;
+  background: linear-gradient(90deg, #1b3325 0%, var(--green-deep) 40%, #2b5d3c 100%);
+  box-shadow: 0 6px 18px -12px rgba(16, 36, 24, .7);
 }
-.mainnav > a:hover { background: var(--surface-2); }
-.mainnav > a.active { background: var(--green); color: #fff; box-shadow: 0 6px 14px -10px rgba(22, 58, 48, .9); }
+.header-bar { display: flex; align-items: stretch; height: 64px; }
+.hb-cell {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 0 18px; border: 0; background: none; cursor: pointer;
+  color: #fff; font-size: 14px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+}
+.hb-cell:hover { background: rgba(255, 255, 255, .06); }
+.hb-cell .i { width: 22px; height: 22px; }
+.burger { margin-left: -18px; border-right: 1px solid rgba(255, 255, 255, .12); }
+.hb-search { margin-right: -18px; border-left: 1px solid rgba(255, 255, 255, .12); }
 
-.header-actions { display: flex; align-items: center; gap: 12px; }
-.divider { width: 1px; height: 26px; background: var(--line-strong); }
-.burger { display: none; margin-left: -10px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; padding-left: 16px; text-decoration: none; color: #fff; }
+.brand-head { width: auto; height: 48px; flex: none; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .25)); }
+.brand-word { font-size: 27px; font-weight: 800; font-style: italic; letter-spacing: -.01em; line-height: 1; white-space: nowrap; }
+.brand-word em { color: var(--gold); font-style: inherit; margin-left: .18em; }
+.crown { width: 44px; height: 37px; color: var(--green-deep); }
+
+.mainnav { display: flex; align-items: center; margin: 0 6px 0 auto; }
+.mainnav > a {
+  position: relative; display: inline-flex; align-items: center; gap: 8px; height: 64px; padding: 0 15px; white-space: nowrap;
+  font-size: 14px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255, 255, 255, .82); text-decoration: none;
+}
+.mainnav > a + a::before { content: ''; position: absolute; left: 0; top: 50%; width: 1px; height: 18px; margin-top: -9px; background: rgba(255, 255, 255, .16); }
+.mainnav > a:hover { color: #fff; }
+.mainnav > a.active { color: #fff; }
+.mainnav > a.active::after { content: ''; position: absolute; left: 16px; right: 16px; bottom: 18px; height: 2px; border-radius: 2px; background: var(--gold); }
+.mainnav .i { width: 17px; height: 17px; color: var(--gold); }
+.nav-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-bright); box-shadow: 0 0 0 3px rgba(46, 172, 89, .25); }
 
 /* ---------- Drawer (mobil) ---------- */
 .drawer-wrap { position: fixed; inset: 0; z-index: 60; pointer-events: none; }
@@ -146,10 +158,16 @@ main.wrap { padding-bottom: 56px; }
   position: absolute; top: 0; bottom: 0; left: 0; width: min(330px, 88vw); padding: 16px 18px 24px;
   background: var(--bg); transform: translateX(-100%); transition: transform .22s ease; display: flex; flex-direction: column; gap: 12px; overflow-y: auto;
 }
-.drawer-head { display: flex; justify-content: space-between; align-items: center; }
-.drawer-head .brand-word { font-size: 24px; }
-.drawer-head .crown { width: 36px; height: 30px; }
-.drawer nav { display: flex; flex-direction: column; gap: 2px; margin: 8px 0 auto; }
+.drawer-head { display: flex; justify-content: space-between; align-items: center; margin: -16px -18px 4px; padding: 8px 8px 8px 2px; background: var(--green-deep); }
+.drawer-head .brand-word { font-size: 23px; }
+.drawer-head .brand-head { height: 42px; }
+.drawer-head .icon-btn { color: #fff; }
+.drawer-head .icon-btn:hover { background: rgba(255, 255, 255, .08); }
+.drawer nav + .drawer-label { margin-top: 18px; }
+.drawer nav.drawer-more { margin-top: 0; }
+.drawer nav.drawer-more a { font-size: 16px; font-weight: 600; padding: 9px 12px; }
+.drawer nav { display: flex; flex-direction: column; gap: 2px; margin: 8px 0 0; }
+.drawer > .btn-block { margin-top: auto; }
 .drawer nav a { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 12px; font-weight: 700; font-size: 18px; text-decoration: none; color: var(--green-deep); }
 .drawer nav a:hover, .drawer nav a[aria-current] { background: var(--surface-2); }
 .drawer nav .i { color: var(--gold-deep); }
@@ -576,7 +594,7 @@ h1 .ph, h2 .ph, h3 .ph { font-weight: inherit; }
 
 /* ---------- Werbeflächen links und rechts (nur breite Bildschirme) ----------
    Inhalt 1240 px + 2 × (Fläche + 20 px Abstand) + Rand zum Fenster. Unter 1640 px Fensterbreite keine Flächen. */
-.ad-rail { position: fixed; top: 100px; z-index: 1; display: none; width: 160px; height: 600px; }
+.ad-rail { position: fixed; top: 88px; z-index: 1; display: none; width: 160px; height: 600px; }
 .ad-left { right: calc(50% + 640px); }
 .ad-right { left: calc(50% + 640px); }
 .ad-slot {
@@ -596,9 +614,8 @@ h1 .ph, h2 .ph, h3 .ph { font-weight: inherit; }
 
 /* ---------- Footer ---------- */
 .site-footer { position: relative; z-index: 2; display: block; margin-top: 96px; background: var(--green-deep); color: #e6ece6; --crown-cut: var(--green-deep); }
-.site-footer .brand, .site-footer .crown { color: #fff; }
+.site-footer .brand { padding-left: 0; }
 .site-footer .brand-word { font-size: 24px; }
-.site-footer .crown { width: 36px; height: 30px; }
 .footer-cols { display: grid; grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr)) 190px; gap: 28px; padding-top: 40px; padding-bottom: 30px; }
 .footer-about { display: grid; align-content: start; }
 /* Janna steht rechts auf der Trennlinie und schaut oben aus dem Footer heraus */
@@ -765,10 +782,11 @@ body.modal-open .modal-overlay { display: grid; }
   :root { --edge: 24px; }
   .wrap { padding: 0 32px; }
 }
-@media (max-width: 1120px) {
+@media (max-width: 1200px) {
   .mainnav { display: none; }
-  .burger { display: inline-grid; }
-  .header-actions { margin-left: auto; }
+  .hb-search { margin-left: auto; }
+}
+@media (max-width: 1120px) {
   .plan-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .finder-row { grid-template-columns: auto minmax(0, 1fr) auto auto; }
   .finder-row .level-ic { display: none; }
@@ -814,13 +832,14 @@ body.modal-open .modal-overlay { display: grid; }
   :root { --edge: 10px; }
   .wrap { padding: 0 16px; }
   body { font-size: 16.5px; }
-  .site-header { min-height: 69px; }
-  .header-main { min-height: 68px; gap: 10px; }
-  .header-actions .divider, .header-actions .btn { display: none; }
-  .brand { gap: 8px; }
-  .crown { width: 34px; height: 29px; }
+  .site-header, .header-bar { min-height: 58px; height: 58px; }
+  .hb-cell { padding: 0 14px; }
+  .burger { margin-left: -16px; }
+  .hb-search { margin-right: -16px; }
+  .hb-search span { display: none; }
+  .brand { gap: 8px; padding-left: 12px; }
+  .brand-head { height: 40px; }
   .brand-word { font-size: 22px; }
-  .brand-word small { font-size: 15px; }
   .lead { font-size: 18px; }
   .grid-3 { grid-template-columns: 1fr; }
   .grid-3 > :nth-child(3) { display: flex; }
