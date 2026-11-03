@@ -12,15 +12,18 @@
   const nextBlock = (c) => cupDays(c).find((x) => endOf(x.to) >= new Date());
   const range = (b) => `${fmtDay(b.from)}${b.to.slice(0, 10) !== b.from.slice(0, 10) ? ` – ${fmtDay(b.to)}` : ''}`;
 
-  /* ---------- Kennzahlen unter der Begrüßung ---------- */
+  /* ---------- Kennzahlen in der hellgrünen Fläche der Begrüßung ---------- */
   function renderStats() {
     const open = upcoming.filter(signupOpen).sort((a, b) => endOf(a.signupDeadline) - endOf(b.signupDeadline));
-    const parts = [
-      `<span><b>${upcoming.length}</b> ${upcoming.length === 1 ? 'kommendes Turnier' : 'kommende Turniere'}</span>`,
-      `<span><b>${open.length}</b> ${open.length === 1 ? 'Anmeldung offen' : 'Anmeldungen offen'}</span>`
-    ];
-    if (open[0]) parts.push(`<a href="${cupUrl(open[0])}">Nächster Anmeldeschluss: <b>${esc(fmtDay(open[0].signupDeadline))}</b> · ${esc(open[0].name)}</a>`);
-    $('hero-stats').innerHTML = parts.join('');
+    const stat = (value, text, href, cls = '') => href
+      ? `<a class="hstat ${cls}" href="${href}"><b>${value}</b><span>${text}</span></a>`
+      : `<div class="hstat ${cls}"><b>${value}</b><span>${text}</span></div>`;
+    const next = open[0]
+      ? stat(esc(fmtDay(open[0].signupDeadline)), `Nächster Anmeldeschluss · ${esc(open[0].name)}`, cupUrl(open[0]), 'is-date')
+      : upcoming[0] ? stat(esc(fmtDay(nextBlock(upcoming[0]).from)), `Nächstes Turnier · ${esc(upcoming[0].name)}`, cupUrl(upcoming[0]), 'is-date') : '';
+    $('hero-stats').innerHTML =
+      stat(upcoming.length, upcoming.length === 1 ? 'kommendes Turnier' : 'kommende Turniere', '#finder-title') +
+      stat(open.length, open.length === 1 ? 'Anmeldung offen' : 'Anmeldungen offen') + next;
   }
 
   /* ---------- Das nächste große Match ---------- */
@@ -34,7 +37,7 @@
           <p class="feature-rel">Neue Termine erscheinen hier automatisch.</p>
           <a class="btn btn-cream" href="cups.html">Zum Turnierkalender${icon('arrow')}</a>
         </div>
-        <div class="feature-stage" aria-hidden="true">${janna('traurig')}</div>`;
+        <div class="feature-stage" aria-hidden="true">${janna('traurig', 'at-r')}</div>`;
       return;
     }
     const b = nextBlock(c);
@@ -52,7 +55,7 @@
         <p class="feature-rel"><b>${n <= 0 ? 'Läuft gerade' : `Los geht’s ${relDays(n)}`}</b> · ${esc(s.text)}</p>
         <a class="btn btn-cream" href="${cupUrl(c)}">Turnier ansehen${icon('arrow')}</a>
       </div>
-      <div class="feature-stage" aria-hidden="true">${janna('pokal')}</div>`;
+      <div class="feature-stage" aria-hidden="true">${janna('pokal', 'at-r')}</div>`;
   }
 
   /* ---------- Finde dein nächstes Turnier ---------- */

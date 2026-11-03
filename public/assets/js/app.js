@@ -118,14 +118,15 @@
 
   // Janna, das Maskottchen: 10 Posen in assets/img/janna/ – als Oberkörper ('-oben', Standard) oder ganze Figur.
   // Posen: winken, caster, ueberlegen, pokal, tablet, staunen, daumen, traurig, fan, krone
+  // In Boxen immer am Rand: cls 'at-r' (rechts) oder 'at-l' (links), siehe CSS „Janna“.
   const janna = (pose, cls = '', full = false) =>
-    `<img class="janna ${cls}" src="${link(`assets/img/janna/janna-${pose}${full ? '' : '-oben'}.png`)}" alt="" loading="lazy" decoding="async" />`;
+    `<img class="janna janna-${pose} ${cls}" src="${link(`assets/img/janna/janna-${pose}${full ? '' : '-oben'}.png`)}" alt="" loading="lazy" decoding="async" />`;
   const searchEmpty = (title, text, pose) => `<div class="search-empty">${janna(pose, 'search-janna')}<p class="empty-title">${title}</p><p class="empty-text">${text}</p></div>`;
 
   // Leerzustand: Symbol (oder Janna), Titel, kurzer Text, optional ein Link
   const empty = ({ ic = 'info', title, text, href, cta, cls = '', pose }) => `
     <div class="empty ${cls} ${pose ? 'has-janna' : ''}">
-      ${pose ? janna(pose, 'empty-janna') : `<span class="empty-ic">${icon(ic)}</span>`}
+      ${pose ? janna(pose, 'empty-janna at-l') : `<span class="empty-ic">${icon(ic)}</span>`}
       <div>
         <p class="empty-title">${title}</p>
         ${text ? `<p class="empty-text">${text}</p>` : ''}
@@ -506,7 +507,7 @@
   // Seitenkopf als Box, aus der Janna oben herausragt: <section class="page-head" data-janna="tablet">
   document.querySelectorAll('.page-head[data-janna]').forEach((el) => {
     el.classList.add('has-janna');
-    el.insertAdjacentHTML('beforeend', janna(el.dataset.janna, 'head-janna'));
+    el.insertAdjacentHTML('beforeend', janna(el.dataset.janna, 'head-janna at-r'));
   });
 
   renderHeader();
