@@ -57,6 +57,9 @@ window.TFTE = {
    */
   cups: [],
 
+  /* Set-Termine (Set-Start, PBE, Set-Ende) – stehen in assets/data/set-termine.js und erscheinen als Info im Kalender. */
+  setEvents: [],
+
   /*
    * Twitch-Creator-Empfehlungen (redaktionell ausgewählt).
    * { login: 'twitch_login', name: 'Anzeigename', focus: 'Ranked & Analyse', lang: 'de', featured: true }

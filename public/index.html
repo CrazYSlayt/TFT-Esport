@@ -34,38 +34,63 @@
       <div class="stat-tiles" id="stat-tiles"></div>
     </section>
 
-    <!-- Turnierübersicht + Seitenspalte -->
-    <div class="home-main">
-      <section class="t-overview" aria-labelledby="overview-title">
-        <div class="t-bar">
-          <h2 class="label-head" id="overview-title">Kommende Turniere</h2>
-          <div class="chips home-chips" id="t-chips" role="group" aria-label="Turniere filtern"></div>
-          <a class="link-arrow" href="cups.html">Kalender &amp; alle Filter<span data-icon="arrow"></span></a>
+    <!-- Einstieg in Boxen: Monatskalender · Nächstes Turnier + Set-Termine · Was steht an? -->
+    <div class="home-hero">
+      <section class="cal home-cal" aria-labelledby="cal-title">
+        <div class="cal-head">
+          <button type="button" class="icon-btn" data-month="-1" aria-label="Vorheriger Monat"><span data-icon="chevronLeft"></span></button>
+          <h2 id="cal-title" aria-live="polite"></h2>
+          <button type="button" class="icon-btn" data-month="1" aria-label="Nächster Monat"><span data-icon="chevronRight"></span></button>
         </div>
-        <div id="t-table"></div>
-        <p class="editor-note"><span data-icon="shield"></span>Alle Turniere trägt die Redaktion ein und prüft sie an den Veranstalterquellen. Die Anmeldung läuft direkt beim Veranstalter.</p>
+        <div id="home-cal"></div>
+        <div class="cal-legend" id="home-cal-legend"></div>
       </section>
 
-      <aside class="home-side" aria-label="Diese Woche und zuletzt gespielt">
-        <div class="widget">
-          <div class="widget-head">
-            <div>
-              <h2>Diese Woche</h2>
-              <p>Was in den nächsten 7 Tagen gespielt wird</p>
-            </div>
-            <span data-mascot="widget-mascot"></span>
-          </div>
-          <div class="widget-body">
-            <div class="upcoming-list" id="week-list"></div>
-          </div>
+      <div class="home-col">
+        <article class="panel next-cup" id="next-cup" aria-label="Nächstes Turnier"></article>
+        <div class="panel">
+          <div class="panel-head"><h3>Set-Termine</h3><span>Set-Start, PBE und Set-Ende</span></div>
+          <div id="set-dates"></div>
         </div>
+      </div>
 
+      <aside class="widget" aria-labelledby="upcoming-title">
+        <div class="widget-head">
+          <div>
+            <h2 id="upcoming-title">Was steht an?</h2>
+            <p>Kommende Turniere mit Anmeldefristen</p>
+          </div>
+          <span data-mascot="widget-mascot"></span>
+        </div>
+        <div class="widget-body">
+          <div class="seg seg-sm" role="group" aria-label="Turniere filtern">
+            <button type="button" data-tab="kommend" aria-pressed="true">Kommend</button>
+            <button type="button" data-tab="offen" aria-pressed="false">Anmeldung offen</button>
+          </div>
+          <div class="upcoming-list" id="upcoming-list"></div>
+          <a class="btn btn-primary btn-block" href="cups.html">Alle Turniere<span data-icon="arrow"></span></a>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Kommende Turniere als Karten mit den fünf Kernfragen -->
+    <section class="section" aria-labelledby="cards-title">
+      <div class="section-head">
+        <h2 class="label-head" id="cards-title">Kommende Turniere</h2>
+        <a class="link-arrow" href="cups.html">Kalender &amp; alle Filter<span data-icon="arrow"></span></a>
+      </div>
+      <div id="upcoming-cards"></div>
+      <p class="editor-note"><span data-icon="shield"></span>Alle Turniere trägt die Redaktion ein und prüft sie an den Veranstalterquellen. Die Anmeldung läuft direkt beim Veranstalter.</p>
+    </section>
+
+    <!-- Zuletzt gespielt + Live Matches -->
+    <section class="section" aria-label="Zuletzt gespielt und Live Matches">
+      <div class="glance-grid">
         <div class="panel">
           <div class="panel-head"><h3>Zuletzt gespielt</h3></div>
           <div id="recent"></div>
           <a class="link-arrow" href="cups.html?ansicht=liste&amp;zeitraum=alle">Alle Turniere, auch vergangene<span data-icon="arrow"></span></a>
         </div>
-
         <div class="plan">
           <p class="plan-label"><span data-icon="info"></span>Geplant</p>
           <h3>Live Matches</h3>
@@ -76,8 +101,8 @@
           </ul>
           <a class="link-arrow" href="live-matches.html">Zu Live Matches<span data-icon="arrow"></span></a>
         </div>
-      </aside>
-    </div>
+      </div>
+    </section>
 
     <!-- Aktive Streams -->
     <section class="twitch-band" aria-labelledby="twitch-title">
@@ -106,6 +131,7 @@
 
   <script src="assets/js/data.js"></script>
   <script src="assets/data/turniere.js"></script>
+  <script src="assets/data/set-termine.js"></script>
   <script src="assets/js/app.js"></script>
   <script src="assets/js/home.js"></script>
 </body>

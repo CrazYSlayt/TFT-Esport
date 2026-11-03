@@ -204,6 +204,38 @@
     </article>`;
   }
 
+  /* ---------- Monatskalender: Spieltage, Anmeldeschlüsse und Set-Termine (Startseite und Turnierseite) ---------- */
+  const SET_ICON = { 'set-start': 'star', pbe: 'info', 'set-end': 'clock' };
+  const setEventsOn = (key) => (D.setEvents || []).filter((e) => e.date === key);
+  function calendarGrid(month, cups) {
+    const [y, m] = month.split('-').map(Number);
+    const first = new Date(y, m - 1, 1);
+    const last = new Date(y, m, 0);
+    const start = new Date(first);
+    start.setDate(1 - ((first.getDay() + 6) % 7));            // Woche beginnt am Montag
+    const today = ymd(new Date());
+    const now = new Date();
+    let cells = '';
+    for (let i = 0; i < 42; i++) {
+      const d = new Date(start);
+      d.setDate(start.getDate() + i);
+      if (i >= 35 && d > last) break;                          // sechste Woche nur, wenn der Monat sie braucht
+      const key = ymd(d);
+      const infos = setEventsOn(key);
+      const deadlines = cups.filter((c) => c.signupDeadline && c.signupDeadline.slice(0, 10) === key);
+      const plays = cups.filter((c) => cupDates(c).includes(key));
+      cells += `<div class="cal-day ${d.getMonth() !== m - 1 ? 'other' : ''} ${key === today ? 'today' : ''}">
+        <span class="cal-num">${d.getDate()}</span>
+        ${infos.map((e) => `<span class="cal-ev cal-info is-${esc(e.kind)}" title="${esc(`${e.title} – ${e.info}`)}">${icon(SET_ICON[e.kind] || 'info')}${esc(e.short || e.title)}</span>`).join('')}
+        ${deadlines.map((c) => `<a class="cal-ev cal-deadline ${endOf(c.signupDeadline) < now ? 'past' : ''}" href="${cupUrl(c)}" title="Anmeldeschluss: ${esc(c.name)}">${icon('clock')}Anmeldeschluss · ${esc(c.name)}</a>`).join('')}
+        ${plays.map((c) => `<a class="cal-ev ${esc(c.level)} ${cupPast(c) ? 'past' : ''}" href="${cupUrl(c)}" title="${esc(c.name)}">${esc(c.name)}</a>`).join('')}
+      </div>`;
+    }
+    return `<div class="cal-grid">${['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'].map((w) => `<div class="cal-wd">${w}</div>`).join('')}${cells}</div>`;
+  }
+  const calLegend = () => `<span><i class="lg lg-offiziell"></i>Offiziell</span><span><i class="lg lg-regional"></i>Regional</span>
+    <span><i class="lg lg-streamer"></i>Streamer-Cup</span><span><i class="lg lg-deadline"></i>Anmeldeschluss</span><span><i class="lg lg-info"></i>Set-Termin</span>`;
+
   /* ---------- Twitch: Creator-Karten ---------- */
   const twitchUrl = (login) => `https://www.twitch.tv/${encodeURIComponent(login)}`;
   const creatorCard = (c) => `<a class="card creator-card" href="${twitchUrl(c.login)}" target="_blank" rel="noopener">
@@ -443,6 +475,7 @@
   window.UI = {
     mascot, mascotNext, icon, crown, esc, fmt, served, link, setUrl, toDate, fmtDate, fmtTime, dayMonth, label, catLabel, articleUrl, cupUrl,
     sortByDateDesc, upcomingCups, startOfToday, signupOpen, imgPlaceholder, empty, tag, articleCard, cupRow,
+    calendarGrid, calLegend, SET_ICON,
     ymd, endOf, fmtDay, fmtWhen, cupDays, cupStart, cupNext, cupEnd, cupPast, cupDates, byStart, fmtDays, signupState, hostOf, keyFacts, cupCard,
     twitchUrl, creatorCard, creatorSlot, streamCard, langName, loadStreams, STREAM_REASONS
   };

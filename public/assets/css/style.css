@@ -315,44 +315,40 @@ h1 .ph, h2 .ph, h3 .ph { font-weight: inherit; }
 .notice .i { color: var(--apricot-deep); margin-top: 2px; }
 .notice strong { color: #5a2a10; }
 
-/* ---------- Startseite: Turniertabelle über die volle Breite, darunter drei Kästen ---------- */
-.home-main { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
-.t-overview { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; min-width: 0; }
-.t-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; }
-.t-bar h2 { font-size: clamp(22px, 2vw, 26px); }
-.t-bar .home-chips { margin: 0; }
-.t-bar .link-arrow { margin-left: auto; }
-.home-side { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; margin-top: 30px; }
-
-/* Turniertabelle: eine Zeile pro Turnier mit den fünf Kernfragen */
-.cup-table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
-.cup-table th { padding: 12px 14px; text-align: left; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); background: var(--surface-2); border-bottom: 1px solid var(--line); }
-.cup-table td { padding: 14px; vertical-align: top; border-bottom: 1px solid var(--line); font-size: 15px; color: var(--ink-soft); }
-.cup-table tbody tr:last-child td { border-bottom: 0; }
-.cup-table tbody tr:hover td { background: #fbf8f1; }
-.t-when { width: 165px; }
-.t-when b { display: block; color: var(--green-deep); font-size: 15px; white-space: nowrap; }
-.t-when small { display: block; margin-top: 2px; font-size: 13px; font-weight: 600; color: var(--apricot-deep); }
-.t-when small.is-live { color: #c53a33; }
-.t-when small.is-live::before { content: ''; display: inline-block; width: 7px; height: 7px; margin-right: 5px; border-radius: 50%; background: #e0413a; vertical-align: 1px; }
-.t-name { width: 22%; }
-.t-who { width: 27%; }
-.t-name > a { display: block; font-size: 17px; font-weight: 700; color: var(--green-deep); text-decoration: none; line-height: 1.25; }
-.t-name > a:hover { color: var(--apricot-deep); }
-.t-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
-.t-tags .tag { font-size: 11px; padding: 2px 8px; }
-.clamp { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.t-signup { width: 250px; }
-.t-signup .signup-pill { font-size: 13px; padding: 3px 10px; }
-.t-signup small { display: block; margin-top: 6px; font-size: 13px; font-weight: 700; color: #1f6b47; }
-.t-signup > a { display: inline-flex; align-items: center; gap: 3px; margin-top: 6px; font-size: 14px; font-weight: 700; color: var(--green); }
-.t-signup > a .i { width: 13px; height: 13px; }
-.t-go { width: 44px; vertical-align: middle !important; }
-.t-go a { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; color: var(--green-deep); }
-.t-go a:hover { background: var(--surface-2); }
-.sr-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+/* ---------- Startseite: Boxen wie dota2news.com – Monatskalender · Spalte · Widget, Verhältnis 2,1 : 1 : 1 ---------- */
+.home-hero { display: grid; grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: stretch; margin-top: 18px; }
+.home-col { display: grid; gap: 16px; align-content: start; min-width: 0; }
+.home-hero > .widget { height: 0; min-height: 100%; }
+/* Der Kalender füllt die Höhe der Reihe, die Wochen teilen sich den Platz */
+.home-cal { display: flex; flex-direction: column; box-shadow: var(--shadow); }
+.home-cal .cal-head { padding: 10px 12px; }
+.home-cal .cal-head h2 { font-size: 22px; }
+#home-cal { flex: 1; display: flex; }
+.home-cal .cal-grid { flex: 1; grid-template-rows: auto; grid-auto-rows: minmax(84px, 1fr); }
+.home-cal .cal-day { min-height: 0; }
+.next-cup { gap: 10px; }
+.next-cup h3 { font-size: 22px; line-height: 1.15; }
+.next-cup h3 a { text-decoration: none; }
+.next-cup h3 a:hover { color: var(--apricot-deep); }
+.next-when { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
+.next-when b { font-size: 18px; color: var(--green-deep); }
+.next-when span { font-size: 14px; font-weight: 700; color: var(--apricot-deep); }
+.next-cup .keyfacts { gap: 6px; }
+.next-cup .keyfacts > div { grid-template-columns: 1fr; gap: 2px; padding-top: 8px; }
+.next-cup .keyfacts dd { font-size: 15px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.next-cup .keyfacts > div:nth-child(4) { display: none; }   /* Spieltermin steht schon direkt unter dem Namen */
+.set-list span > small { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.set-list { list-style: none; margin: 0; padding: 0; display: grid; }
+.set-list li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: start; padding: 10px 0; border-top: 1px solid var(--line); }
+.set-list b { display: block; color: var(--green-deep); font-size: 15px; }
+.set-list small { display: block; font-size: 13px; color: var(--muted); line-height: 1.35; }
+.set-ic { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--green); color: #fff; }
+.set-ic .i { width: 15px; height: 15px; }
+.set-list .is-pbe .set-ic { background: var(--sage); color: var(--green-deep); }
+.set-list .is-set-end .set-ic { background: var(--surface-2); color: var(--green-deep); }
+.set-date { text-align: right; white-space: nowrap; }
+.set-date small { color: var(--apricot-deep); font-weight: 700; }
 .deadline-list span.is-muted { color: var(--muted); font-weight: 600; }
-
 /* Widget mit Maskottchen im Kopf */
 .widget { display: flex; flex-direction: column; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
 .widget-head {
@@ -605,6 +601,12 @@ h1 .ph, h2 .ph, h3 .ph { font-weight: inherit; }
 .lg-streamer { background: var(--lilac); }
 .lg-eigener { background: var(--apricot-soft); }
 .lg-deadline { background: var(--surface); border: 1.5px dashed var(--peach); }
+.lg-info { background: var(--green); }
+/* Set-Termine (Set-Start, PBE, Set-Ende) als Info im Kalender */
+.cal-info { display: flex; align-items: center; gap: 4px; background: var(--green); color: #fff; cursor: help; }
+.cal-info .i { display: none; }
+.cal-info.is-pbe { background: var(--sage); color: var(--green-deep); border: 1.5px solid var(--sage-line); }
+.cal-info.is-set-end { background: var(--surface-2); color: var(--green-deep); border: 1.5px solid var(--line-strong); }
 .cal-empty { padding: 16px; }
 
 /* ---------- Twitch-Seite und Live-Streams ---------- */
@@ -661,23 +663,9 @@ body.modal-open .modal-overlay { display: grid; }
   /* Startseite: Tabelle über die volle Breite, die Seitenspalte darunter in drei Spalten */
   .home-head { flex-direction: column; align-items: stretch; }
   .stat-tiles { flex-wrap: wrap; }
-  .home-side { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .home-side > .plan { grid-column: 1 / -1; }
-  /* Turniertabelle wird zu Karten: jede Zeile ein Kasten, Spaltenname als kleine Überschrift */
-  .cup-table, .cup-table tbody, .cup-table tr, .cup-table td { display: block; width: auto; }
-  .cup-table { background: none; border: 0; box-shadow: none; overflow: visible; }
-  .cup-table thead { display: none; }
-  .cup-table tbody { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-  .cup-table tbody tr { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; align-content: start; }
-  .cup-table tr { position: relative; padding: 14px 16px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
-  .cup-table td { padding: 6px 0; border: 0; }
-  .cup-table tbody tr:hover td { background: none; }
-  .cup-table td[data-label]::before { content: attr(data-label); display: block; margin-bottom: 2px; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-  .cup-table .t-name::before { display: none !important; }
-  .cup-table .t-name { order: -1; padding-right: 40px; }
-  .cup-table .t-go { position: absolute; top: 12px; right: 10px; padding: 0; }
-  .clamp { -webkit-line-clamp: unset; }
-  .cup-table .signup-pill { white-space: normal; }
+  .home-hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .home-hero > .home-cal { grid-column: 1 / -1; }
+
   .grid-5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .footer-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .footer-about { grid-column: 1 / -1; }
@@ -697,8 +685,6 @@ body.modal-open .modal-overlay { display: grid; }
   .grid-3 > :nth-child(3) { display: none; }
   .grid-3.show-all > :nth-child(3) { display: flex; }
   .grid-5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .home-side { grid-template-columns: 1fr; }
-  .t-bar .link-arrow { margin-left: 0; }
 }
 @media (max-width: 680px) {
   .wrap { padding: 0 16px; }
@@ -738,8 +724,9 @@ body.modal-open .modal-overlay { display: grid; }
   .cal-wd { font-size: 11px; padding: 8px 2px; letter-spacing: 0; }
   .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 0 16px; }
   .chips::-webkit-scrollbar { display: none; }
-  .t-bar .chips.home-chips { margin: 0 -16px; }
-  .cup-table tbody { grid-template-columns: minmax(0, 1fr); }
+  .home-hero { grid-template-columns: minmax(0, 1fr); }
+  .home-hero > .widget { height: auto; min-height: 0; }
+  .home-cal .cal-day { min-height: 60px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

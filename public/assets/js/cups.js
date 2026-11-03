@@ -2,7 +2,7 @@
    Darunter die Turniere als Karten mit den fünf Kernfragen. Einstellungen stehen in der Adresse (?ansicht=liste&region=emea …). */
 (function () {
   const D = window.TFTE;
-  const { icon, esc, link, setUrl, empty, cupUrl, ymd, endOf, startOfToday, cupStart, cupPast, cupDates, byStart, signupOpen, cupCard } = window.UI;
+  const { icon, esc, link, setUrl, empty, ymd, startOfToday, cupStart, cupPast, cupDates, byStart, signupOpen, cupCard, calendarGrid, calLegend } = window.UI;
   const $ = (id) => document.getElementById(id);
   const form = $('cup-filters');
 
@@ -91,29 +91,10 @@
   function renderCalendar() {
     const [y, m] = state.monat.split('-').map(Number);
     const first = new Date(y, m - 1, 1);
-    const last = new Date(y, m, 0);
-    const start = new Date(first);
-    start.setDate(1 - ((first.getDay() + 6) % 7));            // Woche beginnt am Montag
     const all = D.cups.filter(matchesBase);
     // im Monat: mindestens ein Spieltag oder der Anmeldeschluss liegt im Monat
     const inMonth = all.filter((c) => cupDates(c).some((d) => d.startsWith(state.monat)) || (c.signupDeadline || '').startsWith(state.monat)).sort(byStart);
     $('cups-count').textContent = count(inMonth.length, ' im Monat');
-
-    const today = ymd(new Date());
-    let cells = '';
-    for (let i = 0; i < 42; i++) {
-      const d = new Date(start);
-      d.setDate(start.getDate() + i);
-      if (i >= 35 && d > last) break;                          // sechste Woche nur, wenn der Monat sie braucht
-      const key = ymd(d);
-      const plays = all.filter((c) => cupDates(c).includes(key));
-      const deadlines = all.filter((c) => c.signupDeadline && c.signupDeadline.slice(0, 10) === key);
-      cells += `<div class="cal-day ${d.getMonth() !== m - 1 ? 'other' : ''} ${key === today ? 'today' : ''}">
-        <span class="cal-num">${d.getDate()}</span>
-        ${deadlines.map((c) => `<a class="cal-ev cal-deadline ${endOf(c.signupDeadline) < new Date() ? 'past' : ''}" href="${cupUrl(c)}" title="Anmeldeschluss: ${esc(c.name)}">${icon('clock')}Anmeldeschluss · ${esc(c.name)}</a>`).join('')}
-        ${plays.map((c) => `<a class="cal-ev ${esc(c.level)} ${cupPast(c) ? 'past' : ''}" href="${cupUrl(c)}" title="${esc(c.name)}">${esc(c.name)}</a>`).join('')}
-      </div>`;
-    }
     const title = first.toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
     const below = !D.cups.length ? noCupsAtAll()
       : inMonth.length ? `<div class="cup-cards">${inMonth.map(cupCard).join('')}</div>`
@@ -124,14 +105,9 @@
           <h2 aria-live="polite">${esc(title)}</h2>
           <button type="button" class="icon-btn" data-month="1" aria-label="Nächster Monat">${icon('chevronRight')}</button>
         </div>
-        <div class="cal-grid">
-          ${['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'].map((w) => `<div class="cal-wd">${w}</div>`).join('')}
-          ${cells}
-        </div>
+        ${calendarGrid(state.monat, all)}
         <div class="cal-legend">
-          <span><i class="lg lg-offiziell"></i>Offiziell</span><span><i class="lg lg-regional"></i>Regional</span>
-          <span><i class="lg lg-streamer"></i>Streamer-Cup</span><span><i class="lg lg-eigener"></i>Eigener Cup</span>
-          <span><i class="lg lg-deadline"></i>Anmeldeschluss</span>
+          ${calLegend()}
           ${state.monat !== ym(new Date()) ? '<button type="button" class="reset-btn" data-today>Zum aktuellen Monat</button>' : ''}
         </div>
       </div>
