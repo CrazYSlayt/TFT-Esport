@@ -24,106 +24,103 @@
   <header id="site-header"></header>
 
   <main class="wrap">
-    <!-- Titelzeile: Turniere im Fokus, rechts die Kennzahlen -->
-    <section class="home-head">
-      <div class="home-title">
+    <!-- Begrüßung: Titel und Einstieg links, rechts ragt Janna oben aus der Box -->
+    <section class="hero-box">
+      <div class="hero-text">
         <p class="eyebrow">Gute Games. Gute Gesellschaft.</p>
-        <h1>Alle TFT-Turniere auf einen Blick</h1>
-        <p class="lead">Offizielle Wettbewerbe, Community- und Streamer-Cups – mit Teilnahmebedingungen, Rang, Anmeldeschluss und Anmeldelink.</p>
+        <h1>Deine Lobby. Deine TFT-Turniere.</h1>
+        <p class="lead">TFT zusammen erleben – vom Community-Cup bis zur Weltmeisterschaft. Alle Turniere mit Rang, Anmeldeschluss und Anmeldelink.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary btn-lg" href="#finder-title">Turniere entdecken<span data-icon="arrow"></span></a>
+          <a class="btn btn-ghost btn-lg" href="cups.html"><span data-icon="calendar"></span>Zum Kalender</a>
+        </div>
+        <p class="hero-stats" id="hero-stats"></p>
       </div>
-      <div class="stat-tiles" id="stat-tiles"></div>
+      <div class="hero-stage" aria-hidden="true">
+        <img class="janna hero-janna" src="assets/img/janna/janna-winken-oben.png" alt="" decoding="async" />
+      </div>
     </section>
 
-    <!-- Einstieg in Boxen: Monatskalender · Nächstes Turnier + Set-Termine · Was steht an? -->
-    <div class="home-hero">
-      <section class="cal home-cal" aria-labelledby="cal-title">
-        <div class="cal-head">
-          <button type="button" class="icon-btn" data-month="-1" aria-label="Vorheriger Monat"><span data-icon="chevronLeft"></span></button>
-          <h2 id="cal-title" aria-live="polite"></h2>
-          <button type="button" class="icon-btn" data-month="1" aria-label="Nächster Monat"><span data-icon="chevronRight"></span></button>
-        </div>
-        <div id="home-cal"></div>
-        <div class="cal-legend" id="home-cal-legend"></div>
-      </section>
+    <div class="home-grid">
+      <div class="home-main">
+        <!-- Das nächste große Match: dunkelgrüne Bühne, Janna mit Pokal ragt heraus -->
+        <section aria-labelledby="next-title">
+          <h2 class="block-title" id="next-title">Das nächste große Match</h2>
+          <article class="feature" id="next-cup"></article>
+        </section>
 
-      <div class="home-col">
-        <article class="panel next-cup" id="next-cup" aria-label="Nächstes Turnier"></article>
-        <div class="panel">
-          <div class="panel-head"><h3>Set-Termine</h3><span>Set-Start, PBE und Set-Ende</span></div>
-          <div id="set-dates"></div>
-        </div>
+        <!-- Finde dein nächstes Turnier: Schnellfilter, Liste oder Monatskalender -->
+        <section aria-labelledby="finder-title">
+          <h2 class="block-title" id="finder-title">Finde dein nächstes Turnier</h2>
+          <div class="finder-bar">
+            <div class="chips chips-boxed" role="group" aria-label="Turniere filtern">
+              <button type="button" class="chip" data-filter="alle" aria-pressed="true">Alle</button>
+              <button type="button" class="chip" data-filter="mitspielen" aria-pressed="false"><span data-icon="swords"></span>Mitspielen</button>
+              <button type="button" class="chip" data-filter="zuschauen" aria-pressed="false"><span data-icon="play"></span>Zuschauen</button>
+              <button type="button" class="chip" data-filter="dach" aria-pressed="false"><span data-icon="pin"></span>DACH</button>
+            </div>
+            <div class="seg" role="group" aria-label="Ansicht">
+              <button type="button" data-view="liste" aria-pressed="true"><span data-icon="list"></span>Liste</button>
+              <button type="button" data-view="kalender" aria-pressed="false"><span data-icon="calendar"></span>Kalender</button>
+            </div>
+          </div>
+          <div class="finder-box" id="finder"></div>
+          <p class="editor-note"><span data-icon="shield"></span>Alle Turniere trägt die Redaktion ein und prüft sie an den Veranstalterquellen. Die Anmeldung läuft direkt beim Veranstalter.</p>
+        </section>
+
+        <!-- Welcher Cup passt zu dir? Janna überlegt mit -->
+        <article class="side-card cup-quiz">
+          <div class="cup-quiz-text">
+            <h2>Welcher Cup passt zu dir?</h2>
+            <p>Finde Turniere für deinen Rang – je nachdem, ob du einfach mitspielen willst oder schon qualifiziert bist.</p>
+            <ul class="quiz-links">
+              <li><a href="cups.html?ansicht=liste&amp;teilnahme=offen">Offen für alle<span data-icon="arrow"></span></a></li>
+              <li><a href="cups.html?ansicht=liste&amp;teilnahme=rang">Mit Rang-Voraussetzung<span data-icon="arrow"></span></a></li>
+              <li><a href="cups.html?ansicht=liste&amp;teilnahme=quali">Nur Qualifizierte<span data-icon="arrow"></span></a></li>
+            </ul>
+          </div>
+          <img class="janna" src="assets/img/janna/janna-ueberlegen-oben.png" alt="" loading="lazy" decoding="async" />
+        </article>
       </div>
 
-      <aside class="widget" aria-labelledby="upcoming-title">
-        <div class="widget-head">
-          <div>
-            <h2 id="upcoming-title">Was steht an?</h2>
-            <p>Kommende Turniere mit Anmeldefristen</p>
+      <aside class="home-side" aria-label="Streams, Cup-Finder und Set-Termine">
+        <article class="side-card stream-teaser">
+          <div class="side-stage" aria-hidden="true">
+            <img class="janna" src="assets/img/janna/janna-caster-oben.png" alt="" loading="lazy" decoding="async" />
           </div>
-          <span data-mascot="widget-mascot"></span>
-        </div>
-        <div class="widget-body">
-          <div class="seg seg-sm" role="group" aria-label="Turniere filtern">
-            <button type="button" data-tab="kommend" aria-pressed="true">Kommend</button>
-            <button type="button" data-tab="offen" aria-pressed="false">Anmeldung offen</button>
-          </div>
-          <div class="upcoming-list" id="upcoming-list"></div>
-          <a class="btn btn-primary btn-block" href="cups.html">Alle Turniere<span data-icon="arrow"></span></a>
-        </div>
+          <h2>Streams &amp; Watchpartys</h2>
+          <p>Gemeinsam TFT schauen – Turnierübertragungen, Co-Streams und Creator.</p>
+          <a class="btn btn-primary" href="twitch.html">Zu den Streams<span data-icon="arrow"></span></a>
+        </article>
+
+        <section class="side-card" id="set-termine" aria-labelledby="set-title">
+          <div class="panel-head"><h2 id="set-title">Set-Termine</h2><span>Set-Start, PBE und Set-Ende</span></div>
+          <div id="set-dates"></div>
+        </section>
       </aside>
     </div>
 
-    <!-- Kommende Turniere als Karten mit den fünf Kernfragen -->
-    <section class="section" aria-labelledby="cards-title">
-      <div class="section-head">
-        <h2 class="label-head" id="cards-title">Kommende Turniere</h2>
-        <a class="link-arrow" href="cups.html">Kalender &amp; alle Filter<span data-icon="arrow"></span></a>
-      </div>
-      <div id="upcoming-cards"></div>
-      <p class="editor-note"><span data-icon="shield"></span>Alle Turniere trägt die Redaktion ein und prüft sie an den Veranstalterquellen. Die Anmeldung läuft direkt beim Veranstalter.</p>
-    </section>
+    <!-- Rund um TFT -->
+    <nav class="round-band" aria-label="Rund um TFT">
+      <span class="round-title"><span data-crown></span>Rund um TFT</span>
+      <a href="#set-termine"><span data-icon="calendar"></span>Set-Termine</a>
+      <a href="live-matches.html"><span data-icon="radio"></span>Live Matches</a>
+      <a href="pro-players.html"><span data-icon="star"></span>Pro Players</a>
+      <a href="news.html"><span data-icon="news"></span>Community-News</a>
+    </nav>
 
-    <!-- Zuletzt gespielt + Live Matches -->
-    <section class="section" aria-label="Zuletzt gespielt und Live Matches">
-      <div class="glance-grid">
-        <div class="panel">
-          <div class="panel-head"><h3>Zuletzt gespielt</h3></div>
-          <div id="recent"></div>
-          <a class="link-arrow" href="cups.html?ansicht=liste&amp;zeitraum=alle">Alle Turniere, auch vergangene<span data-icon="arrow"></span></a>
-        </div>
-        <div class="plan">
-          <p class="plan-label"><span data-icon="info"></span>Geplant</p>
-          <h3>Live Matches</h3>
-          <ul>
-            <li>Laufende Turnier-Lobbys mit Spielphase und Startzeit</li>
-            <li>Aktueller Stand, sofern zuverlässig verfügbar</li>
-            <li>Links zur Übertragung und zur Turnierseite</li>
-          </ul>
-          <a class="link-arrow" href="live-matches.html">Zu Live Matches<span data-icon="arrow"></span></a>
-        </div>
+    <!-- Zuletzt gespielt + Neues aus der Szene -->
+    <section class="section glance-grid" aria-label="Zuletzt gespielt und News">
+      <div class="panel">
+        <div class="panel-head"><h3>Zuletzt gespielt</h3></div>
+        <div id="recent"></div>
+        <a class="link-arrow" href="cups.html?ansicht=liste&amp;zeitraum=alle">Alle Turniere, auch vergangene<span data-icon="arrow"></span></a>
       </div>
-    </section>
-
-    <!-- Aktive Streams -->
-    <section class="twitch-band" aria-labelledby="twitch-title">
-      <div class="section-head">
-        <span class="twitch-mark"><span data-icon="twitch"></span></span>
-        <div>
-          <h2 id="twitch-title">Mach’s dir gemütlich. TFT läuft.</h2>
-          <p class="section-sub">Turnierübertragungen, Co-Streams und Creator – ein guter Platz zum Zuschauen.</p>
-        </div>
-        <a class="link-arrow is-twitch" href="twitch.html">Alle Live Streams<span data-icon="arrow"></span></a>
-      </div>
-      <div class="grid-3" id="home-creators"></div>
-    </section>
-
-    <!-- News aus der Szene -->
-    <section class="section" aria-labelledby="news-title">
-      <div class="section-head">
-        <h2 class="label-head" id="news-title">Neues aus der Szene</h2>
+      <div class="panel">
+        <div class="panel-head"><h3>Neues aus der Szene</h3></div>
+        <div id="home-news"></div>
         <a class="link-arrow" href="news.html">Alle News<span data-icon="arrow"></span></a>
       </div>
-      <div class="grid-5" id="home-news"></div>
     </section>
   </main>
 

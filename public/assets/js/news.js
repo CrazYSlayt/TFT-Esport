@@ -28,7 +28,7 @@
     const c = D.newsCategories.find((x) => x.id === cat);
     box.innerHTML = articles.length
       ? empty({ ic: 'news', title: `Noch keine Artikel in „${esc(c.label)}“`, text: 'In dieser Kategorie ist gerade nichts erschienen. Schau in die anderen Bereiche oder komm bald wieder vorbei.', href: link('news.html'), cta: 'Alle News anzeigen' })
-      : empty({ ic: 'news', title: 'Hier entstehen gerade die ersten News', text: 'Bald findest du hier offizielle Meldungen, Turniere und Ergebnisse, Neues aus der Twitch-Szene und verständliche Erklärungen. Bis dahin: Schau doch bei den Turnieren vorbei.', href: link('cups.html'), cta: 'Zu den Turnieren' });
+      : empty({ pose: 'tablet', title: 'Hier entstehen gerade die ersten News', text: 'Bald findest du hier offizielle Meldungen, Turniere und Ergebnisse, Neues aus der Twitch-Szene und verständliche Erklärungen. Bis dahin: Schau doch bei den Turnieren vorbei.', href: link('cups.html'), cta: 'Zu den Turnieren' });
   }
 
   $('news-filter').addEventListener('click', (e) => {

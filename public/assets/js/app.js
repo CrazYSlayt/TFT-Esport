@@ -29,6 +29,7 @@
     mail: '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/>',
     shield: '<path d="M12 3.5 19 6v5.5c0 4.3-2.9 7.6-7 9-4.1-1.4-7-4.7-7-9V6z"/>',
     info: '<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/>',
+    lock: '<rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>',
     link: '<path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/>',
     sofa: '<path d="M5 11V8.5A2.5 2.5 0 0 1 7.5 6h9A2.5 2.5 0 0 1 19 8.5V11"/><path d="M3.5 12.5a2 2 0 0 1 4 0V14h9v-1.5a2 2 0 0 1 4 0V18h-17z"/><path d="M6 18v2M18 18v2"/>'
   };
@@ -115,22 +116,16 @@
   const imgPlaceholder = (text, cls = '') =>
     `<div class="ph-img ${cls}" role="img" aria-label="Bildplatzhalter: ${esc(text)}"><span>${icon('image')}${esc(text)}</span></div>`;
 
-  // Maskottchen: Bild aus assets/img/ (erst .webp, dann .png). Fehlt die Datei, bleibt ein beschrifteter Platzhalter.
-  const MASCOT = ['assets/img/maskottchen.webp', 'assets/img/maskottchen.png'];
-  const mascot = (cls = '') =>
-    `<span class="mascot ${cls}"><img src="${link(MASCOT[0])}" alt="" data-try="1" onerror="UI.mascotNext(this)" /><span class="mascot-ph">Maskottchen</span></span>`;
-  function mascotNext(img) {
-    const i = Number(img.dataset.try);
-    if (i < MASCOT.length) { img.dataset.try = i + 1; img.src = link(MASCOT[i]); return; }
-    img.closest('.mascot').classList.add('is-missing');
-    img.remove();
-  }
-  const searchEmpty = (title, text) => `<div class="search-empty">${mascot('search-mascot')}<p class="empty-title">${title}</p><p class="empty-text">${text}</p></div>`;
+  // Janna, das Maskottchen: 10 Posen in assets/img/janna/ – als Oberkörper ('-oben', Standard) oder ganze Figur.
+  // Posen: winken, caster, ueberlegen, pokal, tablet, staunen, daumen, traurig, fan, krone
+  const janna = (pose, cls = '', full = false) =>
+    `<img class="janna ${cls}" src="${link(`assets/img/janna/janna-${pose}${full ? '' : '-oben'}.png`)}" alt="" loading="lazy" decoding="async" />`;
+  const searchEmpty = (title, text, pose) => `<div class="search-empty">${janna(pose, 'search-janna')}<p class="empty-title">${title}</p><p class="empty-text">${text}</p></div>`;
 
-  // Leerzustand: Symbol, Titel, kurzer Text, optional ein Link
-  const empty = ({ ic = 'info', title, text, href, cta, cls = '' }) => `
-    <div class="empty ${cls}">
-      <span class="empty-ic">${icon(ic)}</span>
+  // Leerzustand: Symbol (oder Janna), Titel, kurzer Text, optional ein Link
+  const empty = ({ ic = 'info', title, text, href, cta, cls = '', pose }) => `
+    <div class="empty ${cls} ${pose ? 'has-janna' : ''}">
+      ${pose ? janna(pose, 'empty-janna') : `<span class="empty-ic">${icon(ic)}</span>`}
       <div>
         <p class="empty-title">${title}</p>
         ${text ? `<p class="empty-text">${text}</p>` : ''}
@@ -165,6 +160,33 @@
           <span class="signup is-${s.key}">${esc(s.text)}</span>
         </span>
       </span>
+      <span class="row-go">${icon('arrow')}</span>
+    </a>`;
+  }
+
+  // Zeile „Finde dein nächstes Turnier“ (Startseite): Datum, Art, Name, Region · Spielblock, Anmeldestatus
+  const LEVEL_IC = { regional: 'pin', streamer: 'twitch', eigener: 'users' };
+  function finderStatus(c) {
+    let key = signupState(c).key;
+    if (key === 'unknown' && c.requirement === 'quali') key = 'none';   // Info-Link, aber keine offene Anmeldung
+    const st = {
+      open: () => ({ ic: 'users', text: `Anmeldung bis ${fmtDay(c.signupDeadline)}` }),
+      soon: () => ({ ic: 'clock', text: `Anmeldung ab ${fmtDay(c.signupStart)}` }),
+      unknown: () => ({ ic: 'info', text: 'Anmeldung folgt' }),
+      closed: () => ({ ic: 'play', text: 'Zuschauen' }),
+      none: () => ({ ic: 'lock', text: 'Nur Qualifizierte' })
+    }[key]();
+    return { key, ...st };
+  }
+  function finderRow(c) {
+    const next = cupDays(c).find((x) => endOf(x.to) >= new Date()) || cupDays(c)[0];
+    const dm = dayMonth(next.from.slice(0, 10));
+    const st = finderStatus(c);
+    return `<a class="finder-row" href="${cupUrl(c)}">
+      <span class="date-badge"><b>${dm.day}</b><small>${dm.mon}</small></span>
+      <span class="level-ic is-${esc(c.level)}">${c.level === 'offiziell' ? crown() : icon(LEVEL_IC[c.level] || 'trophy')}</span>
+      <span class="finder-main"><strong>${esc(c.name)}</strong><small>${esc(label('regions', c.region))} · ${esc(next.label || label('cupLevels', c.level))}</small></span>
+      <span class="status-pill is-${st.key}">${icon(st.ic)}${esc(st.text)}</span>
       <span class="row-go">${icon('arrow')}</span>
     </a>`;
   }
@@ -426,7 +448,7 @@
     function run() {
       const all = items();
       if (!all.length) {
-        results.innerHTML = searchEmpty('Noch nichts zu finden', 'Sobald die ersten News und Turniere online sind, findest du sie hier.');
+        results.innerHTML = searchEmpty('Noch nichts zu finden', 'Sobald die ersten News und Turniere online sind, findest du sie hier.', 'tablet');
         return;
       }
       const q = input.value.trim().toLowerCase();
@@ -434,7 +456,7 @@
       results.innerHTML = list.length
         ? `<p class="search-hint">${q ? `${list.length} Treffer` : 'Neueste Einträge'}</p>` +
           list.map((x) => `<a class="search-item" href="${x.href}">${tag(x.kind)}<strong>${esc(x.title)}</strong></a>`).join('')
-        : searchEmpty('Keine Treffer', 'Versuch es mit einem anderen Begriff – zum Beispiel einem Turniernamen oder „DACH“.');
+        : searchEmpty('Keine Treffer', 'Versuch es mit einem anderen Begriff – zum Beispiel einem Turniernamen oder „DACH“.', 'ueberlegen');
     }
 
     const open = () => { document.body.classList.add('search-open'); run(); setTimeout(() => input.focus(), 30); };
@@ -448,19 +470,17 @@
     });
   }
 
-  /* ---------- Footer: Marke mit Maskottchen, Spalten, Rechtszeile ---------- */
+  /* ---------- Footer: Marke, Spalten, Rechtszeile – Janna steht rechts und schaut oben heraus ---------- */
   function renderFooter() {
     const el = document.getElementById('site-footer');
     if (!el) return;
     el.className = 'site-footer';
     el.innerHTML = `
       <div class="wrap footer-cols">
+        ${janna('krone', 'footer-janna', true)}
         <div class="footer-about">
-          ${mascot('footer-mascot')}
-          <div>
-            ${brand()}
-            <p class="footer-claim">Dein Game. Deine Szene. Dein Platz. News, Turniere und Streams für alle, die TFT spielen oder gern zuschauen.</p>
-          </div>
+          ${brand()}
+          <p class="footer-claim">Dein Game. Deine Szene. Dein Platz. Turniere, Streams und News für alle, die TFT spielen oder gern zuschauen.</p>
         </div>
         <nav aria-label="Entdecken"><h4>Entdecken</h4>${NAV.map((n) => `<a href="${n.href}">${n.label}</a>`).join('')}</nav>
         <nav aria-label="TFTEsport"><h4>${esc(D.site.name)}</h4>${LEGAL.map((l) => `<a href="${l.href}">${l.label}</a>`).join('')}</nav>
@@ -473,7 +493,7 @@
   }
 
   window.UI = {
-    mascot, mascotNext, icon, crown, esc, fmt, served, link, setUrl, toDate, fmtDate, fmtTime, dayMonth, label, catLabel, articleUrl, cupUrl,
+    janna, finderRow, finderStatus, icon, crown, esc, fmt, served, link, setUrl, toDate, fmtDate, fmtTime, dayMonth, label, catLabel, articleUrl, cupUrl,
     sortByDateDesc, upcomingCups, startOfToday, signupOpen, imgPlaceholder, empty, tag, articleCard, cupRow,
     calendarGrid, calLegend, SET_ICON,
     ymd, endOf, fmtDay, fmtWhen, cupDays, cupStart, cupNext, cupEnd, cupPast, cupDates, byStart, fmtDays, signupState, hostOf, keyFacts, cupCard,
@@ -482,8 +502,12 @@
 
   // Symbole im statischen HTML: <span data-icon="arrow"></span> wird zum SVG
   document.querySelectorAll('[data-icon]').forEach((el) => { el.outerHTML = icon(el.dataset.icon); });
-  // Maskottchen-Plätze im statischen HTML: <span data-mascot="klasse"></span>
-  document.querySelectorAll('[data-mascot]').forEach((el) => { el.outerHTML = mascot(el.dataset.mascot); });
+  document.querySelectorAll('[data-crown]').forEach((el) => { el.outerHTML = crown(); });
+  // Seitenkopf als Box, aus der Janna oben herausragt: <section class="page-head" data-janna="tablet">
+  document.querySelectorAll('.page-head[data-janna]').forEach((el) => {
+    el.classList.add('has-janna');
+    el.insertAdjacentHTML('beforeend', janna(el.dataset.janna, 'head-janna'));
+  });
 
   renderHeader();
   renderDrawer();

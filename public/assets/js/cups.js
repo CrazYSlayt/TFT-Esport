@@ -64,8 +64,8 @@
   const filtersActive = () => ['region', 'teilnahme', 'art', 'offen'].some((k) => state[k]) || (state.ansicht === 'liste' && state.zeitraum !== 'kommend');
   const count = (n, suffix = '') => `${n} ${n === 1 ? 'Turnier' : 'Turniere'}${suffix}`;
 
-  const noCupsAtAll = () => empty({ ic: 'trophy', title: 'Noch keine Turniere eingetragen', text: 'Sobald die Redaktion neue Termine einträgt, erscheinen sie hier – mit Teilnahmebedingungen, Anmeldeschluss und Spielterminen.' });
-  const noMatch = (text) => empty({ ic: 'calendar', title: 'Keine Turniere für diese Auswahl', text, href: link('cups.html'), cta: 'Filter zurücksetzen' });
+  const noCupsAtAll = () => empty({ pose: 'traurig', title: 'Noch keine Turniere eingetragen', text: 'Sobald die Redaktion neue Termine einträgt, erscheinen sie hier – mit Teilnahmebedingungen, Anmeldeschluss und Spielterminen.' });
+  const noMatch = (text) => empty({ pose: 'ueberlegen', title: 'Keine Turniere für diese Auswahl', text, href: link('cups.html'), cta: 'Filter zurücksetzen' });
 
   // Karten nach Monat gruppiert
   function grouped(list) {

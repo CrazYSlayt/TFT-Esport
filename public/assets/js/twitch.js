@@ -34,7 +34,7 @@
     box.className = de.length ? 'stream-grid' : '';
     box.innerHTML = de.length
       ? de.map((s) => streamCard(s, pros.has(s.login.toLowerCase()))).join('')
-      : empty({ ic: 'radio', title: 'Gerade ist kein deutschsprachiger TFT-Stream live', text: 'In anderen Sprachen läuft vielleicht etwas.', href: link('twitch/live-streams.html'), cta: 'Alle Live-Streams' });
+      : empty({ pose: 'traurig', title: 'Gerade ist kein deutschsprachiger TFT-Stream live', text: 'In anderen Sprachen läuft vielleicht etwas.', href: link('twitch/live-streams.html'), cta: 'Alle Live-Streams' });
   }
   renderLive();
 })();

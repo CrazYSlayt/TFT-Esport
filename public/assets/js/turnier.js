@@ -10,7 +10,7 @@
   if (!c) {
     $('cup-name').textContent = 'Turnier nicht gefunden';
     document.querySelector('.layout-aside').outerHTML = empty({
-      ic: 'trophy', title: 'Dieses Turnier gibt es nicht (mehr)',
+      pose: 'traurig', title: 'Dieses Turnier gibt es nicht (mehr)',
       text: 'Vielleicht wurde es umbenannt oder entfernt. In der Übersicht findest du alle aktuellen Turniere.',
       href: link('cups.html'), cta: 'Zu allen Turnieren'
     });
