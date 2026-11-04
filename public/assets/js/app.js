@@ -474,13 +474,13 @@
   }
 
   /* ---------- Werbeflächen links und rechts neben dem Inhalt ----------
-     Nur auf breiten Bildschirmen sichtbar (ab 1640 px: 160 × 600, ab 1880 px: 300 × 600), siehe CSS „Werbeflächen“.
-     Bis echte Banner eingebunden sind, stehen dort beschriftete Platzhalter. AD_PLACEHOLDERS = false blendet sie aus. */
-  const AD_PLACEHOLDERS = true;
+     Nur auf breiten Bildschirmen (ab 1560 px: 120 × 600, ab 1640 px: 160 × 600), siehe CSS „Werbeflächen“.
+     Bis echte Banner eingebunden sind, bleibt der Platz leer. AD_PLACEHOLDERS = true zeigt beschriftete Platzhalter. */
+  const AD_PLACEHOLDERS = false;
   function renderAdRails() {
     if (!AD_PLACEHOLDERS) return;
     const slot = (side) => `<aside class="ad-rail ad-${side}" aria-label="Werbefläche">
-        <div class="ad-slot"><span>Anzeige</span><small>Werbefläche <b class="ad-160">160 × 600</b><b class="ad-300">300 × 600</b></small></div>
+        <div class="ad-slot"><span>Anzeige</span><small>Werbefläche <b class="ad-120">120 × 600</b><b class="ad-160">160 × 600</b></small></div>
       </aside>`;
     document.body.insertAdjacentHTML('beforeend', slot('left') + slot('right'));
   }
