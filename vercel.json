@@ -7,6 +7,28 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "tft-esports.com"
+        }
+      ],
+      "destination": "https://www.tft-esports.com/",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "tft-esport.vercel.app"
+        }
+      ],
+      "destination": "https://www.tft-esports.com/",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [
         {
