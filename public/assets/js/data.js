@@ -77,9 +77,12 @@ window.TFTE = {
       "login": "crazyslayt",
       "name": "CrazYSlayt",
       "role": "Streamer & coach",
-      "extra": [["star", "Rank", "Challenger"], ["link", "Project", "TFTClimb", "founder"]],
+      "extra": [["star", "Rank", "Challenger", "since Set 15"], ["trophy", "Peak", "1,002 LP"], ["users", "Coach", "since Set 17"], ["link", "Project", "TFTClimb", "founder"]],
       "focus": "TFT Challenger · Founder of TFTClimb",
-      "about": "CrazYSlayt is a TFT Challenger player and the founder of TFTClimb, the home of tier lists, tools and coaching for Teamfight Tactics.",
+      "realName": "Claudio",
+      "country": "Germany",
+      "region": "EMEA",
+      "about": "CrazYSlayt (Claudio) from Frankfurt has been a TFT Challenger since Set 15 and a coach since Set 17, with a peak of 1,002 LP. He founded TFTClimb, the home of tier lists, tools and coaching for Teamfight Tactics, together with his partner Kevin10K, and runs TFT E-Sports.",
       "image": "",
       "links": [
         {

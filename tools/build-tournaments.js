@@ -10,7 +10,7 @@ const ROOT = path.join(__dirname, '..', 'public');
 const SITE = 'https://www.tft-esports.com';
 const OUT = path.join(ROOT, 'tft-tournaments');
 const STREAMERS = path.join(ROOT, 'tft-streamers');
-const STATIC_PAGES = ['/', '/tft-tournaments', '/tft-tacticians-crown', '/live-matches', '/twitch', '/pro-players', '/news'];
+const STATIC_PAGES = ['/', '/tft-tournaments', '/tft-tacticians-crown', '/live-matches', '/twitch', '/pro-players', '/about'];
 
 /* ---------- Seitenskripte ohne Browser laden: eine Attrappe genügt, gebraucht werden nur die Bausteine aus window.UI ---------- */
 const stub = () => new Proxy(function () {}, { get: (t, k) => (k === Symbol.toPrimitive ? () => '' : k === 'dataset' ? {} : stub()), apply: () => stub(), set: () => true });

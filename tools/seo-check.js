@@ -75,7 +75,8 @@ for (const f of files) {
     if (!noindex && !inSitemap.has(url)) bad('indexierbar, fehlt aber in sitemap.xml');
   }
 
-  for (const m of html.matchAll(/(?:href|src)="([^"#][^"]*)"/g)) {
+  // <base href="/"> der 404-Seite ist gewollt: Sie wird unter beliebig tiefen Adressen ausgeliefert, nie per Doppelklick geöffnet
+  for (const m of html.replace(/<base [^>]*>/, '').matchAll(/(?:href|src)="([^"#][^"]*)"/g)) {
     if (m[1].startsWith('//') || /^[a-z]+:/i.test(m[1])) continue;   // extern (https:, mailto: …)
     if (m[1].startsWith('/')) bad(`Wurzel-Pfad ${m[1]} – läuft nicht per Doppelklick, relativ verlinken`);
     else if (!exists(m[1], path.dirname(f))) bad(`Link/Datei ohne Ziel: ${m[1]}`);

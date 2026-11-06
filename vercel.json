@@ -18,6 +18,17 @@
       "permanent": true
     },
     {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "tft-esport.vercel.app"
+        }
+      ],
+      "destination": "https://www.tft-esports.com/:path*",
+      "permanent": true
+    },
+    {
       "source": "/cups",
       "destination": "/tft-tournaments",
       "permanent": true
@@ -54,15 +65,6 @@
     }
   ],
   "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
-      ]
-    },
     {
       "source": "/assets/fonts/(.*)",
       "headers": [

@@ -73,11 +73,9 @@ Das Secret nie committen und nie teilen. `server.ps1` ist die alte lokale Varian
 
 - Repository: `github.com/CrazYSlayt/TFT-Esport` (privat), Vercel-Projekt importiert es, ausgeliefert wird nur `public/` (`vercel.json`).
 - Änderungen hochladen: **`Änderungen veröffentlichen.cmd`** doppelklicken – Vercel stellt sie danach automatisch live.
-- Solange `vercel.json` den Header `X-Robots-Tag: noindex, nofollow` setzt, ist die Seite für Suchmaschinen gesperrt.
-  Zum echten Start diesen Block entfernen.
+- Für Suchmaschinen freigegeben seit 06.11.2026. `tft-esport.vercel.app` und `tft-esports.com` leiten auf `www.tft-esports.com` weiter.
 
-## Offen vor dem Launch
+## Offen
 
-- Domain: `https://www.tft-esports.com`; `tft-esports.com` leitet per `vercel.json` auf `www` weiter.
-- Sperre für Suchmaschinen entfernen (Header in `vercel.json`), Search Console einrichten.
-- Über-uns-Text füllen, Pro Players und News mit ersten Einträgen starten.
+- Search Console: Property anlegen und `sitemap.xml` einreichen.
+- News: mit dem ersten Artikel das `noindex` in `news.html` entfernen und `/news` in `STATIC_PAGES` aufnehmen.
