@@ -43,7 +43,7 @@
   });
 
   /* ---------- Offizieller Kanal und Co-Streams ---------- */
-  const isCrownStream = (s) => s.login.toLowerCase() !== CHANNEL && /crown|world championship|tactician/i.test(s.title || '');
+  const isCrownStream = (s) => s.login.toLowerCase() !== CHANNEL && /crown|world championship/i.test(s.title || '');
   async function renderStreams() {
     const { data, reason } = await loadStreams();
     const status = $('crown-status');
