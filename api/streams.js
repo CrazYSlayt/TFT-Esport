@@ -56,7 +56,7 @@ module.exports = async (req, res) => {
         });
       }
       cursor = r.pagination && r.pagination.cursor;
-      if (!cursor || r.data.length < 100) { cursor = null; break; }
+      if (!cursor || !r.data.length) { cursor = null; break; }   // Twitch liefert auch mitten in der Liste manchmal weniger als 100
     }
     res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=120');   // Vercel beantwortet Abrufe eine Minute aus dem Zwischenspeicher
     res.statusCode = 200;
