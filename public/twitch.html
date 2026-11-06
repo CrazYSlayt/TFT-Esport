@@ -28,40 +28,36 @@
   <header id="site-header"></header>
 
   <main class="wrap">
-    <section class="page-head" data-janna="fan">
-      <p class="eyebrow">Live Streams</p>
-      <h1>TFT Live Streams</h1>
-      <p class="lead">Active TFT channels, official broadcasts and creator picks – grab a comfy seat and watch along.</p>
+    <!-- Streams ganz oben, rechts daneben der Zeitplan -->
+    <section class="streams-head">
+      <div>
+        <h1>TFT Live Streams</h1>
+        <p class="live-summary" id="live-count"></p>
+      </div>
+      <a class="link-arrow is-twitch" href="twitch/live-streams.html">All live streams<span data-icon="arrow"></span></a>
     </section>
 
-    <section class="section" aria-labelledby="broadcasts-title">
-      <div class="section-head">
-        <div>
-          <h2 id="broadcasts-title">Official broadcasts &amp; co-streams</h2>
-          <p class="section-sub">Official tournament broadcasts and confirmed co-streams with date and channel.</p>
+    <div class="streams-top">
+      <section aria-label="Live now">
+        <div id="live-now"></div>
+      </section>
+
+      <aside class="side-card stream-teaser tt-card" aria-labelledby="tt-title">
+        <div class="side-stage">
+          <h2 id="tt-title">Timetable</h2>
+          <img class="janna janna-fan at-r" src="assets/img/janna/janna-fan-bust.png" alt="" decoding="async" />
         </div>
+        <div class="tt-list" id="broadcasts"></div>
         <a class="link-arrow" href="tft-tacticians-crown.html#watch">World Championship stream<span data-icon="arrow"></span></a>
-      </div>
-      <div class="upcoming-list" id="broadcasts"></div>
-    </section>
-
-    <section class="section" aria-labelledby="live-title">
-      <div class="section-head">
-        <div>
-          <h2 id="live-title">Live now in English</h2>
-          <p class="section-sub">Active English TFT channels with the most viewers.</p>
-        </div>
-        <a class="link-arrow is-twitch" href="twitch/live-streams.html">All live streams<span data-icon="arrow"></span></a>
-      </div>
-      <div id="live-now"></div>
-    </section>
+      </aside>
+    </div>
 
     <section class="twitch-band" aria-labelledby="creators-title">
       <div class="section-head">
         <span class="twitch-mark"><span data-icon="twitch"></span></span>
         <div>
-          <h2 id="creators-title">Channel picks</h2>
-          <p class="section-sub">Creators with ranked, analysis and community content – hand-picked and visible even when they are offline.</p>
+          <h2 id="creators-title">Streamer profiles</h2>
+          <p class="section-sub">Hand-picked TFT streamers with their live status – visible even when they are offline.</p>
         </div>
       </div>
       <div class="grid-3 show-all" id="creators"></div>

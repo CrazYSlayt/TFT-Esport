@@ -9,6 +9,7 @@ const vm = require('vm');
 const ROOT = path.join(__dirname, '..', 'public');
 const SITE = 'https://www.tft-esports.com';
 const OUT = path.join(ROOT, 'tft-tournaments');
+const STREAMERS = path.join(ROOT, 'tft-streamers');
 const STATIC_PAGES = ['/', '/tft-tournaments', '/tft-tacticians-crown', '/live-matches', '/twitch', '/twitch/live-streams', '/news'];
 
 /* ---------- Seitenskripte ohne Browser laden: eine Attrappe genügt, gebraucht werden nur die Bausteine aus window.UI ---------- */
@@ -24,8 +25,8 @@ global.history = { replaceState() {} };
 for (const f of ['assets/js/data.js', 'assets/data/turniere.js', 'assets/js/app.js', 'assets/js/turnier.js']) {
   vm.runInThisContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), { filename: f });
 }
-const { cups } = window.TFTE;
-const { esc, cupDays, cupPast, label } = window.UI;
+const { cups, creators } = window.TFTE;
+const { esc, cupDays, cupPast, label, icon, creatorImage } = window.UI;
 
 const clip = (s, n) => (s.length <= n ? s : `${s.slice(0, n - 1).replace(/\s+\S*$/, '')}…`);
 const keyword = (name) => (/\bTFT\b/.test(name) ? name : `TFT ${name}`);
@@ -123,11 +124,91 @@ fs.mkdirSync(OUT, { recursive: true });
 const built = cups.filter((c) => !c.page && cupDays(c).length);
 for (const c of built) fs.writeFileSync(path.join(OUT, `${c.id}.html`), html(c));
 
-const urls = [...STATIC_PAGES, ...built.filter(indexable).map((c) => `/tft-tournaments/${c.id}`)];
+/* ---------- Streamer-Profile ---------- */
+function streamerHtml(c) {
+  const url = `${SITE}/tft-streamers/${c.login}`;
+  const title = esc(`${c.name}: TFT Streamer Profile | TFTEsport`);
+  const desc = esc(clip(`${c.name}, TFT streamer on Twitch: profile, live status and channel links. ${c.focus || ''}`, 134));
+  const person = { '@context': 'https://schema.org', '@type': 'Person', name: c.name, url, sameAs: [`https://www.twitch.tv/${c.login}`, ...(c.links || []).map((l) => l.url)] };
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Erzeugt von tools/build-tournaments.js aus assets/js/data.js (creators) -->
+  <title>${title}</title>
+  <meta name="description" content="${desc}" />
+  <link rel="canonical" href="${url}" />
+  <meta property="og:type" content="profile" />
+  <meta property="og:site_name" content="TFTEsport" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="${title}" />
+  <meta property="og:description" content="${desc}" />
+  <meta property="og:url" content="${url}" />
+  <meta property="og:image" content="${SITE}/${c.image || 'assets/img/og-tft-esports.png'}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#213d2c" />
+  <link rel="icon" type="image/png" sizes="64x64" href="../assets/brand/favicon-64.png" />
+  <link rel="apple-touch-icon" href="../assets/brand/apple-touch-icon.png" />
+  <link rel="preload" href="../assets/fonts/Barlow-800-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <script src="../assets/js/ga.js"></script>
+  <script type="application/ld+json">${JSON.stringify(person).replace(/</g, '\\u003c')}</script>
+</head>
+<body data-page="twitch" data-streamer="${esc(c.login)}">
+  <header id="site-header"></header>
+
+  <main class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="../index.html">Home</a><span data-icon="chevronRight"></span><a href="../twitch.html">Live Streams</a><span data-icon="chevronRight"></span><span>${esc(c.name)}</span>
+    </nav>
+
+    <section class="streamer-hero">
+      <div class="streamer-portrait">${creatorImage(c)}</div>
+      <div class="streamer-info">
+        <p class="eyebrow">TFT streamer</p>
+        <h1>${esc(c.name)}</h1>
+        <p class="streamer-focus">${esc(c.focus || '')}</p>
+        <p class="streamer-status" id="streamer-status"><span class="dot" aria-hidden="true"></span>Offline right now</p>
+        <p class="lead">${esc(c.bio || '')}</p>
+        <div class="hero-actions">
+          <a class="btn btn-twitch" href="https://www.twitch.tv/${esc(c.login)}" target="_blank" rel="noopener">twitch.tv/${esc(c.login)}${icon('external')}</a>
+          ${(c.links || []).map((l) => `<a class="btn btn-ghost" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}${icon('external')}</a>`).join('')}
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="watch-title">
+      <h2 class="block-title" id="watch-title">Watch ${esc(c.name)}</h2>
+      <div class="crown-player" id="streamer-player">
+        <div class="crown-player-load">
+          <button type="button" class="btn btn-twitch btn-lg" id="streamer-load"><span data-icon="play"></span>Load the Twitch player</button>
+          <p>The player only loads after your click. From then on Twitch's <a href="https://www.twitch.tv/p/legal/privacy-notice/" target="_blank" rel="noopener">privacy notice</a> applies.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/data/turniere.js"></script>
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/streamer.js"></script>
+</body>
+</html>
+`;
+}
+fs.rmSync(STREAMERS, { recursive: true, force: true });
+fs.mkdirSync(STREAMERS, { recursive: true });
+for (const c of creators) fs.writeFileSync(path.join(STREAMERS, `${c.login}.html`), streamerHtml(c));
+
+const urls = [...STATIC_PAGES, ...built.filter(indexable).map((c) => `/tft-tournaments/${c.id}`), ...creators.map((c) => `/tft-streamers/${c.login}`)];
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <!-- Erzeugt von tools/build-tournaments.js. Nur Seiten, die in die Suche sollen (kein noindex). -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((u) => `  <url><loc>${SITE}${u === '/' ? '/' : u}</loc></url>`).join('\n')}
 </urlset>
 `);
-console.log(`✔ ${built.length} Turnierseiten, ${urls.length} Adressen in der Sitemap`);
+console.log(`✔ ${built.length} Turnierseiten, ${creators.length} Streamer-Profile, ${urls.length} Adressen in der Sitemap`);

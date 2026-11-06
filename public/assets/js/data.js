@@ -63,10 +63,19 @@ window.TFTE = {
   setEvents: [],
 
   /*
-   * Twitch-Creator-Empfehlungen (redaktionell ausgewählt).
-   * { login: 'twitch_login', name: 'Anzeigename', focus: 'Ranked & Analyse', lang: 'de', featured: true }
+   * Streamer-Profile (redaktionell ausgewählt). Jeder Eintrag bekommt eine Seite unter tft-streamers/<login>.html.
+   * { login: 'twitch_login', name: 'Anzeigename', focus: 'kurze Zeile', bio: 'Text', image: 'assets/img/streamers/<login>.png' (Karikatur, optional),
+   *   links: [{ label, url }] }
+   * Nur Streamer eintragen, die mit Profil und Karikatur einverstanden sind.
    */
-  creators: [],
+  creators: [
+    {
+      login: 'crazyslayt', name: 'CrazYSlayt', focus: 'TFT Challenger · Founder of TFTClimb',
+      bio: 'TFT Challenger and founder of TFTClimb, the home of tier lists, tools and coaching for Teamfight Tactics.',
+      image: '',
+      links: [{ label: 'TFTClimb', url: 'https://www.tftclimb.com' }, { label: 'Coaching', url: 'https://www.tftclimb.com/coaching' }]
+    }
+  ],
 
   /*
    * Turnierübertragungen.

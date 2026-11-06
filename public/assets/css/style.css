@@ -151,6 +151,20 @@ main.wrap { padding-bottom: 56px; }
 .mainnav .i { width: 17px; height: 17px; color: var(--gold); }
 .nav-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-bright); box-shadow: 0 0 0 3px rgba(46, 172, 89, .25); }
 
+/* Leiste unter dem Menü: Twitch-Status des Betreibers */
+.dot { display: inline-block; flex: none; width: 10px; height: 10px; border-radius: 50%; background: #a4ada7; }
+.dot.is-live { background: var(--green-bright); box-shadow: 0 0 0 3px rgba(46, 172, 89, .25); animation: dot-pulse 2s ease-in-out infinite; }
+@keyframes dot-pulse { 50% { box-shadow: 0 0 0 6px rgba(46, 172, 89, .1); } }
+.live-bar { background: var(--surface); border-bottom: 1px solid var(--line); }
+.live-bar.is-live { background: var(--sage); border-bottom-color: var(--sage-line); }
+.live-bar-in { display: flex; align-items: center; gap: 8px; min-height: 36px; font-size: 14px; color: var(--ink-soft); text-decoration: none; }
+.live-bar-in b { color: var(--green-deep); }
+.lb-state { color: var(--muted); }
+.live-bar.is-live .lb-state { font-weight: 700; color: var(--green); }
+.lb-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lb-go { display: inline-flex; align-items: center; gap: 5px; flex: none; margin-left: auto; font-weight: 700; color: var(--twitch); }
+.lb-go .i { width: 15px; height: 15px; }
+
 /* ---------- Drawer (mobil) ---------- */
 .drawer-wrap { position: fixed; inset: 0; z-index: 60; pointer-events: none; }
 .drawer-backdrop { position: absolute; inset: 0; background: rgba(22, 58, 48, .35); opacity: 0; transition: opacity .2s; }
@@ -583,6 +597,26 @@ h1 .ph, h2 .ph, h3 .ph { font-weight: inherit; }
 .creator-card small { color: var(--ink-soft); font-size: 15px; }
 .creator-card .card-go { color: var(--twitch); }
 
+/* Streamer-Karten und -Profile: Karikatur oder Anfangsbuchstabe */
+.creator-top { position: relative; display: grid; place-items: end center; height: 190px; overflow: hidden; background: var(--fresh); }
+.creator-img { width: auto; height: 100%; object-fit: contain; }
+.creator-initial { display: grid; place-items: center; align-self: center; width: 96px; height: 96px; border-radius: 50%; background: var(--green); color: #fff; font-size: 44px; font-weight: 800; }
+.creator-initial.is-empty { background: var(--surface); border: 2px dashed var(--sage-line); color: var(--muted); }
+.creator-initial .i { width: 36px; height: 36px; }
+.creator-live { position: absolute; top: 10px; left: 10px; display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; background: var(--surface); font-size: 13px; font-weight: 700; color: var(--muted); }
+.creator-live.is-live { color: var(--green); }
+.creator-live.is-live .dot { background: var(--green-bright); }
+.streamer-hero { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 30px; align-items: center; margin-top: 18px; padding: 14px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
+.streamer-portrait { display: grid; place-items: end center; min-height: 300px; overflow: hidden; border-radius: 18px; background: var(--fresh); }
+.streamer-portrait .creator-initial { width: 150px; height: 150px; font-size: 70px; }
+.streamer-info { display: grid; gap: 10px; justify-items: start; padding: 10px 20px 10px 0; }
+.streamer-info h1 { font-size: clamp(34px, 3.4vw, 52px); letter-spacing: -.02em; }
+.streamer-focus { font-weight: 700; color: var(--ink-soft); }
+.streamer-status { display: flex; align-items: center; gap: 8px; font-size: 15px; color: var(--muted); }
+.streamer-status.is-live { color: var(--green); }
+.streamer-status b { font-weight: 800; }
+.streamer-info .lead { font-size: 18px; }
+
 /* ---------- CTA-Band ---------- */
 .cta-band {
   margin-top: 28px; display: flex; align-items: center; gap: 22px; padding: 22px 26px;
@@ -927,6 +961,25 @@ h1 .ph, h2 .ph, h3 .ph { font-weight: inherit; }
 .cal-empty { padding: 16px; }
 
 /* ---------- Twitch-Seite und Live-Streams ---------- */
+/* Streams ganz oben, rechts der Zeitplan */
+.streams-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 6px 20px; padding: 22px 0 14px; }
+.streams-head h1 { font-size: clamp(30px, 3vw, 42px); letter-spacing: -.02em; }
+.streams-head .live-summary { min-height: 24px; margin-top: 4px; font-size: 15px; }
+.streams-top { display: grid; grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.streams-top .stream-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.tt-card { margin-top: 38px; }
+.tt-card .tt-list, .tt-card > .link-arrow { margin: 0 22px; }
+.tt-card .side-stage { min-height: 120px; }
+.tt-card .side-stage .janna { max-height: 190px; }
+.tt-list { display: grid; gap: 4px; }
+.tt-row { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); text-decoration: none; }
+.tt-row:first-child { border-top: 0; }
+.tt-row .date-badge { min-width: 52px; padding: 6px 4px; }
+.tt-row .date-badge b { font-size: 21px; }
+.tt-main { display: grid; gap: 2px; min-width: 0; }
+.tt-main strong { line-height: 1.2; color: var(--green-deep); }
+.tt-row:hover strong { color: var(--green); }
+.tt-main small { font-size: 13px; color: var(--muted); }
 .stream-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
 .stream-grid > .empty { grid-column: 1 / -1; }
 .stream-card .thumb { position: relative; aspect-ratio: 16 / 9; background: #2a2340; }
@@ -990,7 +1043,9 @@ body.modal-open .modal-overlay { display: grid; }
   /* Startseite: Seitenspalte unter die Turniere, Streams und Cup-Finder nebeneinander */
   .home-grid { grid-template-columns: minmax(0, 1fr); }
   .home-side { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 30px; gap: 24px 20px; }
-  .crown-watch, .crown-days, .crown-two { grid-template-columns: minmax(0, 1fr); }
+  .crown-watch, .crown-days, .crown-two, .streams-top { grid-template-columns: minmax(0, 1fr); }
+  .streams-top .stream-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tt-card { margin-top: 24px; }
   .roster-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .crown-hero { padding-right: 270px; }
   .crown-hero > .janna { max-height: 330px; }
@@ -1077,6 +1132,12 @@ body.modal-open .modal-overlay { display: grid; }
   .page-head.has-janna { margin-top: 24px; padding: 24px 20px; }
   .head-janna { display: none; }
   .empty.has-janna { padding-left: 132px; --out: var(--edge); }
+  .streams-top .stream-grid { grid-template-columns: minmax(0, 1fr); }
+  .streams-top .stream-grid > :nth-child(n+4) { display: none; }   /* Zeitplan soll mobil nicht zu weit unten stehen */
+  .streamer-hero { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .streamer-portrait { min-height: 220px; }
+  .streamer-info { padding: 0 8px 10px; }
+  .lb-title { display: none; }
   .crown-hero { margin-top: 24px; padding: 24px 18px 200px; }
   .crown-hero > .janna { height: 236px; max-height: none; }
   .cd-part { min-width: 66px; }

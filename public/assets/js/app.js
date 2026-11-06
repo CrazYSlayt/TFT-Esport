@@ -268,20 +268,23 @@
 
   /* ---------- Twitch: Creator-Karten ---------- */
   const twitchUrl = (login) => `https://www.twitch.tv/${encodeURIComponent(login)}`;
-  const creatorCard = (c) => `<a class="card creator-card" href="${twitchUrl(c.login)}" target="_blank" rel="noopener">
-      ${imgPlaceholder('Stream preview', 'card-img')}
+  // Profilbild: Karikatur aus assets/img/streamers/ (image in den Daten) oder ein Platzhalter mit Anfangsbuchstabe
+  const creatorUrl = (c) => link(`tft-streamers/${encodeURIComponent(c.login)}.html`);
+  const creatorImage = (c) => (c.image
+    ? `<img class="creator-img" src="${esc(link(c.image))}" alt="Caricature of ${esc(c.name)}" loading="lazy" decoding="async" />`
+    : `<span class="creator-initial" aria-hidden="true">${esc(c.name.charAt(0))}</span>`);
+  const creatorCard = (c) => `<a class="card creator-card" href="${creatorUrl(c)}">
+      <div class="creator-top">${creatorImage(c)}<span class="creator-live" data-live="${esc(c.login)}"><span class="dot" aria-hidden="true"></span><span>Offline</span></span></div>
       <div class="card-body">
-        <span class="avatar-ph">${icon('twitch')}</span>
         <span><strong>${esc(c.name)}</strong><small>${esc(c.focus || '')}</small></span>
-        <span class="card-go">${icon('external')}</span>
+        <span class="card-go">${icon('arrow')}</span>
       </div>
     </a>`;
   // Leerer Platz: bleibt als beschrifteter Platzhalter sichtbar, bis die Redaktion Creator auswählt
   const creatorSlot = (n) => `<div class="card creator-card">
-      ${imgPlaceholder('Stream preview', 'card-img')}
+      <div class="creator-top"><span class="creator-initial is-empty" aria-hidden="true">${icon('users')}</span></div>
       <div class="card-body">
-        <span class="avatar-ph">${icon('users')}</span>
-        <span><strong>Placeholder: creator ${n}</strong><small>Editor's pick</small></span>
+        <span><strong>Placeholder: streamer ${n}</strong><small>Profile coming soon</small></span>
       </div>
     </div>`;
 
@@ -350,7 +353,17 @@
     document.addEventListener('error', (e) => { if (e.target instanceof HTMLImageElement && e.target.closest('.thumb')) e.target.remove(); }, true);
   }
 
-  /* ---------- Twitch-Daten über den lokalen Server (server.ps1 → /api/streams) ---------- */
+  /* ---------- Live-Status einzelner Kanäle, auch außerhalb von TFT (/api/channels) ---------- */
+  async function loadChannels(logins) {
+    if (!served || !logins.length) return null;
+    try {
+      const r = await fetch(`/api/channels?login=${logins.map(encodeURIComponent).join(',')}`);
+      const json = await r.json();
+      return json.source === 'twitch' ? json.channels : null;
+    } catch (_) { return null; }
+  }
+
+  /* ---------- Twitch-Daten (Vercel-Funktion /api/streams, lokal server.ps1) ---------- */
   async function loadStreams() {
     if (!served) return { data: null, reason: 'no-server' };
     try {
@@ -402,6 +415,26 @@
         </nav>
         <button class="hb-cell hb-search" type="button" aria-label="Open search" data-open-search>${icon('search')}<span>Search</span></button>
       </div>`;
+  }
+
+  /* ---------- Leiste unter dem Menü: Kanal des Betreibers mit grünem Live-Punkt oder grauem Offline-Punkt ---------- */
+  const OWN_CHANNEL = { login: 'crazyslayt', name: 'CrazYSlayt' };
+  function renderLiveBar() {
+    const header = document.getElementById('site-header');
+    if (!header) return;
+    const url = twitchUrl(OWN_CHANNEL.login);
+    header.insertAdjacentHTML('afterend', `<div class="live-bar" id="live-bar"><a class="wrap live-bar-in" href="${url}" target="_blank" rel="noopener"></a></div>`);
+    const box = document.querySelector('#live-bar a');
+    const show = (ch) => {
+      document.getElementById('live-bar').classList.toggle('is-live', !!(ch && ch.live));
+      box.innerHTML = ch && ch.live
+        ? `<span class="dot is-live" aria-hidden="true"></span><b>${OWN_CHANNEL.name}</b><span class="lb-state">is live</span><span class="lb-title">${esc(ch.title || '')}</span><span class="lb-go">${fmt(ch.viewers)} viewers · Watch${icon('arrow')}</span>`
+        : `<span class="dot" aria-hidden="true"></span><b>${OWN_CHANNEL.name}</b><span class="lb-state">offline</span><span class="lb-go">Twitch${icon('external')}</span>`;
+    };
+    const update = async () => { const c = await loadChannels([OWN_CHANNEL.login]); show(c && c[OWN_CHANNEL.login]); };
+    show(null);
+    update();
+    setInterval(update, 120000);
   }
 
   function renderDrawer() {
@@ -577,7 +610,7 @@
   }
 
   window.UI = {
-    janna, finderRow, finderStatus, icon, crown, esc, fmt, served, link, setUrl, toDate, fmtDate, fmtTime, dayMonth, label, catLabel, articleUrl, cupUrl,
+    janna, finderRow, finderStatus, creatorUrl, creatorImage, loadChannels, icon, crown, esc, fmt, served, link, setUrl, toDate, fmtDate, fmtTime, dayMonth, label, catLabel, articleUrl, cupUrl,
     sortByDateDesc, upcomingCups, startOfToday, signupOpen, imgPlaceholder, empty, tag, articleCard, cupRow,
     calendarGrid, calLegend, SET_ICON,
     ymd, endOf, fmtDay, fmtWhen, cupDays, cupStart, cupNext, cupEnd, cupPast, cupDates, byStart, fmtDays, signupState, hostOf, keyFacts, cupCard,
@@ -594,6 +627,7 @@
   });
 
   renderHeader();
+  renderLiveBar();
   renderDrawer();
   renderSearch();
   renderFooter();
