@@ -493,6 +493,69 @@
     document.body.insertAdjacentHTML('beforeend', slot('left') + slot('right'));
   }
 
+  /* ---------- Google Analytics: Cookie-Hinweis und Widerspruch (wie bei TFTClimb und TFT Arcade) ----------
+     Das Tag lädt schon im Kopf der Seite (assets/js/ga.js). „Decline“ schaltet es sofort und für künftige Besuche ab
+     und löscht die Analytics-Cookies. Wahl im Browser: tfte_ga = 'ok' | 'no'. Schalter auch in der Datenschutzerklärung. */
+  function initAnalytics() {
+    const id = window.TFTE_GA_ID;
+    if (!id) return;
+    const KEY = 'tfte_ga';
+    const read = () => { try { return localStorage.getItem(KEY); } catch (_) { return null; } };
+    const write = (v) => { try { localStorage.setItem(KEY, v); } catch (_) { /* kein Speicher */ } };
+    function deleteCookies() {
+      const host = location.hostname, root = host.split('.').slice(-2).join('.');
+      document.cookie.split(';').map((c) => c.split('=')[0].trim()).filter((n) => /^_ga(_|$)/.test(n)).forEach((n) => {
+        [host, `.${host}`, `.${root}`, ''].forEach((d) => { document.cookie = `${n}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/${d ? `; domain=${d}` : ''}`; });
+      });
+    }
+    // nach erneuter Zustimmung ohne Neuladen starten
+    function load() {
+      window[`ga-disable-${id}`] = false;
+      if (!served) return;
+      if (!window.gtag) {
+        const s = document.createElement('script');
+        s.async = true; s.src = `https://www.googletagmanager.com/gtag/js?id=${id}`;
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function gtag() { window.dataLayer.push(arguments); };
+        window.gtag('js', new Date());
+      }
+      window.gtag('config', id);
+    }
+    function showState() {
+      const st = document.getElementById('ga-state'), bt = document.getElementById('ga-toggle');
+      if (!st || !bt) return;
+      const off = read() === 'no';
+      st.textContent = off ? 'Google Analytics is turned off for this browser.' : 'Google Analytics is active for this browser.';
+      bt.textContent = off ? 'Allow again' : 'Decline analytics';
+      bt.dataset.ga = off ? 'ok' : 'no';
+    }
+    function choose(v) {
+      write(v);
+      if (v === 'no') { window[`ga-disable-${id}`] = true; deleteCookies(); } else load();
+      const b = document.getElementById('ckb');
+      if (b) b.remove();
+      showState();
+    }
+    // kleines Popup unten rechts; Details stehen in der Datenschutzerklärung
+    function banner() {
+      if (document.getElementById('ckb')) return;
+      document.body.insertAdjacentHTML('beforeend', `<div class="ckb" id="ckb" role="region" aria-label="Cookie notice">
+        <img class="ckb-logo" src="${link('assets/brand/janna-kopf.png')}" alt="" width="46" height="50" />
+        <div class="ckb-tx"><b>Cookies</b>
+          <p>We use Google Analytics cookies to improve our site. <a href="${link('privacy.html')}">Privacy policy</a></p>
+          <div class="ckb-bt"><button type="button" class="ckb-no" data-ga="no">Decline</button><button type="button" class="ckb-ok" data-ga="ok">OK</button></div>
+        </div></div>`);
+    }
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('[data-ckb]')) { e.preventDefault(); banner(); return; }
+      const b = e.target.closest('[data-ga]');
+      if (b) choose(b.dataset.ga);
+    });
+    if (!read()) banner();
+    showState();
+  }
+
   /* ---------- Footer: Marke, Spalten, Rechtszeile – Janna steht rechts und schaut oben heraus ---------- */
   function renderFooter() {
     const el = document.getElementById('site-footer');
@@ -506,7 +569,7 @@
           <p class="footer-claim">Your game. Your scene. Your seat. Tournaments, streams and news for everyone who plays TFT or loves watching it.</p>
         </div>
         <nav aria-label="Explore"><h4>Explore</h4>${NAV.map((n) => `<a href="${n.href}">${n.label}</a>`).join('')}</nav>
-        <nav aria-label="TFTEsport"><h4>${esc(D.site.name)}</h4>${LEGAL.map((l) => `<a href="${l.href}">${l.label}</a>`).join('')}</nav>
+        <nav aria-label="TFTEsport"><h4>${esc(D.site.name)}</h4>${LEGAL.map((l) => `<a href="${l.href}">${l.label}</a>`).join('')}<a href="#" data-ckb>Cookie settings</a></nav>
         <nav aria-label="Network"><h4>Network</h4><a class="footer-network" href="${D.site.network.url}" target="_blank" rel="noopener">${esc(D.site.network.name)}${icon('external')}</a><span class="footer-note">Tier lists, tools and coaching</span></nav>
       </div>
       <div class="wrap footer-legal">
@@ -537,5 +600,6 @@
   renderSearch();
   renderFooter();
   renderAdRails();
+  initAnalytics();
   initWatch();
 })();

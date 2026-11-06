@@ -70,6 +70,7 @@ ${indexable(c) ? '' : '  <meta name="robots" content="noindex, follow" />\n'}  <
   <link rel="preload" href="../assets/fonts/Barlow-800-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="../assets/css/fonts.css" />
   <link rel="stylesheet" href="../assets/css/style.css" />
+  <script src="../assets/js/ga.js"></script>
   <script type="application/ld+json">${JSON.stringify(event).replace(/</g, '\\u003c')}</script>
 </head>
 <body data-page="cups" data-cup="${esc(c.id)}">

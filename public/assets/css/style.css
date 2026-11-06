@@ -779,6 +779,24 @@ h1 .ph, h2 .ph, h3 .ph { font-weight: inherit; }
   .ad-160 { display: inline; }
 }
 
+/* ---------- Cookie-Hinweis ---------- */
+.ckb {
+  position: fixed; right: 16px; bottom: 16px; z-index: 55; display: flex; align-items: flex-start; gap: 12px; width: min(340px, calc(100% - 32px)); padding: 14px;
+  border-radius: 14px; color: #e6ece6; background: var(--green-deep); border: 1.5px solid var(--gold); box-shadow: 0 16px 40px rgba(16, 36, 24, .5);
+}
+.ckb-logo { flex: none; width: 46px; height: auto; }
+.ckb-tx { flex: 1; min-width: 0; }
+.ckb-tx b { display: block; margin-bottom: 2px; font-size: 18px; color: #fff; }
+.ckb-tx p { font-size: 14px; line-height: 1.4; }
+.ckb-tx a { color: var(--gold); white-space: nowrap; }
+.ckb-bt { display: flex; gap: 8px; margin-top: 10px; }
+.ckb-bt button { flex: 1; padding: 8px 12px; border-radius: 9px; font-size: 14px; font-weight: 700; cursor: pointer; }
+.ckb-no { color: #e6ece6; background: transparent; border: 1px solid rgba(255, 255, 255, .3); }
+.ckb-no:hover { border-color: #fff; }
+.ckb-ok { color: var(--green-deep); background: var(--gold); border: 1px solid var(--gold); }
+.ckb-ok:hover { background: #ffd04a; }
+.ga-ctl { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 12px 16px; border-radius: var(--radius-sm); background: var(--sage); }
+
 /* ---------- Footer ---------- */
 .site-footer { position: relative; z-index: 2; display: block; margin-top: 96px; background: var(--green-deep); color: #e6ece6; --crown-cut: var(--green-deep); }
 .site-footer .brand { padding-left: 0; }
