@@ -786,7 +786,7 @@ h1 .ph, h2 .ph, h3 .ph { font-weight: inherit; }
 }
 .ckb-logo { flex: none; width: 46px; height: auto; }
 .ckb-tx { flex: 1; min-width: 0; }
-.ckb-tx b { display: block; margin-bottom: 2px; font-size: 18px; color: #fff; }
+.ckb-tx b { display: block; margin-bottom: 2px; font-size: 17px; font-style: italic; font-weight: 800; letter-spacing: .03em; text-transform: uppercase; color: #fff; }
 .ckb-tx p { font-size: 14px; line-height: 1.4; }
 .ckb-tx a { color: var(--gold); white-space: nowrap; }
 .ckb-bt { display: flex; gap: 8px; margin-top: 10px; }
@@ -815,6 +815,8 @@ h1 .ph, h2 .ph, h3 .ph { font-weight: inherit; }
 .footer-note { font-size: 14px; color: #a9b8ae; }
 .footer-legal { display: grid; gap: 8px; padding-top: 16px; padding-bottom: 26px; border-top: 1px solid rgba(255, 255, 255, .12); }
 .footer-legal p { font-size: 13px; color: #a9b8ae; max-width: 900px; }
+.footer-legal a { color: #cdd8d0; }
+.footer-legal a:hover { color: #fff; }
 
 /* ---------- News-Übersicht ---------- */
 .filter-bar { display: flex; align-items: center; gap: 12px 20px; flex-wrap: wrap; padding: 10px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }

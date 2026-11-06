@@ -547,11 +547,9 @@
           <div class="ckb-bt"><button type="button" class="ckb-no" data-ga="no">Decline</button><button type="button" class="ckb-ok" data-ga="ok">OK</button></div>
         </div></div>`);
     }
-    document.addEventListener('click', (e) => {
-      if (e.target.closest('[data-ckb]')) { e.preventDefault(); banner(); return; }
-      const b = e.target.closest('[data-ga]');
-      if (b) choose(b.dataset.ga);
-    });
+    document.addEventListener('click', (e) => { const b = e.target.closest('[data-ga]'); if (b) choose(b.dataset.ga); });
+    // „Cookie settings“ im Footer: Hinweis wieder zeigen statt zur Datenschutzerklärung zu gehen
+    document.addEventListener('click', (e) => { if (e.target.closest('[data-ckb]')) { e.preventDefault(); banner(); } }, true);
     if (!read()) banner();
     showState();
   }
@@ -569,12 +567,12 @@
           <p class="footer-claim">Your game. Your scene. Your seat. Tournaments, streams and news for everyone who plays TFT or loves watching it.</p>
         </div>
         <nav aria-label="Explore"><h4>Explore</h4>${NAV.map((n) => `<a href="${n.href}">${n.label}</a>`).join('')}</nav>
-        <nav aria-label="TFTEsport"><h4>${esc(D.site.name)}</h4>${LEGAL.map((l) => `<a href="${l.href}">${l.label}</a>`).join('')}<a href="#" data-ckb>Cookie settings</a></nav>
+        <nav aria-label="TFTEsport"><h4>${esc(D.site.name)}</h4>${LEGAL.map((l) => `<a href="${l.href}">${l.label}</a>`).join('')}</nav>
         <nav aria-label="Network"><h4>Network</h4><a class="footer-network" href="${D.site.network.url}" target="_blank" rel="noopener">${esc(D.site.network.name)}${icon('external')}</a><span class="footer-note">Tier lists, tools and coaching</span></nav>
       </div>
       <div class="wrap footer-legal">
         <p>${D.site.name} isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</p>
-        <p>© ${new Date().getFullYear()} ${esc(D.site.name)} · Part of the ${esc(D.site.network.name)} Network</p>
+        <p>© ${new Date().getFullYear()} ${esc(D.site.name)} · Part of the ${esc(D.site.network.name)} Network · <a href="${link('legal-notice.html')}">Legal notice</a> · <a href="${link('privacy.html')}">Privacy</a> · <a href="${link('privacy.html')}" data-ckb>Cookie settings</a></p>
       </div>`;
   }
 
