@@ -13,7 +13,7 @@ async function getToken(id, secret) {
   if (token && Date.now() < tokenUntil) return token;
   const body = new URLSearchParams({ client_id: id, client_secret: secret, grant_type: 'client_credentials' });
   const r = await fetch('https://id.twitch.tv/oauth2/token', { method: 'POST', body });
-  if (!r.ok) throw new Error(`Twitch token ${r.status}`);
+  if (!r.ok) throw new Error(`Twitch token ${r.status}: ${(await r.text()).slice(0, 200)}`);   // Twitch nennt nur den Grund, z. B. „invalid client“
   const j = await r.json();
   token = j.access_token;
   tokenUntil = Date.now() + (j.expires_in - 300) * 1000;
@@ -28,8 +28,8 @@ async function helix(path, id, secret, retry = true) {
 }
 
 module.exports = async (req, res) => {
-  const id = process.env.TWITCH_CLIENT_ID;
-  const secret = process.env.TWITCH_CLIENT_SECRET;
+  const id = (process.env.TWITCH_CLIENT_ID || '').trim();      // Leerzeichen vom Einfügen stören Twitch
+  const secret = (process.env.TWITCH_CLIENT_SECRET || '').trim();
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   if (!id || !secret) {
     res.setHeader('Cache-Control', 's-maxage=60');
