@@ -387,7 +387,7 @@
     const section = page === 'streams' ? 'twitch' : page;
     el.className = 'site-header';
     el.innerHTML = `
-      <div class="wrap header-bar">
+      <div class="header-bar">
         <button class="hb-cell burger" type="button" aria-label="Menü öffnen" data-open-drawer>${icon('menu')}</button>
         ${brand()}
         <nav class="mainnav" aria-label="Hauptnavigation">
@@ -474,7 +474,7 @@
   }
 
   /* ---------- Werbeflächen links und rechts neben dem Inhalt ----------
-     Nur auf breiten Bildschirmen (ab 1560 px: 120 × 600, ab 1640 px: 160 × 600), siehe CSS „Werbeflächen“.
+     Nur auf breiten Bildschirmen (ab 1760 px: 120 × 600, ab 1840 px: 160 × 600), siehe CSS „Werbeflächen“.
      Bis echte Banner eingebunden sind, bleibt der Platz leer. AD_PLACEHOLDERS = true zeigt beschriftete Platzhalter. */
   const AD_PLACEHOLDERS = false;
   function renderAdRails() {
