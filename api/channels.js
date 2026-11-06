@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
     const r = await helix(`streams?type=live&first=${MAX_LOGINS}&${logins.map((l) => `user_login=${l}`).join('&')}`, creds);
     const channels = Object.fromEntries(logins.map((l) => [l, { live: false }]));
     for (const s of r.data) {
-      channels[s.user_login.toLowerCase()] = { live: true, title: s.title, viewers: s.viewer_count, game: s.game_name, startedAt: s.started_at };
+      channels[s.user_login.toLowerCase()] = { live: true, title: s.title, viewers: s.viewer_count, game: s.game_name, startedAt: s.started_at, thumb: (s.thumbnail_url || '').replace('{width}x{height}', '640x360') };
     }
     send(res, 200, { source: 'twitch', channels }, 's-maxage=60, stale-while-revalidate=120');
   } catch (err) {

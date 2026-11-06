@@ -26,7 +26,7 @@ for (const f of ['assets/js/data.js', 'assets/data/turniere.js', 'assets/js/app.
   vm.runInThisContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), { filename: f });
 }
 const { cups, creators } = window.TFTE;
-const { esc, cupDays, cupPast, cupUrl, fmtDate, fmtDays, hostOf, label, icon, creatorImage } = window.UI;
+const { esc, tag, cupDays, cupPast, cupUrl, fmtDate, fmtDays, hostOf, label, icon, creatorImage } = window.UI;
 
 const clip = (s, n) => (s.length <= n ? s : `${s.slice(0, n - 1).replace(/\s+\S*$/, '')}…`);
 const keyword = (name) => (/\bTFT\b/.test(name) ? name : `TFT ${name}`);
@@ -129,8 +129,20 @@ function streamerHtml(c) {
   const url = `${SITE}/tft-streamers/${c.login}`;
   const title = esc(`${c.name}: TFT Streamer Profile | TFT E-Sports`);
   const desc = esc(clip(`${c.name}, TFT streamer on Twitch: profile, live status and channel links. ${c.focus || ''}`, 134));
-  const facts = [c.region, c.team, c.lang].filter(Boolean).map(esc).join(' · ');
-  const events = (c.events || []).map((id) => cups.find((x) => x.id === id)).filter(Boolean);
+  const st = c.stats || {};
+  const facts = [
+    c.realName && ['users', 'Real name', esc(c.realName)],
+    ['twitch', 'Twitch', `<a href="https://www.twitch.tv/${esc(c.login)}" target="_blank" rel="noopener">${esc(c.login)}</a>`, 'stream channel'],
+    ['shield', 'Role', esc(c.role || 'Streamer')],
+    c.worldTitles && ['trophy', 'World titles', esc(c.worldTitles), 'Tactician\'s Crown'],
+    st.wins !== undefined && ['star', 'Tournament wins', esc(st.wins), 'official events'],
+    st.top8 !== undefined && ['list', 'Top 8 finishes', esc(st.top8), 'official events'],
+    st.events !== undefined && ['calendar', 'Tournaments played', esc(st.events), 'official events since 2024'],
+    (c.career || []).length && ['swords', 'Teams so far', esc(c.career.length)],
+    ...(c.extra || []).map(([ic, k, v, sub]) => [ic, esc(k), esc(v), sub && esc(sub)])
+  ].filter(Boolean);
+  const upcoming = (c.events || []).map((id) => cups.find((x) => x.id === id)).filter((e) => e && !cupPast(e));
+  const placeClass = (p) => (/^1/.test(p) ? 'p1' : /^2/.test(p) ? 'p2' : /^3/.test(p) ? 'p3' : '');
   const person = { '@context': 'https://schema.org', '@type': 'Person', name: c.name, url, sameAs: [`https://www.twitch.tv/${c.login}`, ...(c.links || []).map((l) => l.url)] };
   return `<!doctype html>
 <html lang="en">
@@ -166,42 +178,61 @@ function streamerHtml(c) {
       <a href="../index.html">Home</a><span data-icon="chevronRight"></span><a href="../twitch.html">Live Streams</a><span data-icon="chevronRight"></span><span>${esc(c.name)}</span>
     </nav>
 
-    <section class="streamer-hero">
-      <div class="streamer-portrait">${creatorImage(c)}</div>
-      <div class="streamer-info">
-        <p class="eyebrow">TFT streamer</p>
+    <div class="pf-top">
+      <aside class="pf-card">
+        <div class="pf-portrait">${creatorImage(c)}</div>
         <h1>${esc(c.name)}</h1>
-        <p class="streamer-focus">${esc(c.focus || '')}</p>
-        ${facts ? `<p class="streamer-facts">${facts}</p>` : ''}
-        <p class="streamer-status" id="streamer-status"><span class="dot" aria-hidden="true"></span>Offline right now</p>
-        <p class="lead">${esc(c.bio || '')}</p>
+        <p class="pf-sub">TFT player profile</p>
+        <div class="pf-tags">${tag(c.role || 'Streamer', 'solid')}${c.region ? tag(c.region, 'region') : ''}</div>
+        ${c.country ? `<p class="pf-country">${icon('pin')}${esc(c.country)}</p>` : ''}
+        ${c.team ? `<div class="pf-team"><small>Team</small><b>${esc(c.team)}</b>${c.teamSince ? `<small>since ${esc(c.teamSince)}</small>` : ''}</div>` : ''}
+        ${c.prize ? `<div class="pf-prize"><small>Total prize money</small><b>${esc(c.prize.amount)}</b>${c.prize.note ? `<small>${esc(c.prize.note)}</small>` : ''}</div>` : ''}
+      </aside>
+
+      ${(c.career || []).length ? `<section class="pf-box" aria-labelledby="career-title">
+        <div class="pf-head">${icon('clock')}<h2 id="career-title">Career</h2><span>every team, newest first</span></div>
+        <ol class="pf-career">${c.career.map((t) => `<li class="${t.to ? '' : 'is-now'}"><b>${esc(t.team)}</b><span>${esc(t.from)} – ${esc(t.to || 'today')}</span></li>`).join('')}</ol>
+      </section>` : ''}
+
+      <section class="pf-box" aria-labelledby="facts-title">
+        <div class="pf-head">${icon('users')}<h2 id="facts-title">Profile</h2></div>
+        <dl class="pf-facts">${facts.map(([ic, k, v, sub]) => `<div><span class="pf-ic">${icon(ic)}</span><span><dt>${k}</dt><dd>${v}</dd>${sub ? `<small>${sub}</small>` : ''}</span></div>`).join('')}</dl>
+      </section>
+    </div>
+
+    <section class="pf-live" id="streamer-live" aria-label="Live stream">
+      <div class="pf-media" id="streamer-player"><span class="pf-offline">${icon('twitch')}Offline</span></div>
+      <div class="pf-live-text">
+        <p class="streamer-status" id="streamer-status"><span class="dot" aria-hidden="true"></span>${esc(c.name)} is offline right now</p>
+        <p class="pf-live-title" id="streamer-title">twitch.tv/${esc(c.login)}</p>
         <div class="hero-actions">
-          <a class="btn btn-twitch" href="https://www.twitch.tv/${esc(c.login)}" target="_blank" rel="noopener">twitch.tv/${esc(c.login)}${icon('external')}</a>
+          <button type="button" class="btn btn-primary" id="streamer-load">Watch here</button>
+          <a class="btn btn-ghost" href="https://www.twitch.tv/${esc(c.login)}" target="_blank" rel="noopener">Open on Twitch${icon('external')}</a>
           ${(c.links || []).map((l) => `<a class="btn btn-ghost" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}${icon('external')}</a>`).join('')}
         </div>
+        <p class="pf-note">The player loads from Twitch only after you click “Watch here”.</p>
       </div>
     </section>
 
-    ${(c.highlights || []).length || events.length ? `<section class="section streamer-grid-2" aria-label="Career">
-      ${(c.highlights || []).length ? `<div class="panel">
-        <div class="panel-head"><h2>Career highlights</h2></div>
-        <ul class="crown-list">${c.highlights.map((h) => `<li>${esc(h)}</li>`).join('')}</ul>
-      </div>` : ''}
-      ${events.length ? `<div class="panel">
-        <div class="panel-head"><h2>Tournaments</h2></div>
-        <ul class="deadline-list">${events.map((e) => `<li><a href="${cupUrl(e)}"><b>${esc(e.name)}</b><span class="is-muted">${esc(cupPast(e) ? 'Past' : fmtDays(e).split(' · ').pop())}</span></a></li>`).join('')}</ul>
-      </div>` : ''}
-    </section>` : ''}
-
-    <section class="section" aria-labelledby="watch-title">
-      <h2 class="block-title" id="watch-title">Watch ${esc(c.name)}</h2>
-      <div class="crown-player" id="streamer-player">
-        <div class="crown-player-load">
-          <button type="button" class="btn btn-twitch btn-lg" id="streamer-load"><span data-icon="play"></span>Load the Twitch player</button>
-          <p>The player only loads after your click. From then on Twitch's <a href="https://www.twitch.tv/p/legal/privacy-notice/" target="_blank" rel="noopener">privacy notice</a> applies.</p>
-        </div>
-      </div>
+    <section class="pf-box pf-who" aria-labelledby="who-title">
+      <h2 id="who-title">Who is ${esc(c.name)}?</h2>
+      <p>${esc(c.about || '')}</p>
     </section>
+
+    ${(c.results || []).length || upcoming.length ? `<div class="pf-bottom">
+      ${(c.results || []).length ? `<section class="pf-box" aria-labelledby="results-title">
+        <h2 id="results-title">${esc(c.name)}'s biggest results</h2>
+        <p class="pf-sub-left">Selected finishes, newest first</p>
+        <div class="pf-table-wrap"><table class="pf-table">
+          <thead><tr><th>Date</th><th>Place</th><th>Tournament</th><th>Prize</th></tr></thead>
+          <tbody>${c.results.map((r) => `<tr><td>${esc(fmtDate(r.date))}</td><td><span class="pf-place ${placeClass(r.place)}">${esc(r.place)}</span></td><td><b>${esc(r.event)}</b> <span class="pf-tier ${r.tier === 'World' ? 'is-world' : ''}">${esc(r.tier)}</span></td><td>${esc(r.prize || '–')}</td></tr>`).join('')}</tbody>
+        </table></div>
+      </section>` : ''}
+      ${upcoming.length ? `<section class="pf-box" aria-labelledby="next-title">
+        <h2 id="next-title">Next tournaments</h2>
+        <ul class="deadline-list">${upcoming.map((e) => `<li><a href="${cupUrl(e)}"><b>${esc(e.name)}</b><span class="is-muted">${esc(fmtDays(e).split(' · ').pop())}</span></a></li>`).join('')}</ul>
+      </section>` : ''}
+    </div>` : ''}
 
     ${(c.sources || []).length ? `<div class="source-box crown-sources">
       <b>Sources</b>

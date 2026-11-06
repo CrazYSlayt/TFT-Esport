@@ -32,33 +32,45 @@
       <a href="../index.html">Home</a><span data-icon="chevronRight"></span><a href="../twitch.html">Live Streams</a><span data-icon="chevronRight"></span><span>CrazYSlayt</span>
     </nav>
 
-    <section class="streamer-hero">
-      <div class="streamer-portrait"><span class="creator-initial" aria-hidden="true">C</span></div>
-      <div class="streamer-info">
-        <p class="eyebrow">TFT streamer</p>
+    <div class="pf-top">
+      <aside class="pf-card">
+        <div class="pf-portrait"><span class="creator-initial" aria-hidden="true">C</span></div>
         <h1>CrazYSlayt</h1>
-        <p class="streamer-focus">TFT Challenger · Founder of TFTClimb</p>
+        <p class="pf-sub">TFT player profile</p>
+        <div class="pf-tags"><span class="tag tag-solid">Streamer &amp; coach</span></div>
         
-        <p class="streamer-status" id="streamer-status"><span class="dot" aria-hidden="true"></span>Offline right now</p>
-        <p class="lead">TFT Challenger and founder of TFTClimb, the home of tier lists, tools and coaching for Teamfight Tactics.</p>
+        
+        
+      </aside>
+
+      
+
+      <section class="pf-box" aria-labelledby="facts-title">
+        <div class="pf-head"><svg class="i " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.8 6.5-5.8s5.9 2.2 6.5 5.8"/><circle cx="17" cy="9" r="2.6"/><path d="M16.5 14.4c2.7.2 4.6 2.2 5 5.6"/></svg><h2 id="facts-title">Profile</h2></div>
+        <dl class="pf-facts"><div><span class="pf-ic"><svg class="i " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 3.5h16v10l-4 4h-4l-3 3v-3h-5z"/><path d="M11 8v4M15.5 8v4"/></svg></span><span><dt>Twitch</dt><dd><a href="https://www.twitch.tv/crazyslayt" target="_blank" rel="noopener">crazyslayt</a></dd><small>stream channel</small></span></div><div><span class="pf-ic"><svg class="i " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5 19 6v5.5c0 4.3-2.9 7.6-7 9-4.1-1.4-7-4.7-7-9V6z"/></svg></span><span><dt>Role</dt><dd>Streamer &amp; coach</dd></span></div><div><span class="pf-ic"><svg class="i " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg></span><span><dt>Rank</dt><dd>Challenger</dd></span></div><div><span class="pf-ic"><svg class="i " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/></svg></span><span><dt>Project</dt><dd>TFTClimb</dd><small>founder</small></span></div></dl>
+      </section>
+    </div>
+
+    <section class="pf-live" id="streamer-live" aria-label="Live stream">
+      <div class="pf-media" id="streamer-player"><span class="pf-offline"><svg class="i " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 3.5h16v10l-4 4h-4l-3 3v-3h-5z"/><path d="M11 8v4M15.5 8v4"/></svg>Offline</span></div>
+      <div class="pf-live-text">
+        <p class="streamer-status" id="streamer-status"><span class="dot" aria-hidden="true"></span>CrazYSlayt is offline right now</p>
+        <p class="pf-live-title" id="streamer-title">twitch.tv/crazyslayt</p>
         <div class="hero-actions">
-          <a class="btn btn-twitch" href="https://www.twitch.tv/crazyslayt" target="_blank" rel="noopener">twitch.tv/crazyslayt<svg class="i " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a>
+          <button type="button" class="btn btn-primary" id="streamer-load">Watch here</button>
+          <a class="btn btn-ghost" href="https://www.twitch.tv/crazyslayt" target="_blank" rel="noopener">Open on Twitch<svg class="i " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a>
           <a class="btn btn-ghost" href="https://www.tftclimb.com" target="_blank" rel="noopener">TFTClimb<svg class="i " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a><a class="btn btn-ghost" href="https://www.tftclimb.com/coaching" target="_blank" rel="noopener">Coaching<svg class="i " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a>
         </div>
+        <p class="pf-note">The player loads from Twitch only after you click “Watch here”.</p>
       </div>
+    </section>
+
+    <section class="pf-box pf-who" aria-labelledby="who-title">
+      <h2 id="who-title">Who is CrazYSlayt?</h2>
+      <p>CrazYSlayt is a TFT Challenger player and the founder of TFTClimb, the home of tier lists, tools and coaching for Teamfight Tactics.</p>
     </section>
 
     
-
-    <section class="section" aria-labelledby="watch-title">
-      <h2 class="block-title" id="watch-title">Watch CrazYSlayt</h2>
-      <div class="crown-player" id="streamer-player">
-        <div class="crown-player-load">
-          <button type="button" class="btn btn-twitch btn-lg" id="streamer-load"><span data-icon="play"></span>Load the Twitch player</button>
-          <p>The player only loads after your click. From then on Twitch's <a href="https://www.twitch.tv/p/legal/privacy-notice/" target="_blank" rel="noopener">privacy notice</a> applies.</p>
-        </div>
-      </div>
-    </section>
 
     
   </main>

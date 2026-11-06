@@ -59,7 +59,7 @@
     return new Date(utc.getTime() - (at('Europe/Berlin') - at('UTC')));
   }
   const toDate = (iso) => (!/T/.test(iso) ? new Date(`${iso}T00:00`) : /(Z|[+-]\d\d:\d\d)$/.test(iso) ? new Date(iso) : berlin(iso));
-  const fmtDate = (iso, opts = { day: 'numeric', month: 'short', year: 'numeric' }) => toDate(iso).toLocaleDateString('en-GB', opts);
+  const fmtDate = (iso) => { const d = toDate(iso); return `${d.getDate()} ${MON[d.getMonth()]} ${d.getFullYear()}`; };
   const fmtTime = (iso) => toDate(iso).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
   const dayMonth = (iso) => {
     const d = toDate(iso);
