@@ -1,5 +1,5 @@
 /*
- * TFTEsport – Set-Termine als Info im Kalender (Set-Start, PBE-Start, Set-Ende).
+ * TFT E-Sports – Set-Termine als Info im Kalender (Set-Start, PBE-Start, Set-Ende).
  * kind: 'set-start' | 'pbe' | 'set-end'. short = kurze Bezeichnung im Kalender. Datum laut Quelle; Riot plant Patches in Pacific Time.
  * Von Hand pflegen: neue Einträge einfach ergänzen, alte dürfen stehen bleiben. Texte auf Englisch, die Seite ist englisch.
  */

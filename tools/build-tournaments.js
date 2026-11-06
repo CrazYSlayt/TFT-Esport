@@ -1,4 +1,4 @@
-// TFTEsport – schreibt aus assets/data/turniere.js eine feste Seite pro Turnier (public/tft-tournaments/<id>.html) und die sitemap.xml.
+// TFT E-Sports – schreibt aus assets/data/turniere.js eine feste Seite pro Turnier (public/tft-tournaments/<id>.html) und die sitemap.xml.
 // Läuft automatisch beim Veröffentlichen auf Vercel (vercel.json, buildCommand); lokal: node tools/build-tournaments.js
 // Turniere mit eigenem „page“ (z. B. die Weltmeisterschaft) bekommen keine erzeugte Seite.
 // Vergangene inoffizielle Turniere bleiben abrufbar, gehen aber nicht in die Suche (noindex).
@@ -10,7 +10,7 @@ const ROOT = path.join(__dirname, '..', 'public');
 const SITE = 'https://www.tft-esports.com';
 const OUT = path.join(ROOT, 'tft-tournaments');
 const STREAMERS = path.join(ROOT, 'tft-streamers');
-const STATIC_PAGES = ['/', '/tft-tournaments', '/tft-tacticians-crown', '/live-matches', '/twitch', '/twitch/live-streams', '/news'];
+const STATIC_PAGES = ['/', '/tft-tournaments', '/tft-tacticians-crown', '/live-matches', '/twitch', '/pro-players', '/news'];
 
 /* ---------- Seitenskripte ohne Browser laden: eine Attrappe genügt, gebraucht werden nur die Bausteine aus window.UI ---------- */
 const stub = () => new Proxy(function () {}, { get: (t, k) => (k === Symbol.toPrimitive ? () => '' : k === 'dataset' ? {} : stub()), apply: () => stub(), set: () => true });
@@ -26,11 +26,11 @@ for (const f of ['assets/js/data.js', 'assets/data/turniere.js', 'assets/js/app.
   vm.runInThisContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), { filename: f });
 }
 const { cups, creators } = window.TFTE;
-const { esc, cupDays, cupPast, label, icon, creatorImage } = window.UI;
+const { esc, cupDays, cupPast, cupUrl, fmtDate, fmtDays, hostOf, label, icon, creatorImage } = window.UI;
 
 const clip = (s, n) => (s.length <= n ? s : `${s.slice(0, n - 1).replace(/\s+\S*$/, '')}…`);
 const keyword = (name) => (/\bTFT\b/.test(name) ? name : `TFT ${name}`);
-const titleOf = (c) => `${clip(keyword(c.name).replace(/ – .*$/, (m) => (keyword(c.name).length > 47 ? '' : m)), 47)} | TFTEsport`;
+const titleOf = (c) => `${clip(keyword(c.name).replace(/ – .*$/, (m) => (keyword(c.name).length > 44 ? '' : m)), 44)} | TFT E-Sports`;
 const descOf = (c) => clip(`${keyword(c.name)}: who can enter, rank rules, dates, format and sign-up for this ${label('regions', c.region)} tournament.`, 134);
 const indexable = (c) => c.level === 'offiziell' || !cupPast(c);
 
@@ -56,7 +56,7 @@ function html(c) {
   <meta name="description" content="${desc}" />
 ${indexable(c) ? '' : '  <meta name="robots" content="noindex, follow" />\n'}  <link rel="canonical" href="${url}" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="TFTEsport" />
+  <meta property="og:site_name" content="TFT E-Sports" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:title" content="${title}" />
   <meta property="og:description" content="${desc}" />
@@ -127,8 +127,10 @@ for (const c of built) fs.writeFileSync(path.join(OUT, `${c.id}.html`), html(c))
 /* ---------- Streamer-Profile ---------- */
 function streamerHtml(c) {
   const url = `${SITE}/tft-streamers/${c.login}`;
-  const title = esc(`${c.name}: TFT Streamer Profile | TFTEsport`);
+  const title = esc(`${c.name}: TFT Streamer Profile | TFT E-Sports`);
   const desc = esc(clip(`${c.name}, TFT streamer on Twitch: profile, live status and channel links. ${c.focus || ''}`, 134));
+  const facts = [c.region, c.team, c.lang].filter(Boolean).map(esc).join(' · ');
+  const events = (c.events || []).map((id) => cups.find((x) => x.id === id)).filter(Boolean);
   const person = { '@context': 'https://schema.org', '@type': 'Person', name: c.name, url, sameAs: [`https://www.twitch.tv/${c.login}`, ...(c.links || []).map((l) => l.url)] };
   return `<!doctype html>
 <html lang="en">
@@ -140,7 +142,7 @@ function streamerHtml(c) {
   <meta name="description" content="${desc}" />
   <link rel="canonical" href="${url}" />
   <meta property="og:type" content="profile" />
-  <meta property="og:site_name" content="TFTEsport" />
+  <meta property="og:site_name" content="TFT E-Sports" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:title" content="${title}" />
   <meta property="og:description" content="${desc}" />
@@ -170,6 +172,7 @@ function streamerHtml(c) {
         <p class="eyebrow">TFT streamer</p>
         <h1>${esc(c.name)}</h1>
         <p class="streamer-focus">${esc(c.focus || '')}</p>
+        ${facts ? `<p class="streamer-facts">${facts}</p>` : ''}
         <p class="streamer-status" id="streamer-status"><span class="dot" aria-hidden="true"></span>Offline right now</p>
         <p class="lead">${esc(c.bio || '')}</p>
         <div class="hero-actions">
@@ -178,6 +181,17 @@ function streamerHtml(c) {
         </div>
       </div>
     </section>
+
+    ${(c.highlights || []).length || events.length ? `<section class="section streamer-grid-2" aria-label="Career">
+      ${(c.highlights || []).length ? `<div class="panel">
+        <div class="panel-head"><h2>Career highlights</h2></div>
+        <ul class="crown-list">${c.highlights.map((h) => `<li>${esc(h)}</li>`).join('')}</ul>
+      </div>` : ''}
+      ${events.length ? `<div class="panel">
+        <div class="panel-head"><h2>Tournaments</h2></div>
+        <ul class="deadline-list">${events.map((e) => `<li><a href="${cupUrl(e)}"><b>${esc(e.name)}</b><span class="is-muted">${esc(cupPast(e) ? 'Past' : fmtDays(e).split(' · ').pop())}</span></a></li>`).join('')}</ul>
+      </div>` : ''}
+    </section>` : ''}
 
     <section class="section" aria-labelledby="watch-title">
       <h2 class="block-title" id="watch-title">Watch ${esc(c.name)}</h2>
@@ -188,6 +202,12 @@ function streamerHtml(c) {
         </div>
       </div>
     </section>
+
+    ${(c.sources || []).length ? `<div class="source-box crown-sources">
+      <b>Sources</b>
+      ${c.sources.map((u) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(hostOf(u))}${icon('external')}</a>`).join('')}
+      ${c.checked ? `<span>Last checked: ${esc(fmtDate(c.checked))}</span>` : ''}
+    </div>` : ''}
   </main>
 
   <footer id="site-footer"></footer>

@@ -1,4 +1,4 @@
-# TFTEsport – Grundgerüst
+# TFT E-Sports – Grundgerüst
 
 Treffpunkt für TFT-Spieler und Zuschauer aller Spielstärken: News, Cups und Twitch. Teil des TFTClimb Network.
 Stand: Grundgerüst mit Navigation, Seiten, Filtern, Vorlagen und Leerzuständen – **noch nicht veröffentlicht**.
@@ -23,9 +23,11 @@ Die Seite ist **englisch** (Zielgruppe weltweit, Betreiber-Tools wie der Editor 
 | `/tft-tournaments/<id>` | `tft-tournaments/<id>.html` | Feste Seite pro Turnier, **erzeugt** von `tools/build-tournaments.js` | ja; vergangene inoffizielle: noindex |
 | `/tft-tacticians-crown` | `tft-tacticians-crown.html` | Weltmeisterschaft: Countdown, Twitch-Player, Co-Streams, Ablauf, FAQ | ja |
 | `/live-matches` | `live-matches.html` | Live jetzt / Up next, heute, 7 Tage, letzte Ergebnisse (nur offizielle Turniere) | ja |
-| `/twitch`, `/twitch/live-streams` | `twitch.html`, `twitch/live-streams.html` | Übertragungen, englische Streams, alle TFT-Streams | ja |
+| `/twitch` | `twitch.html` | Alle TFT-Streams mit Sprachfilter und „More streams“, darunter die Streamer-Profile | ja |
+| `/tft-streamers/<login>` | `tft-streamers/<login>.html` | Streamer-Profile, **erzeugt** aus `creators` in `data.js` | ja |
+| `/pro-players` | `pro-players.html` | Profile mit `pro: true` | ja |
 | `/news`, `/news/template` | `news.html`, `news/template.html` | News-Übersicht, Artikelvorlage | ja / noindex |
-| `/pro-players`, `/about`, `/contact`, `/legal-notice`, `/privacy` | `*.html` | Platzhalter bzw. Rechtliches | noindex |
+| `/about`, `/contact`, `/legal-notice`, `/privacy` | `*.html` | Platzhalter bzw. Rechtliches | noindex |
 
 ## Inhalte pflegen
 

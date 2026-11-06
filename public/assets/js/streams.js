@@ -1,4 +1,4 @@
-/* Live-Streams: alle TFT-Streams von Twitch über /api/streams (Vercel-Funktion), Filter nach Sprache und Pros.
+/* Live Streams: alle TFT-Streams von Twitch über /api/streams (Vercel-Funktion), Filter nach Sprache und Pros, „More streams“ lädt auf der Seite nach.
    Ohne Twitch-Verbindung gibt es keine Demo-Streams, sondern einen Hinweis und einen Leerzustand. */
 (function () {
   const D = window.TFTE;

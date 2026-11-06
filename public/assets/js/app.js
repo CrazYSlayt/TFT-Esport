@@ -1,4 +1,4 @@
-/* TFTEsport – gemeinsame Teile: Header, Navigation, Drawer, Suche, Footer und Helfer für alle Seiten. */
+/* TFT E-Sports – gemeinsame Teile: Header, Navigation, Drawer, Suche, Footer und Helfer für alle Seiten. */
 (function () {
   const D = window.TFTE;
 
@@ -395,10 +395,10 @@
     { href: link('legal-notice.html'), label: 'Legal notice' },
     { href: link('privacy.html'), label: 'Privacy' }
   ];
-  // Marke: Janna-Kopf als Symbol, dazu der Schriftzug „TFT Esport“ (Esport in Gold)
+  // Marke: Janna-Kopf als Symbol, dazu der Schriftzug „TFT E-Sports“ (E-Sports in Gold)
   const brand = () => `<a class="brand" href="${link('index.html')}" aria-label="${D.site.name} home">
       <img class="brand-head" src="${link('assets/brand/janna-kopf.png')}" alt="" width="147" height="160" />
-      <span class="brand-word">TFT<em>Esport</em></span></a>`;
+      <span class="brand-word">TFT<em>E-Sports</em></span></a>`;
 
   function renderHeader() {
     const el = document.getElementById('site-header');
@@ -600,7 +600,7 @@
           <p class="footer-claim">Your game. Your scene. Your seat. Tournaments, streams and news for everyone who plays TFT or loves watching it.</p>
         </div>
         <nav aria-label="Explore"><h4>Explore</h4>${NAV.map((n) => `<a href="${n.href}">${n.label}</a>`).join('')}</nav>
-        <nav aria-label="TFTEsport"><h4>${esc(D.site.name)}</h4>${LEGAL.map((l) => `<a href="${l.href}">${l.label}</a>`).join('')}</nav>
+        <nav aria-label="TFT E-Sports"><h4>${esc(D.site.name)}</h4>${LEGAL.map((l) => `<a href="${l.href}">${l.label}</a>`).join('')}</nav>
         <nav aria-label="Network"><h4>Network</h4><a class="footer-network" href="${D.site.network.url}" target="_blank" rel="noopener">${esc(D.site.network.name)}${icon('external')}</a><span class="footer-note">Tier lists, tools and coaching</span></nav>
       </div>
       <div class="wrap footer-legal">

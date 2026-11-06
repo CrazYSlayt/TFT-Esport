@@ -961,25 +961,14 @@ h1 .ph, h2 .ph, h3 .ph { font-weight: inherit; }
 .cal-empty { padding: 16px; }
 
 /* ---------- Twitch-Seite und Live-Streams ---------- */
-/* Streams ganz oben, rechts der Zeitplan */
 .streams-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 6px 20px; padding: 22px 0 14px; }
 .streams-head h1 { font-size: clamp(30px, 3vw, 42px); letter-spacing: -.02em; }
 .streams-head .live-summary { min-height: 24px; margin-top: 4px; font-size: 15px; }
-.streams-top { display: grid; grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr); gap: 24px; align-items: start; }
-.streams-top .stream-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-.tt-card { margin-top: 38px; }
-.tt-card .tt-list, .tt-card > .link-arrow { margin: 0 22px; }
-.tt-card .side-stage { min-height: 120px; }
-.tt-card .side-stage .janna { max-height: 190px; }
-.tt-list { display: grid; gap: 4px; }
-.tt-row { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); text-decoration: none; }
-.tt-row:first-child { border-top: 0; }
-.tt-row .date-badge { min-width: 52px; padding: 6px 4px; }
-.tt-row .date-badge b { font-size: 21px; }
-.tt-main { display: grid; gap: 2px; min-width: 0; }
-.tt-main strong { line-height: 1.2; color: var(--green-deep); }
-.tt-row:hover strong { color: var(--green); }
-.tt-main small { font-size: 13px; color: var(--muted); }
+.lang-bar .result-count { margin-left: auto; }
+.streamer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+.streamer-grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+.streamer-grid-2 .panel-head h2 { font-size: 24px; }
+.streamer-facts { font-size: 15px; font-weight: 600; color: var(--muted); }
 .stream-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
 .stream-grid > .empty { grid-column: 1 / -1; }
 .stream-card .thumb { position: relative; aspect-ratio: 16 / 9; background: #2a2340; }
@@ -1043,9 +1032,7 @@ body.modal-open .modal-overlay { display: grid; }
   /* Startseite: Seitenspalte unter die Turniere, Streams und Cup-Finder nebeneinander */
   .home-grid { grid-template-columns: minmax(0, 1fr); }
   .home-side { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 30px; gap: 24px 20px; }
-  .crown-watch, .crown-days, .crown-two, .streams-top { grid-template-columns: minmax(0, 1fr); }
-  .streams-top .stream-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .tt-card { margin-top: 24px; }
+  .crown-watch, .crown-days, .crown-two { grid-template-columns: minmax(0, 1fr); }
   .roster-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .crown-hero { padding-right: 270px; }
   .crown-hero > .janna { max-height: 330px; }
@@ -1132,8 +1119,6 @@ body.modal-open .modal-overlay { display: grid; }
   .page-head.has-janna { margin-top: 24px; padding: 24px 20px; }
   .head-janna { display: none; }
   .empty.has-janna { padding-left: 132px; --out: var(--edge); }
-  .streams-top .stream-grid { grid-template-columns: minmax(0, 1fr); }
-  .streams-top .stream-grid > :nth-child(n+4) { display: none; }   /* Zeitplan soll mobil nicht zu weit unten stehen */
   .streamer-hero { grid-template-columns: minmax(0, 1fr); gap: 14px; }
   .streamer-portrait { min-height: 220px; }
   .streamer-info { padding: 0 8px 10px; }

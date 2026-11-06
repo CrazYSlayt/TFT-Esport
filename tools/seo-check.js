@@ -1,4 +1,4 @@
-// TFTEsport – prüft alle Seiten auf die SEO-Regeln (wie bei TFTClimb und TFT Arcade) und auf kaputte Links.
+// TFT E-Sports – prüft alle Seiten auf die SEO-Regeln (wie bei TFTClimb und TFT Arcade) und auf kaputte Links.
 // Regeln: genau eine sichtbare H1 ≤ 54 Zeichen, title ≤ 60, Meta-Beschreibung ≤ 134, keine doppelten Titel,
 // canonical = eigene saubere Adresse, indexierbare Seiten mit Keyword „TFT“ in title und Beschreibung und in der Sitemap,
 // alle internen Links, Bilder und Symbole (data-icon) vorhanden.
@@ -55,13 +55,13 @@ for (const f of files) {
   else {
     const t = text(title);
     if (t.length > 60) bad(`title ${t.length} > 60 Zeichen`);
-    if (!noindex && !/TFT/.test(t.replace('TFTEsport', ''))) bad('Keyword „TFT“ fehlt im title');
+    if (!noindex && !/TFT/.test(t.replace('TFT E-Sports', ''))) bad('Keyword „TFT“ fehlt im title');
     (titles[t] = titles[t] || []).push(url);
   }
   if (!desc) bad('Meta-Beschreibung fehlt');
   else {
     if (text(desc).length > 134) bad(`Meta-Beschreibung ${text(desc).length} > 134 Zeichen`);
-    if (!noindex && !/TFT/.test(desc.replace('TFTEsport', ''))) bad('Keyword „TFT“ fehlt in der Meta-Beschreibung');
+    if (!noindex && !/TFT/.test(desc.replace('TFT E-Sports', ''))) bad('Keyword „TFT“ fehlt in der Meta-Beschreibung');
   }
   if (!/<html lang="en">/.test(html)) bad('lang="en" fehlt');
 

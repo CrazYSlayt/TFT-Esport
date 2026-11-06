@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TFT Live Streams: Channels &amp; Broadcasts | TFTEsport</title>
+  <title>TFT Live Streams: Channels &amp; Broadcasts | TFT E-Sports</title>
   <meta name="description" content="TFT live streams on Twitch: active channels, official broadcasts, co-streams and hand-picked creator recommendations." />
   <link rel="canonical" href="https://www.tft-esports.com/twitch" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="TFTEsport" />
+  <meta property="og:site_name" content="TFT E-Sports" />
   <meta property="og:locale" content="en_US" />
-  <meta property="og:title" content="TFT Live Streams: Channels &amp; Broadcasts | TFTEsport" />
+  <meta property="og:title" content="TFT Live Streams: Channels &amp; Broadcasts | TFT E-Sports" />
   <meta property="og:description" content="TFT live streams on Twitch: active channels, official broadcasts, co-streams and hand-picked creator recommendations." />
   <meta property="og:url" content="https://www.tft-esports.com/twitch" />
   <meta property="og:image" content="https://www.tft-esports.com/assets/img/og-tft-esports.png" />
@@ -28,39 +28,35 @@
   <header id="site-header"></header>
 
   <main class="wrap">
-    <!-- Streams ganz oben, rechts daneben der Zeitplan -->
     <section class="streams-head">
       <div>
         <h1>TFT Live Streams</h1>
-        <p class="live-summary" id="live-count"></p>
+        <div class="live-summary" id="live-summary"><span class="rec-dot"></span>Loading streams …</div>
       </div>
-      <a class="link-arrow is-twitch" href="twitch/live-streams.html">All live streams<span data-icon="arrow"></span></a>
+      <a class="link-arrow" href="tft-tacticians-crown.html#watch">World Championship stream<span data-icon="arrow"></span></a>
     </section>
+    <div id="source-note"></div>
 
-    <div class="streams-top">
-      <section aria-label="Live now">
-        <div id="live-now"></div>
-      </section>
-
-      <aside class="side-card stream-teaser tt-card" aria-labelledby="tt-title">
-        <div class="side-stage">
-          <h2 id="tt-title">Timetable</h2>
-          <img class="janna janna-fan at-r" src="assets/img/janna/janna-fan-bust.png" alt="" decoding="async" />
-        </div>
-        <div class="tt-list" id="broadcasts"></div>
-        <a class="link-arrow" href="tft-tacticians-crown.html#watch">World Championship stream<span data-icon="arrow"></span></a>
-      </aside>
+    <div class="lang-bar">
+      <div class="chips chips-boxed" id="lang-chips" role="group" aria-label="Filter by language"></div>
+      <button type="button" class="chip" id="pros-only" aria-pressed="false" hidden>Pros only</button>
+      <span class="result-count" id="grid-sub"></span>
     </div>
+
+    <section aria-label="Live streams">
+      <div class="stream-grid" id="stream-grid"></div>
+      <div class="load-more-wrap"><button type="button" class="btn btn-primary" id="load-more" hidden>More streams</button></div>
+    </section>
 
     <section class="twitch-band" aria-labelledby="creators-title">
       <div class="section-head">
         <span class="twitch-mark"><span data-icon="twitch"></span></span>
         <div>
           <h2 id="creators-title">Streamer profiles</h2>
-          <p class="section-sub">Hand-picked TFT streamers with their live status – visible even when they are offline.</p>
+          <p class="section-sub">The people behind the channels, with their live status and biggest results.</p>
         </div>
       </div>
-      <div class="grid-3 show-all" id="creators"></div>
+      <div class="streamer-grid" id="creators"></div>
     </section>
   </main>
 
@@ -69,6 +65,7 @@
   <script src="assets/js/data.js"></script>
   <script src="assets/data/turniere.js"></script>
   <script src="assets/js/app.js"></script>
+  <script src="assets/js/streams.js"></script>
   <script src="assets/js/twitch.js"></script>
 </body>
 </html>

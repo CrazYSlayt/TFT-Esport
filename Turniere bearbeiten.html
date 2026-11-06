@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex" />
-  <title>Turniere bearbeiten – TFTEsport</title>
+  <title>Turniere bearbeiten – TFT E-Sports</title>
   <!-- Eingabemaske für die Redaktion: liest public/assets/data/turniere.js und schreibt die Datei beim Speichern neu.
        Liegt bewusst außerhalb von public/ und wird nicht veröffentlicht. Speichern direkt in die Datei: Chrome oder Edge. -->
   <link rel="stylesheet" href="public/assets/css/fonts.css" />
@@ -343,7 +343,7 @@
         c.result = { top: top.map((t) => (t.points === '' ? { name: t.name } : t)), note: c.result.note.trim(), source: c.result.source.trim() };
         return c;
       });
-      return `/*\n * TFTEsport – Turniere. Diese Datei wird von „Turniere bearbeiten.html“ (Hauptordner) geschrieben.\n` +
+      return `/*\n * TFT E-Sports – Turniere. Diese Datei wird von „Turniere bearbeiten.html“ (Hauptordner) geschrieben.\n` +
         ` * Von Hand ändern geht auch – Format siehe Kommentar in assets/js/data.js (cups).\n */\n` +
         `window.TFTE.cups = ${JSON.stringify(list, null, 2)};\n`;
     }

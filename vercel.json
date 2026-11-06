@@ -46,6 +46,11 @@
       "source": "/datenschutz",
       "destination": "/privacy",
       "permanent": true
+    },
+    {
+      "source": "/twitch/live-streams",
+      "destination": "/twitch",
+      "permanent": true
     }
   ],
   "headers": [

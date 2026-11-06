@@ -1,5 +1,5 @@
 /*
- * TFTEsport – Turniere. Diese Datei wird von „Turniere bearbeiten.html“ (Hauptordner) geschrieben.
+ * TFT E-Sports – Turniere. Diese Datei wird von „Turniere bearbeiten.html“ (Hauptordner) geschrieben.
  * Von Hand ändern geht auch – Format siehe Kommentar in assets/js/data.js (cups).
  */
 window.TFTE.cups = [
