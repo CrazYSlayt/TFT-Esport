@@ -1,6 +1,6 @@
 {
   "framework": null,
-  "buildCommand": null,
+  "buildCommand": "node tools/build-tournaments.js",
   "installCommand": null,
   "outputDirectory": "public",
   "cleanUrls": true,
@@ -8,8 +8,43 @@
   "redirects": [
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "tft-esports.com" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "tft-esports.com"
+        }
+      ],
       "destination": "https://www.tft-esports.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/cups",
+      "destination": "/tft-tournaments",
+      "permanent": true
+    },
+    {
+      "source": "/cups/turnier",
+      "destination": "/tft-tournaments",
+      "permanent": true
+    },
+    {
+      "source": "/ueber-uns",
+      "destination": "/about",
+      "permanent": true
+    },
+    {
+      "source": "/kontakt",
+      "destination": "/contact",
+      "permanent": true
+    },
+    {
+      "source": "/impressum",
+      "destination": "/legal-notice",
+      "permanent": true
+    },
+    {
+      "source": "/datenschutz",
+      "destination": "/privacy",
       "permanent": true
     }
   ],
@@ -17,12 +52,20 @@
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
       ]
     },
     {
       "source": "/assets/fonts/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
     }
   ]
 }

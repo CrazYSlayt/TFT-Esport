@@ -1,4 +1,4 @@
-/* Twitch-Übersicht: Creator-Empfehlungen, Turnierübertragungen und deutschsprachige Live-Streams (über /api/streams). */
+/* Twitch-Übersicht: Creator-Empfehlungen, Turnierübertragungen und englischsprachige Live-Streams (über /api/streams). */
 (function () {
   const D = window.TFTE;
   const { icon, esc, link, empty, dayMonth, fmtTime, toDate, startOfToday, twitchUrl, creatorCard, creatorSlot, streamCard, loadStreams, STREAM_REASONS } = window.UI;
@@ -15,26 +15,26 @@
       const dm = dayMonth(b.date);
       return `<a class="cup-row" href="${esc(b.url || twitchUrl(b.channel))}" target="_blank" rel="noopener">
         <span class="date-block"><b>${dm.day}</b><small>${dm.mon}</small></span>
-        <span class="cup-row-main"><strong>${esc(b.title)}</strong><span class="cup-row-meta"><span>${esc(fmtTime(b.date))} Uhr</span><span>twitch.tv/${esc(b.channel)}</span></span></span>
+        <span class="cup-row-main"><strong>${esc(b.title)}</strong><span class="cup-row-meta"><span>${/T/.test(b.date) ? esc(fmtTime(b.date)) : 'Time TBA'}</span><span>twitch.tv/${esc(b.channel)}</span></span></span>
         <span class="row-go">${icon('external')}</span>
       </a>`;
     }).join('')
-    : empty({ ic: 'radio', title: 'Noch keine Übertragungen geplant', text: 'Sobald Turniere live gezeigt werden, stehen Termin und Kanal hier.' });
+    : empty({ ic: 'radio', title: 'No broadcasts scheduled yet', text: 'As soon as tournaments are shown live, the date and channel appear here.' });
 
-  /* ---------- Jetzt live (Deutsch) ---------- */
+  /* ---------- Jetzt live (Englisch) ---------- */
   async function renderLive() {
     const { data, reason } = await loadStreams();
     const box = $('live-now');
     if (!data) {
-      box.innerHTML = `<div class="notice"><span>${icon('info')}</span><span><strong>Keine Live-Daten.</strong> ${STREAM_REASONS[reason] || STREAM_REASONS['no-server']}</span></div>`;
+      box.innerHTML = `<div class="notice"><span>${icon('info')}</span><span><strong>No live data.</strong> ${STREAM_REASONS[reason] || STREAM_REASONS['no-server']}</span></div>`;
       return;
     }
     const pros = new Set(D.proStreamers.map((p) => p.login.toLowerCase()));
-    const de = data.streams.filter((s) => s.lang === 'de').slice(0, 4);
-    box.className = de.length ? 'stream-grid' : '';
-    box.innerHTML = de.length
-      ? de.map((s) => streamCard(s, pros.has(s.login.toLowerCase()))).join('')
-      : empty({ pose: 'traurig', title: 'Gerade ist kein deutschsprachiger TFT-Stream live', text: 'In anderen Sprachen läuft vielleicht etwas.', href: link('twitch/live-streams.html'), cta: 'Alle Live-Streams' });
+    const en = data.streams.filter((s) => s.lang === 'en').slice(0, 4);
+    box.className = en.length ? 'stream-grid' : '';
+    box.innerHTML = en.length
+      ? en.map((s) => streamCard(s, pros.has(s.login.toLowerCase()))).join('')
+      : empty({ pose: 'sad', title: 'No English TFT stream is live right now', text: 'Something may be running in other languages.', href: link('twitch/live-streams.html'), cta: 'All live streams' });
   }
   renderLive();
 })();

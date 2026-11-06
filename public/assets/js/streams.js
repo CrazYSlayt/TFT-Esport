@@ -1,4 +1,4 @@
-/* Live-Streams: alle TFT-Streams von Twitch über den lokalen Server (/api/streams), Filter nach Sprache und Pros.
+/* Live-Streams: alle TFT-Streams von Twitch über /api/streams (Vercel-Funktion), Filter nach Sprache und Pros.
    Ohne Twitch-Verbindung gibt es keine Demo-Streams, sondern einen Hinweis und einen Leerzustand. */
 (function () {
   const D = window.TFTE;
@@ -23,12 +23,12 @@
   function renderSummary() {
     const d = state.data;
     if (!d) {
-      $('live-summary').innerHTML = '<span class="rec-dot"></span>Keine Live-Daten';
-      $('source-note').innerHTML = `<div class="notice"><span>${icon('info')}</span><span><strong>Twitch nicht verbunden.</strong> ${STREAM_REASONS[state.reason] || STREAM_REASONS['no-server']}</span></div>`;
+      $('live-summary').innerHTML = '<span class="rec-dot"></span>No live data';
+      $('source-note').innerHTML = `<div class="notice"><span>${icon('info')}</span><span><strong>Twitch is not connected.</strong> ${STREAM_REASONS[state.reason] || STREAM_REASONS['no-server']}</span></div>`;
       return;
     }
-    const time = new Date(d.updatedAt).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-    $('live-summary').innerHTML = `<span class="rec-dot"></span><b>${fmt(d.totalStreams)}</b>&nbsp;Streams live · <b>${fmt(d.totalViewers)}</b>&nbsp;Zuschauer · Stand ${time} Uhr${d.capped ? ' · Top 2.000' : ''}`;
+    const time = new Date(d.updatedAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+    $('live-summary').innerHTML = `<span class="rec-dot"></span><b>${fmt(d.totalStreams)}</b>&nbsp;streams live · <b>${fmt(d.totalViewers)}</b>&nbsp;viewers · updated ${time}${d.capped ? ' · top 2,000' : ''}`;
     $('source-note').innerHTML = '';
   }
 
@@ -38,11 +38,11 @@
     if (!state.data) { box.innerHTML = ''; return; }
     const counts = {};
     state.data.streams.forEach((s) => { counts[s.lang] = (counts[s.lang] || 0) + 1; });
-    // Deutsch immer vorne, danach die Sprachen mit den meisten Streams
-    let langs = Object.keys(counts).sort((a, b) => (b === 'de') - (a === 'de') || counts[b] - counts[a]).slice(0, 9);
+    // Englisch immer vorne, danach die Sprachen mit den meisten Streams
+    let langs = Object.keys(counts).sort((a, b) => (b === 'en') - (a === 'en') || counts[b] - counts[a]).slice(0, 9);
     if (state.lang !== 'all' && !langs.includes(state.lang)) langs.push(state.lang);
     box.innerHTML =
-      `<button type="button" class="chip" data-lang="all" aria-pressed="${state.lang === 'all'}">Alle Sprachen <span class="chip-count">${fmt(state.data.streams.length)}</span></button>` +
+      `<button type="button" class="chip" data-lang="all" aria-pressed="${state.lang === 'all'}">All languages <span class="chip-count">${fmt(state.data.streams.length)}</span></button>` +
       langs.map((l) => `<button type="button" class="chip" data-lang="${esc(l)}" aria-pressed="${state.lang === l}">${esc(langName(l))} <span class="chip-count">${counts[l] || 0}</span></button>`).join('');
     $('pros-only').setAttribute('aria-pressed', state.prosOnly);
   }
@@ -51,7 +51,7 @@
     const grid = $('stream-grid');
     const more = $('load-more');
     if (!state.data) {
-      grid.innerHTML = empty({ ic: 'radio', title: 'Hier erscheinen die Live-Streams', text: 'Sobald Twitch verbunden ist, siehst du hier alle laufenden TFT-Streams.' });
+      grid.innerHTML = empty({ ic: 'radio', title: 'Live streams appear here', text: 'As soon as Twitch is connected, you will see all running TFT streams here.' });
       $('grid-sub').textContent = '';
       more.hidden = true;
       return;
@@ -59,10 +59,10 @@
     const list = filtered();
     grid.innerHTML = list.length
       ? list.slice(0, state.shown).map((s) => streamCard(s, pros.has(s.login.toLowerCase()))).join('')
-      : empty({ ic: 'radio', title: 'Gerade keine Streams für diesen Filter', text: 'Probier eine andere Sprache oder schau später noch einmal vorbei.' });
-    $('grid-sub').textContent = `${fmt(list.length)} ${list.length === 1 ? 'Stream' : 'Streams'}`;
+      : empty({ ic: 'radio', title: 'No streams for this filter right now', text: 'Try another language or come back later.' });
+    $('grid-sub').textContent = `${fmt(list.length)} ${list.length === 1 ? 'stream' : 'streams'}`;
     more.hidden = list.length <= state.shown;
-    more.textContent = `Mehr Streams (${fmt(Math.max(0, list.length - state.shown))} weitere)`;
+    more.textContent = `More streams (${fmt(Math.max(0, list.length - state.shown))} left)`;
   }
 
   function render() {

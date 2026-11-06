@@ -1,18 +1,21 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TFT Live Matches: Turniere heute &amp; Ergebnisse | TFTEsport</title>
-  <meta name="description" content="TFT Live Matches: welche Turniere heute laufen, der Spielplan der Woche, Streams und die letzten Ergebnisse auf einen Blick." />
+  <title>TFT Live Matches: Today's Tournaments &amp; Results | TFTEsport</title>
+  <meta name="description" content="TFT live matches: which tournaments run today, the schedule for the week, streams and the latest results at a glance." />
   <link rel="canonical" href="https://www.tft-esports.com/live-matches" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="TFTEsport" />
-  <meta property="og:locale" content="de_DE" />
-  <meta property="og:title" content="TFT Live Matches: Turniere heute &amp; Ergebnisse | TFTEsport" />
-  <meta property="og:description" content="TFT Live Matches: welche Turniere heute laufen, der Spielplan der Woche, Streams und die letzten Ergebnisse auf einen Blick." />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="TFT Live Matches: Today's Tournaments &amp; Results | TFTEsport" />
+  <meta property="og:description" content="TFT live matches: which tournaments run today, the schedule for the week, streams and the latest results at a glance." />
   <meta property="og:url" content="https://www.tft-esports.com/live-matches" />
-  <meta name="twitter:card" content="summary" />
+  <meta property="og:image" content="https://www.tft-esports.com/assets/img/og-tft-esports.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="theme-color" content="#213d2c" />
   <link rel="icon" type="image/png" sizes="64x64" href="assets/brand/favicon-64.png" />
   <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png" />
@@ -24,44 +27,41 @@
   <header id="site-header"></header>
 
   <main class="wrap">
-    <!-- Kopf wie ein Live-Tracker: Pokal, Status, Titel -->
     <section class="live-head">
       <span class="live-head-ic" aria-hidden="true"><span data-icon="trophy"></span></span>
       <div>
-        <p class="live-meta"><span class="live-pill"><span class="nav-dot"></span>Live-Tracker</span><span id="updated"></span></p>
-        <h1>TFT Live Matches: Turniere heute &amp; Ergebnisse</h1>
-        <p class="lead">Welche Turniere heute laufen, wo du zuschauen kannst, was diese Woche ansteht und wer zuletzt gewonnen hat – in deiner Ortszeit.</p>
+        <p class="live-meta"><span class="live-pill"><span class="nav-dot"></span>Live tracker</span><span id="updated"></span></p>
+        <h1>TFT Live Matches: Today's Tournaments &amp; Results</h1>
+        <p class="lead">Which tournaments run today, where to watch, what is coming up this week and who won last – in your local time.</p>
       </div>
     </section>
 
-    <!-- Live jetzt (oder: als Nächstes), Janna kommentiert am rechten Rand -->
     <section class="live-box" aria-labelledby="live-title">
       <div class="live-box-head">
         <h2 id="live-title"></h2>
         <p id="live-sub"></p>
       </div>
       <div class="live-cards" id="live-cards"></div>
-      <img class="janna janna-caster at-r" src="assets/img/janna/janna-caster-oben.png" alt="" decoding="async" />
+      <img class="janna janna-caster at-r" src="assets/img/janna/janna-caster-bust.png" alt="" decoding="async" />
     </section>
 
-    <!-- Heute · Diese Woche · Letzte Ergebnisse -->
     <div class="live-cols">
       <section class="side-card" aria-labelledby="today-title">
-        <div class="panel-head"><h2 id="today-title">Heute</h2><span id="today-date"></span></div>
+        <div class="panel-head"><h2 id="today-title">Today</h2><span id="today-date"></span></div>
         <div id="today"></div>
       </section>
       <section class="side-card" aria-labelledby="week-title">
-        <div class="panel-head"><h2 id="week-title">Diese Woche</h2><span>die nächsten 7 Tage</span></div>
+        <div class="panel-head"><h2 id="week-title">This week</h2><span>next 7 days</span></div>
         <div id="week"></div>
       </section>
       <section class="side-card" aria-labelledby="results-title">
-        <div class="panel-head"><h2 id="results-title">Letzte Ergebnisse</h2></div>
+        <div class="panel-head"><h2 id="results-title">Latest results</h2><span>official events</span></div>
         <div id="results"></div>
-        <a class="link-arrow" href="cups.html?ansicht=liste&amp;zeitraum=alle">Alle Turniere, auch vergangene<span data-icon="arrow"></span></a>
+        <a class="link-arrow" href="tft-tournaments.html?view=list&amp;range=all">All tournaments, including past ones<span data-icon="arrow"></span></a>
       </section>
     </div>
 
-    <p class="editor-note"><span data-icon="info"></span>Termine, Streams und Ergebnisse trägt die Redaktion ein und prüft sie an den Veranstalterquellen. Live-Punktestände aus laufenden Lobbys folgen, sobald eine zuverlässige Datenquelle angebunden ist.</p>
+    <p class="editor-note"><span data-icon="info"></span>Dates, streams and results are added by the editors and checked against organizer sources. Live points from running lobbies will follow once a reliable data source is connected.</p>
   </main>
 
   <footer id="site-footer"></footer>

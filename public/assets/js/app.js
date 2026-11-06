@@ -42,7 +42,7 @@
 
   /* ---------- Helfer ---------- */
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const fmt = (n) => Number(n).toLocaleString('de-DE');
+  const fmt = (n) => Number(n).toLocaleString('en-US');
   const served = location.protocol.startsWith('http');
   // Links relativ zur Projektwurzel, damit die Seite auch per Doppelklick (file://) läuft.
   // Wurzel = Pfad, über den diese Seite app.js einbindet (z. B. '../' für news/vorlage.html).
@@ -51,13 +51,19 @@
   // Adresse in der Leiste ändern (Filter teilbar); manche Browser erlauben das bei file:// nicht
   const setUrl = (url) => { try { history.replaceState(null, '', url); } catch (_) { /* egal */ } };
 
-  // Ohne Zeitzone gelten ISO-Angaben als Ortszeit ('2026-11-07T18:00'); reines Datum bekommt 00:00, sonst wäre es UTC.
-  const toDate = (iso) => new Date(/T/.test(iso) ? iso : `${iso}T00:00`);
-  const fmtDate = (iso, opts = { day: '2-digit', month: '2-digit', year: 'numeric' }) => toDate(iso).toLocaleDateString('de-DE', opts);
-  const fmtTime = (iso) => toDate(iso).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+  // Uhrzeiten stehen in den Daten in deutscher Zeit ('2026-11-07T18:00') und werden in der Ortszeit des Besuchers angezeigt.
+  // Reines Datum bleibt ein Kalendertag (00:00 Ortszeit). Angaben mit Z oder +01:00 gelten wie geschrieben.
+  function berlin(iso) {
+    const utc = new Date(`${iso.slice(0, 16)}:00Z`);
+    const at = (timeZone) => new Date(utc.toLocaleString('en-US', { timeZone }));
+    return new Date(utc.getTime() - (at('Europe/Berlin') - at('UTC')));
+  }
+  const toDate = (iso) => (!/T/.test(iso) ? new Date(`${iso}T00:00`) : /(Z|[+-]\d\d:\d\d)$/.test(iso) ? new Date(iso) : berlin(iso));
+  const fmtDate = (iso, opts = { day: 'numeric', month: 'short', year: 'numeric' }) => toDate(iso).toLocaleDateString('en-GB', opts);
+  const fmtTime = (iso) => toDate(iso).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
   const dayMonth = (iso) => {
     const d = toDate(iso);
-    return { day: String(d.getDate()).padStart(2, '0'), mon: d.toLocaleDateString('de-DE', { month: 'short' }).replace('.', '').toUpperCase() };
+    return { day: String(d.getDate()).padStart(2, '0'), mon: d.toLocaleDateString('en-US', { month: 'short' }).toUpperCase() };
   };
 
   const label = (list, id) => (D[list].find((x) => x.id === id) || {}).label || id;
@@ -68,16 +74,17 @@
   const ymd = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   // Reines Datum gilt bis zum Ende des Tages (Anmeldeschluss „14.09.“ = noch am 14.09. möglich)
   const endOf = (iso) => (/T/.test(iso) ? toDate(iso) : new Date(toDate(iso).getTime() + 864e5 - 1));
-  // „Sa 10.10.“ (mit Jahr „Sa 10.10.2026“), mit Uhrzeit „Sa 10.10.2026, 18:00 Uhr“
-  const WD = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+  // „Sat 10 Oct“ (mit Jahr „Sat 10 Oct 2026“), mit Uhrzeit „Sat 10 Oct 2026, 18:00“
+  const WD = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const fmtDay = (iso, year = false) => {
     const d = toDate(iso);
-    return `${WD[d.getDay()]} ${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${year ? d.getFullYear() : ''}`;
+    return `${WD[d.getDay()]} ${d.getDate()} ${MON[d.getMonth()]}${year ? ` ${d.getFullYear()}` : ''}`;
   };
-  const fmtWhen = (iso) => fmtDay(iso, true) + (/T/.test(iso) ? `, ${fmtTime(iso)} Uhr` : '');
+  const fmtWhen = (iso) => fmtDay(iso, true) + (/T/.test(iso) ? `, ${fmtTime(iso)}` : '');
 
   /* ---------- Turniere ---------- */
-  const cupUrl = (c) => link(`cups/turnier.html?id=${encodeURIComponent(c.id)}`);
+  const cupUrl = (c) => link(c.page || `tft-tournaments/${encodeURIComponent(c.id)}.html`);
   const cupDays = (c) => (c.days || []).filter((d) => d.from).map((d) => ({ from: d.from, to: d.to || d.from, label: d.label || '' }))
     .sort((a, b) => toDate(a.from) - toDate(b.from));
   const cupStart = (c) => { const d = cupDays(c); return d.length ? toDate(d[0].from) : null; };
@@ -95,18 +102,18 @@
   // Nächster Spielblock, der noch nicht vorbei ist (bei Turnieren über Wochen, z. B. Qualifier im Sept., Finale im Dez.)
   const cupNext = (c) => { const d = cupDays(c).find((x) => endOf(x.to) >= new Date()); return d ? toDate(d.from) : null; };
   const upcomingCups = () => D.cups.filter((c) => cupNext(c)).sort((a, b) => cupNext(a) - cupNext(b));
-  // Spieltage lesbar: „Sa, 10.10. – So, 11.10. · Fr, 16.10. – So, 18.10.“
+  // Spieltage lesbar: „Sat 10 Oct – Sun 11 Oct · Fri 16 Oct – Sun 18 Oct“
   const fmtDays = (c) => cupDays(c).map((d) =>
-    `${d.label ? `${d.label}: ` : ''}${fmtDay(d.from)}${d.to !== d.from ? ` – ${fmtDay(d.to)}` : ''}${/T/.test(d.from) ? `, ${fmtTime(d.from)} Uhr` : ''}`).join(' · ');
+    `${d.label ? `${d.label}: ` : ''}${fmtDay(d.from)}${d.to !== d.from ? ` – ${fmtDay(d.to)}` : ''}${/T/.test(d.from) ? `, ${fmtTime(d.from)}` : ''}`).join(' · ');
 
   // Anmeldestatus: open | soon | closed | unknown | none
   function signupState(c) {
     const now = new Date();
-    if (!c.signupDeadline && !c.signupUrl) return { key: 'none', text: 'Keine Anmeldung – nur Qualifizierte' };
-    if (!c.signupDeadline) return { key: 'unknown', text: 'Anmeldeschluss noch nicht bekannt' };
-    if (endOf(c.signupDeadline) < now) return { key: 'closed', text: 'Anmeldung beendet' };
-    if (c.signupStart && toDate(c.signupStart) > now) return { key: 'soon', text: `Anmeldung ab ${fmtDay(c.signupStart)}` };
-    return { key: 'open', text: `Anmeldung offen bis ${fmtDay(c.signupDeadline)}` };
+    if (!c.signupDeadline && !c.signupUrl) return { key: 'none', text: 'No sign-up – qualified players only' };
+    if (!c.signupDeadline) return { key: 'unknown', text: 'Deadline not announced yet' };
+    if (endOf(c.signupDeadline) < now) return { key: 'closed', text: 'Sign-up closed' };
+    if (c.signupStart && toDate(c.signupStart) > now) return { key: 'soon', text: `Sign-up opens ${fmtDay(c.signupStart)}` };
+    return { key: 'open', text: `Sign-up open until ${fmtDay(c.signupDeadline)}` };
   }
   const signupOpen = (c) => signupState(c).key === 'open';
   const hostOf = (url) => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch (_) { return url; } };
@@ -114,13 +121,13 @@
   /* ---------- Bausteine ---------- */
   // Beschrifteter Bildplatzhalter, bis echte Bilder vorhanden sind
   const imgPlaceholder = (text, cls = '') =>
-    `<div class="ph-img ${cls}" role="img" aria-label="Bildplatzhalter: ${esc(text)}"><span>${icon('image')}${esc(text)}</span></div>`;
+    `<div class="ph-img ${cls}" role="img" aria-label="Image placeholder: ${esc(text)}"><span>${icon('image')}${esc(text)}</span></div>`;
 
-  // Janna, das Maskottchen: 10 Posen in assets/img/janna/ – als Oberkörper ('-oben', Standard) oder ganze Figur.
+  // Janna, das Maskottchen: 10 Posen in assets/img/janna/ – als Oberkörper ('-bust', Standard) oder ganze Figur.
   // Posen: winken, caster, ueberlegen, pokal, tablet, staunen, daumen, traurig, fan, krone
   // In Boxen immer am Rand: cls 'at-r' (rechts) oder 'at-l' (links), siehe CSS „Janna“.
   const janna = (pose, cls = '', full = false) =>
-    `<img class="janna janna-${pose} ${cls}" src="${link(`assets/img/janna/janna-${pose}${full ? '' : '-oben'}.png`)}" alt="" loading="lazy" decoding="async" />`;
+    `<img class="janna janna-${pose} ${cls}" src="${link(`assets/img/janna/janna-${pose}${full ? '' : '-bust'}.png`)}" alt="" loading="lazy" decoding="async" />`;
   const searchEmpty = (title, text, pose) => `<div class="search-empty">${janna(pose, 'search-janna')}<p class="empty-title">${title}</p><p class="empty-text">${text}</p></div>`;
 
   // Leerzustand: Symbol (oder Janna), Titel, kurzer Text, optional ein Link
@@ -138,11 +145,11 @@
 
   function articleCard(a) {
     return `<a class="card news-card" href="${articleUrl(a)}">
-      ${a.image ? `<img class="card-img" src="${esc(link(a.image))}" alt="" loading="lazy" />` : imgPlaceholder('Artikelbild', 'card-img')}
+      ${a.image ? `<img class="card-img" src="${esc(link(a.image))}" alt="" loading="lazy" />` : imgPlaceholder('Article image', 'card-img')}
       <div class="card-body">
         ${tag(catLabel(a.cat), a.cat)}
         <h3 class="card-title">${esc(a.title)}</h3>
-        <p class="card-meta">${esc(fmtDate(a.date))}${a.readMin ? ` · ${a.readMin} Min.` : ''}<span class="card-go">${icon('arrow')}</span></p>
+        <p class="card-meta">${esc(fmtDate(a.date))}${a.readMin ? ` · ${a.readMin} min read` : ''}<span class="card-go">${icon('arrow')}</span></p>
       </div>
     </a>`;
   }
@@ -171,11 +178,11 @@
     let key = signupState(c).key;
     if (key === 'unknown' && c.requirement === 'quali') key = 'none';   // Info-Link, aber keine offene Anmeldung
     const st = {
-      open: () => ({ ic: 'users', text: `Anmeldung bis ${fmtDay(c.signupDeadline)}` }),
-      soon: () => ({ ic: 'clock', text: `Anmeldung ab ${fmtDay(c.signupStart)}` }),
-      unknown: () => ({ ic: 'info', text: 'Anmeldung folgt' }),
-      closed: () => ({ ic: 'play', text: 'Zuschauen' }),
-      none: () => ({ ic: 'lock', text: 'Nur Qualifizierte' })
+      open: () => ({ ic: 'users', text: `Sign up by ${fmtDay(c.signupDeadline)}` }),
+      soon: () => ({ ic: 'clock', text: `Sign-up opens ${fmtDay(c.signupStart)}` }),
+      unknown: () => ({ ic: 'info', text: 'Sign-up to be announced' }),
+      closed: () => ({ ic: 'play', text: 'Watch' }),
+      none: () => ({ ic: 'lock', text: 'Qualified only' })
     }[key]();
     return { key, ...st };
   }
@@ -196,16 +203,16 @@
   function keyFacts(c) {
     const s = signupState(c);
     const deadline = c.signupDeadline ? fmtWhen(c.signupDeadline)
-      : !c.signupUrl ? 'Keine Anmeldung' : cupPast(c) ? 'Keine Angabe des Veranstalters' : 'Noch nicht bekannt';
+      : !c.signupUrl ? 'No sign-up' : cupPast(c) ? 'Not stated by the organizer' : 'Not announced yet';
     const where = c.signupUrl
       ? `<a href="${esc(c.signupUrl)}" target="_blank" rel="noopener">${esc(hostOf(c.signupUrl))}${icon('external')}</a>`
-      : 'Keine Anmeldung – nur Qualifizierte';
+      : 'No sign-up – qualified players only';
     return `<dl class="keyfacts">
-      <div><dt>${icon('users')}Wer darf teilnehmen?</dt><dd>${esc(c.eligibility || 'Noch nicht bekannt')}</dd></div>
-      <div><dt>${icon('shield')}Rangbeschränkung</dt><dd>${esc(c.rank || 'Noch nicht bekannt')}</dd></div>
-      <div class="kf-${s.key}"><dt>${icon('clock')}Anmeldeschluss</dt><dd>${esc(deadline)}</dd></div>
-      <div><dt>${icon('calendar')}Gespielt wird</dt><dd>${esc(fmtDays(c) || 'Noch nicht bekannt')}</dd></div>
-      <div><dt>${icon('link')}Anmeldung</dt><dd>${where}</dd></div>
+      <div><dt>${icon('users')}Who can enter?</dt><dd>${esc(c.eligibility || 'Not announced yet')}</dd></div>
+      <div><dt>${icon('shield')}Rank requirement</dt><dd>${esc(c.rank || 'Not announced yet')}</dd></div>
+      <div class="kf-${s.key}"><dt>${icon('clock')}Sign-up deadline</dt><dd>${esc(deadline)}</dd></div>
+      <div><dt>${icon('calendar')}Game days</dt><dd>${esc(fmtDays(c) || 'Not announced yet')}</dd></div>
+      <div><dt>${icon('link')}Where to sign up</dt><dd>${where}</dd></div>
     </dl>`;
   }
 
@@ -215,14 +222,14 @@
     const past = cupPast(c);
     return `<article class="cup-card ${past ? 'is-past' : ''}">
       <header class="cup-card-head">
-        <div class="cup-card-tags">${tag(label('cupLevels', c.level), c.level)}${tag(label('regions', c.region), 'region')}${past ? tag('Vorbei', 'past') : ''}</div>
+        <div class="cup-card-tags">${tag(label('cupLevels', c.level), c.level)}${tag(label('regions', c.region), 'region')}${past ? tag('Past', 'past') : ''}</div>
         <h3><a href="${cupUrl(c)}">${esc(c.name)}</a></h3>
         ${past ? '' : `<span class="signup-pill is-${s.key}">${esc(s.text)}</span>`}
       </header>
       ${keyFacts(c)}
       <footer class="cup-card-foot">
-        <a class="link-arrow" href="${cupUrl(c)}">Alle Details${icon('arrow')}</a>
-        ${c.checked ? `<span>Geprüft am ${esc(fmtDate(c.checked))}${c.organizer ? ` · ${esc(c.organizer)}` : ''}</span>` : ''}
+        <a class="link-arrow" href="${cupUrl(c)}">Full details${icon('arrow')}</a>
+        ${c.checked ? `<span>Checked ${esc(fmtDate(c.checked))}${c.organizer ? ` · ${esc(c.organizer)}` : ''}</span>` : ''}
       </footer>
     </article>`;
   }
@@ -250,19 +257,19 @@
       cells += `<div class="cal-day ${d.getMonth() !== m - 1 ? 'other' : ''} ${key === today ? 'today' : ''}">
         <span class="cal-num">${d.getDate()}</span>
         ${infos.map((e) => `<span class="cal-ev cal-info is-${esc(e.kind)}" title="${esc(`${e.title} – ${e.info}`)}">${icon(SET_ICON[e.kind] || 'info')}${esc(e.short || e.title)}</span>`).join('')}
-        ${deadlines.map((c) => `<a class="cal-ev cal-deadline ${endOf(c.signupDeadline) < now ? 'past' : ''}" href="${cupUrl(c)}" title="Anmeldeschluss: ${esc(c.name)}">${icon('clock')}Anmeldeschluss · ${esc(c.name)}</a>`).join('')}
+        ${deadlines.map((c) => `<a class="cal-ev cal-deadline ${endOf(c.signupDeadline) < now ? 'past' : ''}" href="${cupUrl(c)}" title="Sign-up deadline: ${esc(c.name)}">${icon('clock')}Deadline · ${esc(c.name)}</a>`).join('')}
         ${plays.map((c) => `<a class="cal-ev ${esc(c.level)} ${cupPast(c) ? 'past' : ''}" href="${cupUrl(c)}" title="${esc(c.name)}">${esc(c.name)}</a>`).join('')}
       </div>`;
     }
-    return `<div class="cal-grid">${['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'].map((w) => `<div class="cal-wd">${w}</div>`).join('')}${cells}</div>`;
+    return `<div class="cal-grid">${['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((w) => `<div class="cal-wd">${w}</div>`).join('')}${cells}</div>`;
   }
-  const calLegend = () => `<span><i class="lg lg-offiziell"></i>Offiziell</span><span><i class="lg lg-regional"></i>Regional</span>
-    <span><i class="lg lg-streamer"></i>Streamer-Cup</span><span><i class="lg lg-deadline"></i>Anmeldeschluss</span><span><i class="lg lg-info"></i>Set-Termin</span>`;
+  const calLegend = () => `<span><i class="lg lg-offiziell"></i>Official</span><span><i class="lg lg-regional"></i>Regional</span>
+    <span><i class="lg lg-streamer"></i>Streamer cup</span><span><i class="lg lg-deadline"></i>Sign-up deadline</span><span><i class="lg lg-info"></i>Set date</span>`;
 
   /* ---------- Twitch: Creator-Karten ---------- */
   const twitchUrl = (login) => `https://www.twitch.tv/${encodeURIComponent(login)}`;
   const creatorCard = (c) => `<a class="card creator-card" href="${twitchUrl(c.login)}" target="_blank" rel="noopener">
-      ${imgPlaceholder('Stream-Vorschau', 'card-img')}
+      ${imgPlaceholder('Stream preview', 'card-img')}
       <div class="card-body">
         <span class="avatar-ph">${icon('twitch')}</span>
         <span><strong>${esc(c.name)}</strong><small>${esc(c.focus || '')}</small></span>
@@ -271,24 +278,24 @@
     </a>`;
   // Leerer Platz: bleibt als beschrifteter Platzhalter sichtbar, bis die Redaktion Creator auswählt
   const creatorSlot = (n) => `<div class="card creator-card">
-      ${imgPlaceholder('Stream-Vorschau', 'card-img')}
+      ${imgPlaceholder('Stream preview', 'card-img')}
       <div class="card-body">
         <span class="avatar-ph">${icon('users')}</span>
-        <span><strong>Platzhalter: Creator ${n}</strong><small>Redaktionelle Empfehlung</small></span>
+        <span><strong>Placeholder: creator ${n}</strong><small>Editor's pick</small></span>
       </div>
     </div>`;
 
   /* ---------- Twitch: Stream-Karten und Player-Fenster ---------- */
   let langNames = null;
-  try { langNames = new Intl.DisplayNames(['de'], { type: 'language' }); } catch (_) { /* älterer Browser */ }
+  try { langNames = new Intl.DisplayNames(['en'], { type: 'language' }); } catch (_) { /* älterer Browser */ }
   function langName(code) {
-    if (!code || code === 'other') return 'Andere';
+    if (!code || code === 'other') return 'Other';
     try { const n = langNames && langNames.of(code); return n ? n.charAt(0).toUpperCase() + n.slice(1) : code.toUpperCase(); } catch (_) { return code.toUpperCase(); }
   }
   function uptime(iso) {
     const min = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
     const h = Math.floor(min / 60);
-    return h ? `${h} Std. ${min % 60} Min.` : `${min} Min.`;
+    return h ? `${h} h ${min % 60} min` : `${min} min`;
   }
   const streams = new Map();   // login → Stream, damit ein Klick das Player-Fenster öffnen kann
   function streamCard(s, isPro = false) {
@@ -298,12 +305,12 @@
       <div class="thumb">
         ${s.thumb ? `<img src="${esc(s.thumb)}?t=${minute}" alt="" loading="lazy" />` : ''}
         <span class="badge-live">Live</span>
-        <span class="viewer-pill">${fmt(s.viewers)} Zuschauer</span>
+        <span class="viewer-pill">${fmt(s.viewers)} viewers</span>
       </div>
       <div class="card-body">
         <span class="stream-name">${esc(s.name)}${isPro ? tag('Pro') : ''}</span>
         <p class="stream-title" title="${esc(s.title)}">${esc(s.title || '')}</p>
-        <div class="stream-meta"><span>${esc(langName(s.lang))}</span><span>seit ${uptime(s.startedAt)}</span></div>
+        <div class="stream-meta"><span>${esc(langName(s.lang))}</span><span>live for ${uptime(s.startedAt)}</span></div>
       </div>
     </a>`;
   }
@@ -313,15 +320,15 @@
   const closeModal = () => { document.body.classList.remove('modal-open'); modal.innerHTML = ''; };
   function openWatch(s) {
     const host = encodeURIComponent(location.hostname);
-    modal.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-label="Stream von ${esc(s.name)}">
+    modal.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-label="Stream by ${esc(s.name)}">
       <div class="watch-head">
         <div class="watch-title"><strong>${esc(s.name)}</strong><span>${esc(s.title || '')}</span></div>
-        <a class="btn btn-ghost" href="${twitchUrl(s.login)}" target="_blank" rel="noopener">Auf Twitch öffnen${icon('external')}</a>
-        <button type="button" class="icon-btn" aria-label="Schließen" data-close-modal>${icon('x')}</button>
+        <a class="btn btn-ghost" href="${twitchUrl(s.login)}" target="_blank" rel="noopener">Open on Twitch${icon('external')}</a>
+        <button type="button" class="icon-btn" aria-label="Close" data-close-modal>${icon('x')}</button>
       </div>
       <div class="watch-main">
-        <div class="player"><iframe src="https://player.twitch.tv/?channel=${encodeURIComponent(s.login)}&parent=${host}&autoplay=true" allowfullscreen allow="autoplay; fullscreen" title="Twitch-Player"></iframe></div>
-        <iframe class="chat" src="https://www.twitch.tv/embed/${encodeURIComponent(s.login)}/chat?parent=${host}" title="Twitch-Chat"></iframe>
+        <div class="player"><iframe src="https://player.twitch.tv/?channel=${encodeURIComponent(s.login)}&parent=${host}&autoplay=true" allowfullscreen allow="autoplay; fullscreen" title="Twitch player"></iframe></div>
+        <iframe class="chat" src="https://www.twitch.tv/embed/${encodeURIComponent(s.login)}/chat?parent=${host}" title="Twitch chat"></iframe>
       </div>
     </div>`;
     document.body.classList.add('modal-open');
@@ -355,28 +362,28 @@
     } catch (_) { return { data: null, reason: 'no-server' }; }
   }
   const STREAM_REASONS = {
-    'no-credentials': 'Twitch ist noch nicht verbunden: Client-ID und Secret in <code>twitch.config.json</code> eintragen und den Server neu starten.',
-    'no-server': 'Live-Daten von Twitch kommen mit der Anbindung. Bis dahin bleibt dieser Bereich leer.',
-    'twitch-error': 'Twitch ist gerade nicht erreichbar. Details stehen im Server-Fenster.'
+    'no-credentials': 'Live data from Twitch is being connected. Until then you can watch directly on Twitch.',
+    'no-server': 'Live data from Twitch is only available on the published site.',
+    'twitch-error': 'Twitch cannot be reached right now. Please try again in a moment.'
   };
 
   /* ---------- Navigation ---------- */
   // mark: kleines Zeichen vor dem Menüpunkt (grüner Live-Punkt bzw. Symbol), wie bei dota2news.com
   const NAV = [
-    { id: 'cups', href: link('cups.html'), label: 'Turniere' },
+    { id: 'cups', href: link('tft-tournaments.html'), label: 'Tournaments' },
     { id: 'matches', href: link('live-matches.html'), label: 'Live Matches', mark: '<span class="nav-dot" aria-hidden="true"></span>' },
     { id: 'twitch', href: link('twitch.html'), label: 'Live Streams', mark: icon('radio') },
     { id: 'pros', href: link('pro-players.html'), label: 'Pro Players' },
     { id: 'news', href: link('news.html'), label: 'News' }
   ];
   const LEGAL = [
-    { href: link('ueber-uns.html'), label: 'Über uns' },
-    { href: link('kontakt.html'), label: 'Kontakt' },
-    { href: link('impressum.html'), label: 'Impressum' },
-    { href: link('datenschutz.html'), label: 'Datenschutz' }
+    { href: link('about.html'), label: 'About' },
+    { href: link('contact.html'), label: 'Contact' },
+    { href: link('legal-notice.html'), label: 'Legal notice' },
+    { href: link('privacy.html'), label: 'Privacy' }
   ];
   // Marke: Janna-Kopf als Symbol, dazu der Schriftzug „TFT Esport“ (Esport in Gold)
-  const brand = () => `<a class="brand" href="${link('index.html')}" aria-label="${D.site.name} Startseite">
+  const brand = () => `<a class="brand" href="${link('index.html')}" aria-label="${D.site.name} home">
       <img class="brand-head" src="${link('assets/brand/janna-kopf.png')}" alt="" width="147" height="160" />
       <span class="brand-word">TFT<em>Esport</em></span></a>`;
 
@@ -388,12 +395,12 @@
     el.className = 'site-header';
     el.innerHTML = `
       <div class="header-bar">
-        <button class="hb-cell burger" type="button" aria-label="Menü öffnen" data-open-drawer>${icon('menu')}</button>
+        <button class="hb-cell burger" type="button" aria-label="Open menu" data-open-drawer>${icon('menu')}</button>
         ${brand()}
-        <nav class="mainnav" aria-label="Hauptnavigation">
+        <nav class="mainnav" aria-label="Main navigation">
           ${NAV.map((n) => `<a href="${n.href}" ${section === n.id ? 'class="active" aria-current="page"' : ''}>${n.mark || ''}${n.label}</a>`).join('')}
         </nav>
-        <button class="hb-cell hb-search" type="button" aria-label="Suche öffnen" data-open-search>${icon('search')}<span>Suche</span></button>
+        <button class="hb-cell hb-search" type="button" aria-label="Open search" data-open-search>${icon('search')}<span>Search</span></button>
       </div>`;
   }
 
@@ -404,19 +411,20 @@
     wrap.className = 'drawer-wrap';
     wrap.innerHTML = `
       <div class="drawer-backdrop" data-close-drawer></div>
-      <aside class="drawer" aria-label="Menü">
-        <div class="drawer-head">${brand()}<button type="button" class="icon-btn" aria-label="Menü schließen" data-close-drawer>${icon('x')}</button></div>
-        <nav aria-label="Menü">
-          <a href="${link('index.html')}" ${page === 'home' ? 'aria-current="page"' : ''}>Startseite</a>
+      <aside class="drawer" aria-label="Menu">
+        <div class="drawer-head">${brand()}<button type="button" class="icon-btn" aria-label="Close menu" data-close-drawer>${icon('x')}</button></div>
+        <nav aria-label="Menu">
+          <a href="${link('index.html')}" ${page === 'home' ? 'aria-current="page"' : ''}>Home</a>
           ${NAV.map((n) => `<a href="${n.href}" ${section === n.id ? 'aria-current="page"' : ''}>${n.label}</a>`).join('')}
         </nav>
-        <p class="drawer-label">Mehr</p>
-        <nav class="drawer-more" aria-label="Mehr">
-          <a href="${link('index.html#set-termine')}">${icon('calendar')}Set-Termine</a>
-          ${LEGAL.slice(0, 2).map((l) => `<a href="${l.href}">${icon(l.label === 'Kontakt' ? 'mail' : 'info')}${l.label}</a>`).join('')}
-          <a href="${D.site.network.url}" target="_blank" rel="noopener">${icon('external')}${esc(D.site.network.name)} – Tools &amp; Coaching</a>
+        <p class="drawer-label">More</p>
+        <nav class="drawer-more" aria-label="More">
+          <a href="${link('tft-tacticians-crown.html')}">${icon('trophy')}World Championship</a>
+          <a href="${link('index.html#set-dates-card')}">${icon('calendar')}Set dates</a>
+          ${LEGAL.slice(0, 2).map((l) => `<a href="${l.href}">${icon(l.label === 'Contact' ? 'mail' : 'info')}${l.label}</a>`).join('')}
+          <a href="${D.site.network.url}" target="_blank" rel="noopener">${icon('external')}${esc(D.site.network.name)} – tools &amp; coaching</a>
         </nav>
-        <a class="btn btn-primary btn-block" href="${link('cups.html')}">Alle Turniere${icon('arrow')}</a>
+        <a class="btn btn-primary btn-block" href="${link('tft-tournaments.html')}">All tournaments${icon('arrow')}</a>
       </aside>`;
     document.body.appendChild(wrap);
     const toggle = (open) => document.body.classList.toggle('drawer-open', open);
@@ -432,11 +440,11 @@
     const wrap = document.createElement('div');
     wrap.className = 'search-overlay';
     wrap.innerHTML = `
-      <div class="search-box" role="dialog" aria-modal="true" aria-label="Suche">
+      <div class="search-box" role="dialog" aria-modal="true" aria-label="Search">
         <div class="search-input">
           ${icon('search')}
-          <input type="search" placeholder="News und Turniere durchsuchen …" autocomplete="off" aria-label="Suchbegriff" />
-          <button type="button" class="icon-btn" aria-label="Suche schließen" data-close-search>${icon('x')}</button>
+          <input type="search" placeholder="Search news and tournaments …" autocomplete="off" aria-label="Search term" />
+          <button type="button" class="icon-btn" aria-label="Close search" data-close-search>${icon('x')}</button>
         </div>
         <div class="search-results" aria-live="polite"></div>
       </div>`;
@@ -445,21 +453,21 @@
     const results = wrap.querySelector('.search-results');
     const items = () => [
       ...D.articles.map((a) => ({ kind: 'News', title: a.title, text: `${a.title} ${a.teaser || ''} ${catLabel(a.cat)}`, href: articleUrl(a) })),
-      ...D.cups.map((c) => ({ kind: 'Turnier', title: c.name, text: `${c.name} ${label('regions', c.region)} ${c.organizer || ''} ${c.format || ''}`, href: cupUrl(c) }))
+      ...D.cups.map((c) => ({ kind: 'Tournament', title: c.name, text: `${c.name} ${label('regions', c.region)} ${c.organizer || ''} ${c.format || ''}`, href: cupUrl(c) }))
     ];
 
     function run() {
       const all = items();
       if (!all.length) {
-        results.innerHTML = searchEmpty('Noch nichts zu finden', 'Sobald die ersten News und Turniere online sind, findest du sie hier.', 'tablet');
+        results.innerHTML = searchEmpty('Nothing to find yet', 'As soon as the first news and tournaments are online, you will find them here.', 'tablet');
         return;
       }
       const q = input.value.trim().toLowerCase();
       const list = q ? all.filter((x) => x.text.toLowerCase().includes(q)) : all.slice(0, 6);
       results.innerHTML = list.length
-        ? `<p class="search-hint">${q ? `${list.length} Treffer` : 'Neueste Einträge'}</p>` +
+        ? `<p class="search-hint">${q ? `${list.length} ${list.length === 1 ? 'result' : 'results'}` : 'Latest entries'}</p>` +
           list.map((x) => `<a class="search-item" href="${x.href}">${tag(x.kind)}<strong>${esc(x.title)}</strong></a>`).join('')
-        : searchEmpty('Keine Treffer', 'Versuch es mit einem anderen Begriff – zum Beispiel einem Turniernamen oder „DACH“.', 'ueberlegen');
+        : searchEmpty('No results', 'Try another term – for example a tournament name or “EMEA”.', 'thinking');
     }
 
     const open = () => { document.body.classList.add('search-open'); run(); setTimeout(() => input.focus(), 30); };
@@ -479,8 +487,8 @@
   const AD_PLACEHOLDERS = false;
   function renderAdRails() {
     if (!AD_PLACEHOLDERS) return;
-    const slot = (side) => `<aside class="ad-rail ad-${side}" aria-label="Werbefläche">
-        <div class="ad-slot"><span>Anzeige</span><small>Werbefläche <b class="ad-120">120 × 600</b><b class="ad-160">160 × 600</b></small></div>
+    const slot = (side) => `<aside class="ad-rail ad-${side}" aria-label="Ad space">
+        <div class="ad-slot"><span>Ad</span><small>Ad space <b class="ad-120">120 × 600</b><b class="ad-160">160 × 600</b></small></div>
       </aside>`;
     document.body.insertAdjacentHTML('beforeend', slot('left') + slot('right'));
   }
@@ -492,18 +500,18 @@
     el.className = 'site-footer';
     el.innerHTML = `
       <div class="wrap footer-cols">
-        ${janna('krone', 'footer-janna', true)}
+        ${janna('crown', 'footer-janna', true)}
         <div class="footer-about">
           ${brand()}
-          <p class="footer-claim">Dein Game. Deine Szene. Dein Platz. Turniere, Streams und News für alle, die TFT spielen oder gern zuschauen.</p>
+          <p class="footer-claim">Your game. Your scene. Your seat. Tournaments, streams and news for everyone who plays TFT or loves watching it.</p>
         </div>
-        <nav aria-label="Entdecken"><h4>Entdecken</h4>${NAV.map((n) => `<a href="${n.href}">${n.label}</a>`).join('')}</nav>
+        <nav aria-label="Explore"><h4>Explore</h4>${NAV.map((n) => `<a href="${n.href}">${n.label}</a>`).join('')}</nav>
         <nav aria-label="TFTEsport"><h4>${esc(D.site.name)}</h4>${LEGAL.map((l) => `<a href="${l.href}">${l.label}</a>`).join('')}</nav>
-        <nav aria-label="Netzwerk"><h4>Netzwerk</h4><a class="footer-network" href="${D.site.network.url}" target="_blank" rel="noopener">${esc(D.site.network.name)}${icon('external')}</a><span class="footer-note">Tierlists, Tools und Coaching</span></nav>
+        <nav aria-label="Network"><h4>Network</h4><a class="footer-network" href="${D.site.network.url}" target="_blank" rel="noopener">${esc(D.site.network.name)}${icon('external')}</a><span class="footer-note">Tier lists, tools and coaching</span></nav>
       </div>
       <div class="wrap footer-legal">
-        <p>${D.site.name} ist nicht von Riot Games unterstützt und gibt nicht die Ansichten oder Meinungen von Riot Games oder Personen wieder, die offiziell an der Produktion oder Verwaltung von Riot-Games-Eigentum beteiligt sind. Riot Games und alle zugehörigen Eigentümer sind Marken oder eingetragene Marken von Riot Games, Inc.</p>
-        <p>© ${new Date().getFullYear()} ${esc(D.site.name)} · Teil des ${esc(D.site.network.name)} Network</p>
+        <p>${D.site.name} isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</p>
+        <p>© ${new Date().getFullYear()} ${esc(D.site.name)} · Part of the ${esc(D.site.network.name)} Network</p>
       </div>`;
   }
 

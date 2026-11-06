@@ -1,4 +1,4 @@
-/* News-Übersicht: Filter nach Kategorie (per Adresse verlinkbar: /news?kategorie=turniere). */
+/* News-Übersicht: Filter nach Kategorie (per Adresse verlinkbar: /news?category=turniere). */
 (function () {
   const D = window.TFTE;
   const { esc, empty, articleCard, sortByDateDesc, link, setUrl } = window.UI;
@@ -6,20 +6,20 @@
 
   const articles = sortByDateDesc(D.articles);
   const valid = (id) => D.newsCategories.some((c) => c.id === id);
-  let cat = new URLSearchParams(location.search).get('kategorie');
+  let cat = new URLSearchParams(location.search).get('category');
   if (!valid(cat)) cat = 'all';
 
   function render() {
     const counts = {};
     articles.forEach((a) => { counts[a.cat] = (counts[a.cat] || 0) + 1; });
-    const chips = [{ id: 'all', label: 'Alle' }, ...D.newsCategories];
+    const chips = [{ id: 'all', label: 'All' }, ...D.newsCategories];
     $('news-filter').innerHTML = chips.map((c) => {
       const n = c.id === 'all' ? articles.length : counts[c.id] || 0;
       return `<button type="button" class="chip" data-cat="${c.id}" aria-pressed="${cat === c.id}">${esc(c.label)} <span class="chip-count">${n}</span></button>`;
     }).join('');
 
     const list = articles.filter((a) => cat === 'all' || a.cat === cat);
-    $('news-count').textContent = `${list.length} Artikel`;
+    $('news-count').textContent = `${list.length} ${list.length === 1 ? 'article' : 'articles'}`;
     const box = $('news-list');
     box.classList.toggle('grid-3', list.length > 0);
     box.classList.toggle('show-all', list.length > 0);
@@ -27,8 +27,8 @@
 
     const c = D.newsCategories.find((x) => x.id === cat);
     box.innerHTML = articles.length
-      ? empty({ ic: 'news', title: `Noch keine Artikel in „${esc(c.label)}“`, text: 'In dieser Kategorie ist gerade nichts erschienen. Schau in die anderen Bereiche oder komm bald wieder vorbei.', href: link('news.html'), cta: 'Alle News anzeigen' })
-      : empty({ pose: 'tablet', title: 'Hier entstehen gerade die ersten News', text: 'Bald findest du hier offizielle Meldungen, Turniere und Ergebnisse, Neues aus der Twitch-Szene und verständliche Erklärungen. Bis dahin: Schau doch bei den Turnieren vorbei.', href: link('cups.html'), cta: 'Zu den Turnieren' });
+      ? empty({ ic: 'news', title: `No articles in “${esc(c.label)}” yet`, text: 'Nothing has been published in this category so far. Have a look at the other sections or come back soon.', href: link('news.html'), cta: 'Show all news' })
+      : empty({ pose: 'tablet', title: 'The first news are on their way', text: 'Soon you will find official updates, tournaments and results, news from the Twitch scene and clear explanations here. Until then: have a look at the tournaments.', href: link('tft-tournaments.html'), cta: 'Go to tournaments' });
   }
 
   $('news-filter').addEventListener('click', (e) => {
@@ -36,7 +36,7 @@
     if (!b) return;
     cat = b.dataset.cat;
     const url = new URL(location.href);
-    if (cat === 'all') url.searchParams.delete('kategorie'); else url.searchParams.set('kategorie', cat);
+    if (cat === 'all') url.searchParams.delete('category'); else url.searchParams.set('category', cat);
     setUrl(url);
     render();
   });

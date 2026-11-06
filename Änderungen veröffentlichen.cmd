@@ -8,6 +8,8 @@ if not exist "%GIT%" (
   pause
   exit /b 1
 )
+rem Turnierseiten und Sitemap aktualisieren (Vercel macht das beim Veröffentlichen ohnehin; so stimmen auch die lokalen Dateien)
+where node >nul 2>nul && node tools\build-tournaments.js
 "%GIT%" add -A
 "%GIT%" diff --cached --quiet && (
   echo Keine Änderungen – alles ist schon online.

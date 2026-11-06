@@ -63,7 +63,7 @@ for (const f of files) {
     if (text(desc).length > 134) bad(`Meta-Beschreibung ${text(desc).length} > 134 Zeichen`);
     if (!noindex && !/TFT/.test(desc.replace('TFTEsport', ''))) bad('Keyword „TFT“ fehlt in der Meta-Beschreibung');
   }
-  if (!/<html lang="de">/.test(html)) bad('lang="de" fehlt');
+  if (!/<html lang="en">/.test(html)) bad('lang="en" fehlt');
 
   if (!is404) {
     const canon = (html.match(/<link rel="canonical" href="([^"]+)"/) || [])[1];

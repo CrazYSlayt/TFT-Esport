@@ -1,18 +1,21 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Alle TFT Live-Streams auf Twitch | TFTEsport</title>
-  <meta name="description" content="Alle TFT Live-Streams auf Twitch: nach Sprache filtern, nach Zuschauern sortiert und direkt auf der Seite anschauen." />
+  <title>All TFT Live Streams on Twitch | TFTEsport</title>
+  <meta name="description" content="All TFT live streams on Twitch: filter by language, sorted by viewers, and watch directly on the page." />
   <link rel="canonical" href="https://www.tft-esports.com/twitch/live-streams" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="TFTEsport" />
-  <meta property="og:locale" content="de_DE" />
-  <meta property="og:title" content="Alle TFT Live-Streams auf Twitch | TFTEsport" />
-  <meta property="og:description" content="Alle TFT Live-Streams auf Twitch: nach Sprache filtern, nach Zuschauern sortiert und direkt auf der Seite anschauen." />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="All TFT Live Streams on Twitch | TFTEsport" />
+  <meta property="og:description" content="All TFT live streams on Twitch: filter by language, sorted by viewers, and watch directly on the page." />
   <meta property="og:url" content="https://www.tft-esports.com/twitch/live-streams" />
-  <meta name="twitter:card" content="summary" />
+  <meta property="og:image" content="https://www.tft-esports.com/assets/img/og-tft-esports.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="theme-color" content="#213d2c" />
   <link rel="icon" type="image/png" sizes="64x64" href="../assets/brand/favicon-64.png" />
   <link rel="apple-touch-icon" href="../assets/brand/apple-touch-icon.png" />
@@ -24,39 +27,38 @@
   <header id="site-header"></header>
 
   <main class="wrap">
-    <nav class="crumbs" aria-label="Brotkrümel">
-      <a href="../index.html">Start</a><span data-icon="chevronRight"></span><a href="../twitch.html">Live Streams</a><span data-icon="chevronRight"></span><span>Alle Streams</span>
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="../index.html">Home</a><span data-icon="chevronRight"></span><a href="../twitch.html">Live Streams</a><span data-icon="chevronRight"></span><span>All streams</span>
     </nav>
     <section class="page-head" data-janna="fan">
       <p class="eyebrow">Live Streams</p>
-      <h1>Alle TFT-Streams auf Twitch</h1>
-      <p class="lead">Alle Teamfight-Tactics-Streams, die gerade auf Twitch laufen – die meisten Zuschauer zuerst. Ein Klick öffnet den Stream direkt hier.</p>
+      <h1>All TFT Streams on Twitch</h1>
+      <p class="lead">Every Teamfight Tactics stream live on Twitch right now – most viewers first. One click opens the stream right here.</p>
     </section>
 
     <div class="streams-bar">
-      <div class="live-summary" id="live-summary"><span class="rec-dot"></span>Streams werden geladen …</div>
+      <div class="live-summary" id="live-summary"><span class="rec-dot"></span>Loading streams …</div>
     </div>
     <div id="source-note"></div>
 
     <div class="lang-bar">
-      <div class="chips chips-boxed" id="lang-chips" role="group" aria-label="Nach Sprache filtern"></div>
-      <button type="button" class="chip" id="pros-only" aria-pressed="false" hidden>Nur Pros</button>
+      <div class="chips chips-boxed" id="lang-chips" role="group" aria-label="Filter by language"></div>
+      <button type="button" class="chip" id="pros-only" aria-pressed="false" hidden>Pros only</button>
     </div>
 
     <section aria-labelledby="all-title">
       <div class="section-head">
-        <h2 id="all-title">Alle TFT-Streams</h2>
+        <h2 id="all-title">All TFT streams</h2>
         <span class="result-count" id="grid-sub"></span>
       </div>
       <div class="stream-grid" id="stream-grid"></div>
-      <div class="load-more-wrap"><button type="button" class="btn btn-ghost" id="load-more" hidden>Mehr Streams</button></div>
+      <div class="load-more-wrap"><button type="button" class="btn btn-ghost" id="load-more" hidden>More streams</button></div>
     </section>
   </main>
 
   <footer id="site-footer"></footer>
 
   <script src="../assets/js/data.js"></script>
-
   <script src="../assets/data/turniere.js"></script>
   <script src="../assets/js/app.js"></script>
   <script src="../assets/js/streams.js"></script>

@@ -1,4 +1,4 @@
-/* Startseite: Begrüßung, das nächste große Match, „Finde dein nächstes Turnier“ (Liste oder Monatskalender),
+/* Startseite: Begrüßung, Hinweis auf die Weltmeisterschaft, das nächste große Match, „Find your next tournament“ (Liste oder Monatskalender),
    Set-Termine, zuletzt gespielt und News. Janna steht als Bild direkt im HTML. */
 (function () {
   const D = window.TFTE;
@@ -8,7 +8,7 @@
 
   const upcoming = upcomingCups();
   const daysUntil = (iso) => Math.round((toDate(iso.slice(0, 10)) - startOfToday()) / 864e5);
-  const relDays = (n) => (n < 0 ? 'vorbei' : n === 0 ? 'heute' : n === 1 ? 'morgen' : `in ${n} Tagen`);
+  const relDays = (n) => (n < 0 ? 'over' : n === 0 ? 'today' : n === 1 ? 'tomorrow' : `in ${n} days`);
   const nextBlock = (c) => cupDays(c).find((x) => endOf(x.to) >= new Date());
   const range = (b) => `${fmtDay(b.from)}${b.to.slice(0, 10) !== b.from.slice(0, 10) ? ` – ${fmtDay(b.to)}` : ''}`;
 
@@ -19,11 +19,26 @@
       ? `<a class="hstat ${cls}" href="${href}"><b>${value}</b><span>${text}</span></a>`
       : `<div class="hstat ${cls}"><b>${value}</b><span>${text}</span></div>`;
     const next = open[0]
-      ? stat(esc(fmtDay(open[0].signupDeadline)), `Nächster Anmeldeschluss · ${esc(open[0].name)}`, cupUrl(open[0]), 'is-date')
-      : upcoming[0] ? stat(esc(fmtDay(nextBlock(upcoming[0]).from)), `Nächstes Turnier · ${esc(upcoming[0].name)}`, cupUrl(upcoming[0]), 'is-date') : '';
+      ? stat(esc(fmtDay(open[0].signupDeadline)), `Next sign-up deadline · ${esc(open[0].name)}`, cupUrl(open[0]), 'is-date')
+      : upcoming[0] ? stat(esc(fmtDay(nextBlock(upcoming[0]).from)), `Next tournament · ${esc(upcoming[0].name)}`, cupUrl(upcoming[0]), 'is-date') : '';
     $('hero-stats').innerHTML =
-      stat(upcoming.length, upcoming.length === 1 ? 'kommendes Turnier' : 'kommende Turniere', '#finder-title') +
-      stat(open.length, open.length === 1 ? 'Anmeldung offen' : 'Anmeldungen offen') + next;
+      stat(upcoming.length, upcoming.length === 1 ? 'upcoming tournament' : 'upcoming tournaments', '#finder-title') +
+      stat(open.length, open.length === 1 ? 'open sign-up' : 'open sign-ups') + next;
+  }
+
+  /* ---------- Hinweis auf die Weltmeisterschaft (Turnier mit eigener Seite), bis sie vorbei ist ---------- */
+  function renderCrown() {
+    const c = D.cups.find((x) => x.page && !cupPast(x));
+    const box = $('crown-banner');
+    if (!c) return;
+    const b = cupDays(c)[0];
+    const n = daysUntil(b.from);
+    box.hidden = false;
+    box.href = cupUrl(c);
+    box.innerHTML = `<span class="cb-tag">${crown()}World Championship</span>
+      <strong>${esc(c.name.split(' – ')[0])}</strong>
+      <span class="cb-when">${esc(fmtDay(b.from))} – ${esc(fmtDay(cupDays(c).slice(-1)[0].to))} · ${n > 0 ? `starts ${relDays(n)}` : 'live this weekend'}</span>
+      <span class="cb-go">Guide &amp; streams${icon('arrow')}</span>`;
   }
 
   /* ---------- Das nächste große Match ---------- */
@@ -33,11 +48,11 @@
     if (!c) {
       box.classList.add('is-empty');
       box.innerHTML = `<div class="feature-text">
-          <h3>Gerade ist kein Turnier eingetragen</h3>
-          <p class="feature-rel">Neue Termine erscheinen hier automatisch.</p>
-          <a class="btn btn-cream" href="cups.html">Zum Turnierkalender${icon('arrow')}</a>
+          <h3>No tournament listed right now</h3>
+          <p class="feature-rel">New dates appear here automatically.</p>
+          <a class="btn btn-cream" href="tft-tournaments.html">Tournament calendar${icon('arrow')}</a>
         </div>
-        <div class="feature-stage" aria-hidden="true">${janna('traurig', 'at-r')}</div>`;
+        <div class="feature-stage" aria-hidden="true">${janna('sad', 'at-r')}</div>`;
       return;
     }
     const b = nextBlock(c);
@@ -52,13 +67,13 @@
           <span class="pill-dark">${icon('pin')}${esc(label('regions', c.region))}</span>
           ${b.label ? `<span class="pill-dark">${esc(b.label)}</span>` : ''}
         </div>
-        <p class="feature-rel"><b>${n <= 0 ? 'Läuft gerade' : `Los geht’s ${relDays(n)}`}</b> · ${esc(s.text)}</p>
-        <a class="btn btn-cream" href="${cupUrl(c)}">Turnier ansehen${icon('arrow')}</a>
+        <p class="feature-rel"><b>${n <= 0 ? 'Running now' : `Starts ${relDays(n)}`}</b> · ${esc(s.text)}</p>
+        <a class="btn btn-cream" href="${cupUrl(c)}">View tournament${icon('arrow')}</a>
       </div>
-      <div class="feature-stage" aria-hidden="true">${janna('pokal', 'at-r')}</div>`;
+      <div class="feature-stage" aria-hidden="true">${janna('trophy', 'at-r')}</div>`;
   }
 
-  /* ---------- Finde dein nächstes Turnier ---------- */
+  /* ---------- Find your next tournament ---------- */
   const FILTERS = {
     alle: () => true,
     mitspielen: (c) => ['open', 'soon', 'unknown'].includes(finderStatus(c).key),
@@ -82,12 +97,12 @@
       const [y, m] = month.split('-').map(Number);
       box.innerHTML = `<div class="cal">
         <div class="cal-head">
-          <button type="button" class="icon-btn" data-month="-1" aria-label="Vorheriger Monat">${icon('chevronLeft')}</button>
-          <h3 aria-live="polite">${new Date(y, m - 1, 1).toLocaleDateString('de-DE', { month: 'long', year: 'numeric' })}</h3>
-          <button type="button" class="icon-btn" data-month="1" aria-label="Nächster Monat">${icon('chevronRight')}</button>
+          <button type="button" class="icon-btn" data-month="-1" aria-label="Previous month">${icon('chevronLeft')}</button>
+          <h3 aria-live="polite">${new Date(y, m - 1, 1).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</h3>
+          <button type="button" class="icon-btn" data-month="1" aria-label="Next month">${icon('chevronRight')}</button>
         </div>
         ${calendarGrid(month, D.cups.filter(pick))}
-        <div class="cal-legend">${calLegend()}${month !== thisMonth() ? '<button type="button" class="reset-btn" data-today>Zum aktuellen Monat</button>' : ''}</div>
+        <div class="cal-legend">${calLegend()}${month !== thisMonth() ? '<button type="button" class="reset-btn" data-today>Back to this month</button>' : ''}</div>
       </div>`;
       return;
     }
@@ -95,8 +110,8 @@
     const list = upcoming.filter(pick);
     box.innerHTML = list.length
       ? `<div class="finder-list">${list.slice(0, 8).map(finderRow).join('')}</div>
-         ${list.length > 8 ? `<a class="finder-more link-arrow" href="cups.html?ansicht=liste">Alle ${list.length} Turniere${icon('arrow')}</a>` : ''}`
-      : empty({ pose: 'traurig', cls: 'empty-tight', title: filter === 'alle' ? 'Noch keine kommenden Turniere' : 'Gerade nichts für diesen Filter', text: 'Neue Termine erscheinen hier automatisch – oder schau in den Kalender.', href: 'cups.html', cta: 'Zum Turnierkalender' });
+         ${list.length > 8 ? `<a class="finder-more link-arrow" href="tft-tournaments.html?view=list">All ${list.length} tournaments${icon('arrow')}</a>` : ''}`
+      : empty({ pose: 'sad', cls: 'empty-tight', title: filter === 'alle' ? 'No upcoming tournaments yet' : 'Nothing for this filter right now', text: 'New dates appear here automatically – or have a look at the calendar.', href: 'tft-tournaments.html', cta: 'Tournament calendar' });
   }
 
   document.querySelector('.finder-bar').addEventListener('click', (e) => {
@@ -125,7 +140,7 @@
           <span><b>${esc(e.title)}</b><small>${esc(e.info)}</small></span>
           <span class="set-date"><b>${esc(fmtDay(e.date))}</b><small>${relDays(daysUntil(e.date))}</small></span>
         </li>`).join('')}</ul>`
-      : empty({ ic: 'calendar', cls: 'empty-tight', title: 'Keine Set-Termine eingetragen' });
+      : empty({ ic: 'calendar', cls: 'empty-tight', title: 'No set dates listed' });
   }
 
   /* ---------- Zuletzt gespielt ---------- */
@@ -136,7 +151,7 @@
           const winner = c.result && c.result.top && c.result.top[0] && c.result.top[0].name;
           return `<li><a href="${cupUrl(c)}"><b>${esc(c.name)}${winner ? `<small class="winner">${icon('trophy')}${esc(winner)}</small>` : ''}</b><span class="is-muted">${esc(fmtDay(ymd(cupEnd(c))))}</span></a></li>`;
         }).join('')}</ul>`
-      : empty({ ic: 'trophy', cls: 'empty-tight', title: 'Noch keine vergangenen Turniere' });
+      : empty({ ic: 'trophy', cls: 'empty-tight', title: 'No past tournaments yet' });
   }
 
   /* ---------- Neues aus der Szene ---------- */
@@ -144,10 +159,11 @@
     const list = sortByDateDesc(D.articles).slice(0, 4);
     $('home-news').innerHTML = list.length
       ? `<ul class="deadline-list">${list.map((a) => `<li><a href="${articleUrl(a)}"><b>${esc(a.title)}</b><span class="is-muted">${esc(fmtDate(a.date))}</span></a></li>`).join('')}</ul>`
-      : empty({ ic: 'news', cls: 'empty-tight', title: 'Noch keine News', text: 'Sobald die ersten Artikel online sind, stehen sie hier.' });
+      : empty({ ic: 'news', cls: 'empty-tight', title: 'No news yet', text: 'As soon as the first articles are online, you will find them here.' });
   }
 
   renderStats();
+  renderCrown();
   renderNextCup();
   renderFinder();
   renderSetDates();

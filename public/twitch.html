@@ -1,18 +1,21 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TFT Live Streams – Kanäle &amp; Übertragungen | TFTEsport</title>
-  <meta name="description" content="TFT Live Streams auf Twitch: aktive Kanäle, offizielle Übertragungen, Co-Streams und kuratierte Creator-Empfehlungen." />
+  <title>TFT Live Streams: Channels &amp; Broadcasts | TFTEsport</title>
+  <meta name="description" content="TFT live streams on Twitch: active channels, official broadcasts, co-streams and hand-picked creator recommendations." />
   <link rel="canonical" href="https://www.tft-esports.com/twitch" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="TFTEsport" />
-  <meta property="og:locale" content="de_DE" />
-  <meta property="og:title" content="TFT Live Streams – Kanäle &amp; Übertragungen | TFTEsport" />
-  <meta property="og:description" content="TFT Live Streams auf Twitch: aktive Kanäle, offizielle Übertragungen, Co-Streams und kuratierte Creator-Empfehlungen." />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="TFT Live Streams: Channels &amp; Broadcasts | TFTEsport" />
+  <meta property="og:description" content="TFT live streams on Twitch: active channels, official broadcasts, co-streams and hand-picked creator recommendations." />
   <meta property="og:url" content="https://www.tft-esports.com/twitch" />
-  <meta name="twitter:card" content="summary" />
+  <meta property="og:image" content="https://www.tft-esports.com/assets/img/og-tft-esports.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="theme-color" content="#213d2c" />
   <link rel="icon" type="image/png" sizes="64x64" href="assets/brand/favicon-64.png" />
   <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png" />
@@ -27,27 +30,16 @@
     <section class="page-head" data-janna="fan">
       <p class="eyebrow">Live Streams</p>
       <h1>TFT Live Streams</h1>
-      <p class="lead">Aktive TFT-Kanäle, offizielle Übertragungen und Creator-Empfehlungen – such dir einen gemütlichen Platz und schau mit.</p>
-    </section>
-
-    <section class="twitch-band" aria-labelledby="creators-title">
-      <div class="section-head">
-        <span class="twitch-mark"><span data-icon="twitch"></span></span>
-        <div>
-          <h2 id="creators-title">Kanalempfehlungen</h2>
-          <p class="section-sub">Creator mit Ranked-, Analyse- und Community-Inhalten – kuratiert und auch sichtbar, wenn sie gerade offline sind.</p>
-        </div>
-      </div>
-      <div class="grid-3 show-all" id="creators"></div>
+      <p class="lead">Active TFT channels, official broadcasts and creator picks – grab a comfy seat and watch along.</p>
     </section>
 
     <section class="section" aria-labelledby="broadcasts-title">
       <div class="section-head">
         <div>
-          <h2 id="broadcasts-title">Offizielle Übertragungen &amp; Co-Streams</h2>
-          <p class="section-sub">Offizielle Turnierübertragungen und bestätigte Co-Streams mit Termin und Kanal.</p>
+          <h2 id="broadcasts-title">Official broadcasts &amp; co-streams</h2>
+          <p class="section-sub">Official tournament broadcasts and confirmed co-streams with date and channel.</p>
         </div>
-        <a class="link-arrow" href="cups.html">Alle Turniere<span data-icon="arrow"></span></a>
+        <a class="link-arrow" href="tft-tacticians-crown.html#watch">World Championship stream<span data-icon="arrow"></span></a>
       </div>
       <div class="upcoming-list" id="broadcasts"></div>
     </section>
@@ -55,33 +47,29 @@
     <section class="section" aria-labelledby="live-title">
       <div class="section-head">
         <div>
-          <h2 id="live-title">Jetzt live auf Deutsch</h2>
-          <p class="section-sub">Aktuell aktive deutschsprachige TFT-Kanäle mit den meisten Zuschauern.</p>
+          <h2 id="live-title">Live now in English</h2>
+          <p class="section-sub">Active English TFT channels with the most viewers.</p>
         </div>
-        <a class="link-arrow is-twitch" href="twitch/live-streams.html">Alle Live-Streams<span data-icon="arrow"></span></a>
+        <a class="link-arrow is-twitch" href="twitch/live-streams.html">All live streams<span data-icon="arrow"></span></a>
       </div>
       <div id="live-now"></div>
     </section>
 
-    <section class="section" aria-labelledby="plan-title">
-      <div class="section-head"><h2 id="plan-title">Geplanter Aufbau</h2></div>
-      <div class="plan">
-        <p class="plan-label"><span data-icon="info"></span>Geplant</p>
-        <ul>
-          <li>Aktuell aktive TFT-Kanäle auf Twitch</li>
-          <li>Offizielle Übertragungen und bestätigte Co-Streams</li>
-          <li>Creator mit Ranked-, Analyse- und Community-Inhalten</li>
-          <li>Kanalvorschau, Sprache, Beschreibung und Twitch-Link</li>
-          <li>Filter nach Sprache und Stream-Art</li>
-          <li>Kuratierte Kanalempfehlungen, auch wenn diese offline sind</li>
-        </ul>
+    <section class="twitch-band" aria-labelledby="creators-title">
+      <div class="section-head">
+        <span class="twitch-mark"><span data-icon="twitch"></span></span>
+        <div>
+          <h2 id="creators-title">Channel picks</h2>
+          <p class="section-sub">Creators with ranked, analysis and community content – hand-picked and visible even when they are offline.</p>
+        </div>
       </div>
-    </section>  </main>
+      <div class="grid-3 show-all" id="creators"></div>
+    </section>
+  </main>
 
   <footer id="site-footer"></footer>
 
   <script src="assets/js/data.js"></script>
-
   <script src="assets/data/turniere.js"></script>
   <script src="assets/js/app.js"></script>
   <script src="assets/js/twitch.js"></script>

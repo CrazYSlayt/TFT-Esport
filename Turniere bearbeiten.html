@@ -69,7 +69,7 @@
     <div class="wrap">
       <h1><svg class="crown" viewBox="0 0 48 40" aria-hidden="true"><path fill="currentColor" d="M24 2.5 30.5 15 40 6.5l-2.8 22.5H10.8L8 6.5 17.5 15z"/><path fill="currentColor" d="M10.5 32h27a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-27A1.5 1.5 0 0 1 9 36.5v-3a1.5 1.5 0 0 1 1.5-1.5z"/></svg>Turniere bearbeiten</h1>
       <span class="ed-status" id="status">Alles gespeichert</span>
-      <a class="btn btn-ghost" href="public/cups.html" target="_blank" rel="noopener">Seite ansehen</a>
+      <a class="btn btn-ghost" href="public/tft-tournaments.html" target="_blank" rel="noopener">Seite ansehen</a>
       <button class="btn btn-save" type="button" id="save">Speichern</button>
     </div>
   </header>
@@ -100,12 +100,12 @@
 
     // Feste Reihenfolge der Felder in der Datei
     const KEYS = ['id', 'name', 'level', 'region', 'organizer', 'requirement', 'eligibility', 'rank', 'signupStart', 'signupDeadline',
-      'signupUrl', 'days', 'format', 'prize', 'streamUrl', 'info', 'sources', 'checked', 'result'];
+      'signupUrl', 'days', 'format', 'prize', 'streamUrl', 'info', 'sources', 'checked', 'result', 'page'];
     const RES_PLACES = 8;   // Ergebnis: Platz 1 bis 8 (Finallobby)
     const blankResult = () => ({ top: [], note: '', source: '' });
     const blank = () => ({ id: '', name: '', level: 'offiziell', region: 'emea', organizer: '', requirement: 'offen', eligibility: '', rank: '',
       signupStart: '', signupDeadline: '', signupUrl: '', days: [{ from: '', to: '', label: '' }], format: '', prize: '', streamUrl: '', info: '',
-      sources: [], checked: '', result: blankResult() });
+      sources: [], checked: '', result: blankResult(), page: '' });
     const normalize = (c) => {
       const b = blank(), o = {};
       KEYS.forEach((k) => { o[k] = c[k] !== undefined ? c[k] : b[k]; });
@@ -198,6 +198,7 @@
         ${p.length ? `<div class="notice"><span><strong>Noch offen:</strong> ${p.map(esc).join(' · ')}</span></div>` : ''}
 
         <div class="ed-card">
+          <p class="notice"><span>Die Seite ist englisch: Bitte alle Texte auf <strong>Englisch</strong> eintragen. Uhrzeiten in deutscher Zeit, Besucher sehen ihre Ortszeit. Die Turnierseite wird beim Veröffentlichen neu erzeugt.</span></p>
           <h2>Grunddaten</h2>
           ${field('name', 'Name des Turniers', c.name, { req: true })}
           <div class="ed-row">
@@ -264,7 +265,7 @@
         </div>
 
         <div class="ed-actions">
-          ${c.id ? `<a class="btn btn-ghost" href="public/cups/turnier.html?id=${encodeURIComponent(c.id)}" target="_blank" rel="noopener">Turnierseite ansehen</a>` : ''}
+          ${c.id ? `<a class="btn btn-ghost" href="public/${c.page || `tft-tournaments/${encodeURIComponent(c.id)}.html`}" target="_blank" rel="noopener">Turnierseite ansehen</a>` : ''}
           <button type="button" class="btn btn-ghost" id="dup">Duplizieren</button>
           <button type="button" class="btn btn-danger" id="del">Löschen</button>
           <span class="ed-id">${c.id ? `ID: ${esc(c.id)}` : 'ID wird beim Speichern aus dem Namen erzeugt'}</span>
@@ -335,6 +336,7 @@
     function fileText() {
       const list = cups.map(normalize).sort((a, b) => (firstDay(a) || '9').localeCompare(firstDay(b) || '9')).map((c) => {
         // Ergebnis nur speichern, wenn etwas eingetragen ist; leere Plätze am Ende weglassen, Punkte nur wenn angegeben
+        if (!c.page) delete c.page;
         if (!hasResult(c.result)) { delete c.result; return c; }
         let top = c.result.top.map((t) => ({ name: t.name.trim(), points: t.points }));
         while (top.length && !top[top.length - 1].name) top.pop();

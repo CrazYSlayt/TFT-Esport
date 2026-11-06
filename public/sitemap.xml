@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Nur Seiten, die in die Suche sollen (kein noindex). tools/seo-check.js prüft, dass jede Adresse existiert. -->
+<!-- Erzeugt von tools/build-tournaments.js. Nur Seiten, die in die Suche sollen (kein noindex). -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://www.tft-esports.com/</loc></url>
-  <url><loc>https://www.tft-esports.com/news</loc></url>
-  <url><loc>https://www.tft-esports.com/cups</loc></url>
+  <url><loc>https://www.tft-esports.com/tft-tournaments</loc></url>
+  <url><loc>https://www.tft-esports.com/tft-tacticians-crown</loc></url>
   <url><loc>https://www.tft-esports.com/live-matches</loc></url>
   <url><loc>https://www.tft-esports.com/twitch</loc></url>
   <url><loc>https://www.tft-esports.com/twitch/live-streams</loc></url>
+  <url><loc>https://www.tft-esports.com/news</loc></url>
+  <url><loc>https://www.tft-esports.com/tft-tournaments/riftbeast-cup-set-18-emea</loc></url>
+  <url><loc>https://www.tft-esports.com/tft-tournaments/tacticians-trials-1-set-18-emea</loc></url>
+  <url><loc>https://www.tft-esports.com/tft-tournaments/elderwood-cup-set-18-emea</loc></url>
+  <url><loc>https://www.tft-esports.com/tft-tournaments/tacticians-trials-2-set-18-emea</loc></url>
+  <url><loc>https://www.tft-esports.com/tft-tournaments/blossom-cup-set-18-emea</loc></url>
+  <url><loc>https://www.tft-esports.com/tft-tournaments/regional-finals-set-18-emea</loc></url>
+  <url><loc>https://www.tft-esports.com/tft-tournaments/tacticians-superbrawl-set-18</loc></url>
+  <url><loc>https://www.tft-esports.com/tft-tournaments/tk-tft-cup-season-2-2026</loc></url>
 </urlset>

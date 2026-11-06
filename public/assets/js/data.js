@@ -2,7 +2,7 @@
  * TFTEsport – Inhalte der Seite.
  * Alle Listen sind bewusst leer: keine erfundenen Artikel, Termine oder Creator.
  * Sobald ein Eintrag ergänzt wird, erscheint er automatisch auf den Übersichten; bis dahin zeigen sie Leerzustände.
- * Datumsangaben immer als ISO-Text in Ortszeit, z. B. '2026-11-07T18:00'.
+ * Datumsangaben immer als ISO-Text in deutscher Zeit, z. B. '2026-11-07T18:00'; angezeigt wird die Ortszeit des Besuchers. Alle Texte auf Englisch.
  */
 window.TFTE = {
   site: {
@@ -13,10 +13,10 @@ window.TFTE = {
 
   /* News-Kategorien (Filter auf /news, Chips auf der Startseite) */
   newsCategories: [
-    { id: 'offiziell', label: 'Offizielle Meldungen', short: 'Offiziell' },
-    { id: 'turniere', label: 'Turniere & Ergebnisse', short: 'Turniere' },
-    { id: 'szene', label: 'Twitch & Szene', short: 'Twitch & Szene' },
-    { id: 'orientierung', label: 'Orientierung', short: 'Orientierung' }
+    { id: 'offiziell', label: 'Official updates', short: 'Official' },
+    { id: 'turniere', label: 'Tournaments & results', short: 'Tournaments' },
+    { id: 'szene', label: 'Twitch & scene', short: 'Twitch & scene' },
+    { id: 'orientierung', label: 'Guides', short: 'Guides' }
   ],
 
   /*
@@ -28,27 +28,27 @@ window.TFTE = {
 
   /* Turnier-Filter */
   regions: [
-    { id: 'global', label: 'Weltweit' },
+    { id: 'global', label: 'Global' },
     { id: 'emea', label: 'EMEA' },
     { id: 'euw', label: 'EUW' },
     { id: 'eune', label: 'EUNE' },
     { id: 'dach', label: 'DACH' }
   ],
   requirements: [
-    { id: 'offen', label: 'Offen für alle' },
-    { id: 'rang', label: 'Mit Rang-Voraussetzung' },
-    { id: 'quali', label: 'Nur Qualifizierte / Einladung' }
+    { id: 'offen', label: 'Open to everyone' },
+    { id: 'rang', label: 'Rank requirement' },
+    { id: 'quali', label: 'Qualified / invite only' }
   ],
   cupLevels: [
-    { id: 'offiziell', label: 'Offizieller Wettbewerb' },
-    { id: 'regional', label: 'Regionales Turnier' },
-    { id: 'streamer', label: 'Streamer-Cup' },
-    { id: 'eigener', label: 'Eigener Cup' }
+    { id: 'offiziell', label: 'Official event' },
+    { id: 'regional', label: 'Regional tournament' },
+    { id: 'streamer', label: 'Streamer cup' },
+    { id: 'eigener', label: 'Own cup' }
   ],
 
   /*
    * Turniere – stehen in assets/data/turniere.js und werden mit „Turniere bearbeiten.html“ (Hauptordner) gepflegt.
-   * Nur die Redaktion trägt Turniere ein – Besucher können keine erstellen. Detailseite: cups/turnier.html?id=<id>.
+   * Nur die Redaktion trägt Turniere ein – Besucher können keine erstellen. Eigene Seite pro Turnier: tft-tournaments/<id>.html (tools/build-tournaments.js), page: 'datei.html' = handgeschriebene Seite.
    * { id, name, level: 'offiziell' | 'regional' | 'streamer' | 'eigener', region: 'emea', organizer,
    *   requirement: 'offen' | 'rang' | 'quali', eligibility: 'Wer darf teilnehmen?', rank: 'Rangbeschränkung',
    *   signupStart / signupDeadline: '2026-09-14' oder '2026-09-14T18:00' (deutsche Zeit, leer = keine Anmeldung),
@@ -72,7 +72,11 @@ window.TFTE = {
    * Turnierübertragungen.
    * { title, cup: 'slug' (optional), date: '2026-…T18:00', channel: 'twitch_login', url: 'https://www.twitch.tv/…' }
    */
-  broadcasts: [],
+  broadcasts: [
+    { title: "Tactician's Crown – Day 1", cup: 'tacticians-crown-set-18', date: '2026-11-13', channel: 'teamfighttactics' },
+    { title: "Tactician's Crown – Day 2", cup: 'tacticians-crown-set-18', date: '2026-11-14', channel: 'teamfighttactics' },
+    { title: "Tactician's Crown – Grand Final", cup: 'tacticians-crown-set-18', date: '2026-11-15', channel: 'teamfighttactics' }
+  ],
 
   /* Live Matches und Pro Players: Bereiche bleiben in der Navigation, Inhalte folgen später. */
   liveMatches: [],

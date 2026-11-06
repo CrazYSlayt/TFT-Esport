@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TFT Tournaments Calendar: Dates &amp; Sign-Ups | TFTEsport</title>
+  <meta name="description" content="TFT tournaments calendar: official Riot events, regional tournaments and streamer cups, filtered by date, region and rank." />
+  <link rel="canonical" href="https://www.tft-esports.com/tft-tournaments" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="TFTEsport" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="TFT Tournaments Calendar: Dates &amp; Sign-Ups | TFTEsport" />
+  <meta property="og:description" content="TFT tournaments calendar: official Riot events, regional tournaments and streamer cups, filtered by date, region and rank." />
+  <meta property="og:url" content="https://www.tft-esports.com/tft-tournaments" />
+  <meta property="og:image" content="https://www.tft-esports.com/assets/img/og-tft-esports.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#213d2c" />
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/brand/favicon-64.png" />
+  <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png" />
+  <link rel="preload" href="assets/fonts/Barlow-800-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body data-page="cups">
+  <header id="site-header"></header>
+
+  <main class="wrap">
+    <section class="page-head" data-janna="tablet">
+      <p class="eyebrow">Tournaments</p>
+      <h1>TFT Tournaments &amp; Cups</h1>
+      <p class="lead">Official events, regional tournaments and smaller streamer cups – find the right dates by time frame, region and rank.</p>
+    </section>
+
+    <div class="cups-toolbar">
+      <div class="seg" role="group" aria-label="View">
+        <button type="button" data-view="calendar" aria-pressed="true"><span data-icon="calendar"></span>Calendar</button>
+        <button type="button" data-view="list" aria-pressed="false"><span data-icon="list"></span>List</button>
+      </div>
+      <span class="result-count" id="cups-count" aria-live="polite"></span>
+    </div>
+
+    <form class="cup-filters" id="cup-filters" aria-label="Filter tournaments">
+      <label class="field" id="range-field"><span>Time frame</span>
+        <select name="range">
+          <option value="upcoming">All upcoming</option>
+          <option value="7">Next 7 days</option>
+          <option value="30">Next 30 days</option>
+          <option value="day">Specific day …</option>
+          <option value="all">Including past</option>
+        </select>
+      </label>
+      <label class="field"><span>Region</span><select name="region" id="f-region"></select></label>
+      <label class="field"><span>Entry</span><select name="entry" id="f-req"></select></label>
+      <label class="field"><span>Type</span><select name="type" id="f-level"></select></label>
+      <label class="check"><input type="checkbox" name="open" value="1" />Open sign-up only</label>
+      <div class="filter-foot">
+        <label class="field date-field" id="date-field"><span>Date</span><input type="date" name="date" /></label>
+        <button type="button" class="reset-btn" id="reset-filters">Reset filters</button>
+      </div>
+    </form>
+
+    <section class="cups-results" id="cups-results" aria-label="Tournaments"></section>
+
+    <p class="editor-note"><span data-icon="shield"></span>All tournaments are added and checked by the editors – visitors cannot create tournaments. Sign-up runs directly through the organizer.</p>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/data/turniere.js"></script>
+  <script src="assets/data/set-termine.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/cups.js"></script>
+</body>
+</html>
