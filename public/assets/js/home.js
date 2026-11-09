@@ -20,7 +20,6 @@
     if (!featured || isWorlds) return;
     const b = nextBlock(featured);
     $('hh-title').textContent = featured.name;
-    $('hh-lead').textContent = featured.info || '';
     $('hh-meta').innerHTML = `<span class="feature-date">${icon('calendar')}${esc(range(b))}</span>
       <span class="pill-dark">${icon('pin')}${esc(label('regions', featured.region))}</span>
       <span class="pill-dark">${esc(label('cupLevels', featured.level))}</span>`;

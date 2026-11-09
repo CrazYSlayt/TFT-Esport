@@ -786,9 +786,21 @@ h1 .ph, h2 .ph, h3 .ph { font-weight: inherit; }
 .home-duo { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 28px; margin-top: 76px; align-items: stretch; }
 .home-duo .cup-quiz { margin-top: 0; }
 .home-duo .cup-quiz-text { align-content: center; }
+/* Flaches Banner: Text | Countdown | Buttons in einer Zeile, Janna klein am rechten Rand */
+.crown-hero.home-hero { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 14px 28px; margin-top: 46px; padding: 20px 200px 20px 28px; }
+.hh-text { display: grid; gap: 6px; justify-items: start; min-width: 0; }
+.home-hero .feature-date { font-size: 17px; }
+.home-hero .crown-countdown { min-height: 0; gap: 8px; }
+.home-hero .cd-part { min-width: 60px; padding: 6px 8px; }
+.home-hero .cd-part b { font-size: 24px; }
+.home-hero .cd-part small { font-size: 11px; }
+.home-hero .cd-state { font-size: 18px; }
+.hh-actions { display: grid; gap: 8px; }
+.hh-actions .btn { justify-content: center; }
+.crown-hero.home-hero > .janna { height: calc(100% + 40px); max-height: 230px; }
 .crown-hero .hh-kicker { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); --crown-cut: var(--green-deep); }
 .hh-kicker .crown { width: 22px; height: 18px; color: var(--gold); }
-.hh-title { font-size: clamp(38px, 4.4vw, 64px); font-weight: 800; line-height: 1; letter-spacing: -.025em; color: #fff; }
+.hh-title { font-size: clamp(28px, 2.8vw, 42px); font-weight: 800; line-height: 1; letter-spacing: -.025em; color: #fff; }
 .btn-ghost-dark { background: transparent; color: #fff; border: 1.5px solid rgba(255, 255, 255, .45); }
 .btn-ghost-dark:hover { border-color: #fff; background: rgba(255, 255, 255, .06); }
 .glance-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 18px; }
@@ -1119,6 +1131,9 @@ body.modal-open .modal-overlay { display: grid; }
   /* Startseite: Seitenspalte unter die Turniere, Streams und Cup-Finder nebeneinander */
   .home-grid { grid-template-columns: minmax(0, 1fr); }
   .home-duo { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .crown-hero.home-hero { grid-template-columns: auto minmax(0, 1fr); padding-right: 190px; }
+  .hh-text { grid-column: 1 / -1; }
+  .hh-actions { display: flex; flex-wrap: wrap; }
   .home-side { grid-template-columns: minmax(0, 1fr); padding-top: 0; gap: 24px 20px; }
   .pf-top, .pf-top:has(> :nth-child(2):last-child) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .pf-top > .pf-card { grid-column: 1 / -1; }
@@ -1219,7 +1234,14 @@ body.modal-open .modal-overlay { display: grid; }
   .pf-top, .pf-top:has(> :nth-child(2):last-child), .pf-live { grid-template-columns: minmax(0, 1fr); }
   .pf-facts { grid-template-columns: minmax(0, 1fr); }
   .home-hero { margin-top: 24px; }
-  .crown-hero.home-hero { padding-bottom: 250px; }
+  .crown-hero.home-hero { grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 18px; margin-top: 40px; }
+  .crown-hero.home-hero > .janna { height: 176px; max-height: none; }
+  .home-hero .crown-countdown, .home-hero .hh-actions { margin-right: 140px; }
+  .home-hero .hh-actions .btn { padding: 0 12px; font-size: 16px; }
+  .home-hero .cd-part { min-width: 0; flex: 1; }
+  .home-hero .hh-kicker { font-size: 12px; letter-spacing: .08em; }
+  .home-hero .feature-meta { margin-top: 4px; }
+  .hh-actions { display: grid; }
   .home-duo { margin-top: 60px; }
   .home-streams { grid-template-columns: minmax(0, 1fr); }
   .home-streams > :nth-child(n+3) { display: none; }
