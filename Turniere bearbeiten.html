@@ -100,12 +100,12 @@
 
     // Feste Reihenfolge der Felder in der Datei
     const KEYS = ['id', 'name', 'level', 'region', 'organizer', 'requirement', 'eligibility', 'rank', 'signupStart', 'signupDeadline',
-      'signupUrl', 'days', 'format', 'prize', 'streamUrl', 'info', 'sources', 'checked', 'result', 'page'];
+      'signupUrl', 'days', 'format', 'prize', 'streamUrl', 'info', 'sources', 'checked', 'result', 'page', 'startReported'];
     const RES_PLACES = 8;   // Ergebnis: Platz 1 bis 8 (Finallobby)
     const blankResult = () => ({ top: [], note: '', source: '' });
     const blank = () => ({ id: '', name: '', level: 'offiziell', region: 'emea', organizer: '', requirement: 'offen', eligibility: '', rank: '',
       signupStart: '', signupDeadline: '', signupUrl: '', days: [{ from: '', to: '', label: '' }], format: '', prize: '', streamUrl: '', info: '',
-      sources: [], checked: '', result: blankResult(), page: '' });
+      sources: [], checked: '', result: blankResult(), page: '', startReported: '' });
     const normalize = (c) => {
       const b = blank(), o = {};
       KEYS.forEach((k) => { o[k] = c[k] !== undefined ? c[k] : b[k]; });
@@ -337,6 +337,7 @@
       const list = cups.map(normalize).sort((a, b) => (firstDay(a) || '9').localeCompare(firstDay(b) || '9')).map((c) => {
         // Ergebnis nur speichern, wenn etwas eingetragen ist; leere Plätze am Ende weglassen, Punkte nur wenn angegeben
         if (!c.page) delete c.page;
+        if (!c.startReported) delete c.startReported;
         if (!hasResult(c.result)) { delete c.result; return c; }
         let top = c.result.top.map((t) => ({ name: t.name.trim(), points: t.points }));
         while (top.length && !top[top.length - 1].name) top.pop();

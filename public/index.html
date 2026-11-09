@@ -29,78 +29,51 @@
   <header id="site-header"></header>
 
   <main class="wrap">
-    <!-- Begrüßung: Titel und Einstieg links, rechts hellgrüne Fläche mit Kennzahlen – Janna steht am rechten Rand -->
-    <section class="hero-box">
-      <div class="hero-text">
-        <p class="eyebrow">Good games. Good company.</p>
-        <h1>Your Lobby. Your TFT Tournaments.</h1>
-        <p class="lead">Follow TFT together – from community cups to the World Championship. Every tournament with rank rules, deadlines and sign-up links.</p>
+    <!-- Kopf wie auf der Crown-Seite: das große Event mit Countdown, Janna mit Pokal am rechten Rand.
+         Fest im HTML steht die Weltmeisterschaft; ist sie vorbei, füllt home.js den Kopf mit dem nächsten Turnier. -->
+    <section class="crown-hero home-hero" aria-labelledby="hh-title">
+      <div class="crown-hero-text">
+        <h1 class="hh-kicker"><span data-crown></span>TFT Esports: Tournaments, Worlds &amp; Live Streams</h1>
+        <p class="hh-title" id="hh-title">Tactician's Crown 2026</p>
+        <p class="crown-lead" id="hh-lead">The TFT World Championship: the 40 best players in the world fight for the Enchanted Wilds title.</p>
+        <div class="feature-meta" id="hh-meta">
+          <span class="feature-date"><span data-icon="calendar"></span>13–15 Nov 2026</span>
+          <span class="pill-dark"><span data-icon="users"></span>40 players</span>
+          <span class="pill-dark"><span data-icon="trophy"></span>$470,000</span>
+        </div>
+        <div class="crown-countdown" id="hh-countdown" aria-live="polite"></div>
         <div class="hero-actions">
-          <a class="btn btn-primary btn-lg" href="#finder-title">Find tournaments<span data-icon="arrow"></span></a>
-          <a class="btn btn-ghost btn-lg" href="tft-tournaments.html"><span data-icon="calendar"></span>Open calendar</a>
+          <a class="btn btn-cream btn-lg" id="hh-go" href="tft-tacticians-crown.html">Guide &amp; schedule<span data-icon="arrow"></span></a>
+          <a class="btn btn-ghost-dark btn-lg" id="hh-watch" href="tft-tacticians-crown.html#watch"><span data-icon="play"></span>Watch live</a>
         </div>
       </div>
-      <div class="hero-stage">
-        <div class="hero-stats" id="hero-stats"></div>
-        <img class="janna janna-waving at-r" src="assets/img/janna/janna-waving-bust.png" alt="Janna, the TFT E-Sports mascot, waving with a TFT board in her hand" width="280" height="282" decoding="async" />
-      </div>
+      <img class="janna janna-trophy at-r" src="assets/img/janna/janna-trophy-bust.png" alt="Janna, the TFT E-Sports mascot, holding up a golden trophy" width="253" height="274" decoding="async" />
     </section>
 
-    <!-- Weltmeisterschaft: erscheint automatisch, bis das Turnier vorbei ist -->
-    <a class="crown-banner" id="crown-banner" href="tft-tacticians-crown.html" hidden></a>
+    <!-- Auf einen Blick -->
+    <div class="glance-tiles" id="glance-tiles" aria-label="At a glance"></div>
 
     <div class="home-grid">
-      <div class="home-main">
-        <!-- Das nächste große Match: grüne Bühne, Janna mit Pokal ragt heraus -->
-        <section aria-labelledby="next-title">
-          <h2 class="block-title" id="next-title">The next big match</h2>
-          <article class="feature" id="next-cup"></article>
-        </section>
-
-        <!-- Find your next tournament: Schnellfilter, Liste oder Monatskalender -->
-        <section aria-labelledby="finder-title">
-          <h2 class="block-title" id="finder-title">Find your next tournament</h2>
-          <div class="finder-bar">
-            <div class="chips chips-boxed" role="group" aria-label="Filter tournaments">
-              <button type="button" class="chip" data-filter="alle" aria-pressed="true">All</button>
-              <button type="button" class="chip" data-filter="mitspielen" aria-pressed="false"><span data-icon="swords"></span>Play</button>
-              <button type="button" class="chip" data-filter="zuschauen" aria-pressed="false"><span data-icon="play"></span>Watch</button>
-              <button type="button" class="chip" data-filter="dach" aria-pressed="false"><span data-icon="pin"></span>DACH</button>
-            </div>
-            <div class="seg" role="group" aria-label="View">
-              <button type="button" data-view="liste" aria-pressed="true"><span data-icon="list"></span>List</button>
-              <button type="button" data-view="kalender" aria-pressed="false"><span data-icon="calendar"></span>Calendar</button>
-            </div>
+      <!-- Find your next tournament: Schnellfilter, Liste oder Monatskalender -->
+      <section class="home-main" aria-labelledby="finder-title">
+        <h2 class="block-title" id="finder-title">Find your next tournament</h2>
+        <div class="finder-bar">
+          <div class="chips chips-boxed" role="group" aria-label="Filter tournaments">
+            <button type="button" class="chip" data-filter="alle" aria-pressed="true">All</button>
+            <button type="button" class="chip" data-filter="mitspielen" aria-pressed="false"><span data-icon="swords"></span>Play</button>
+            <button type="button" class="chip" data-filter="zuschauen" aria-pressed="false"><span data-icon="play"></span>Watch</button>
+            <button type="button" class="chip" data-filter="dach" aria-pressed="false"><span data-icon="pin"></span>DACH</button>
           </div>
-          <div class="finder-box" id="finder"></div>
-          <p class="editor-note"><span data-icon="shield"></span>All tournaments are added by the editors and checked against organizer sources. Sign-up runs directly through the organizer.</p>
-        </section>
-
-        <!-- Which cup fits you? Janna überlegt mit -->
-        <article class="side-card cup-quiz">
-          <div class="cup-quiz-text">
-            <h2>Which cup fits you?</h2>
-            <p>Find tournaments for your rank – whether you just want to play or you have already qualified.</p>
-            <ul class="quiz-links">
-              <li><a href="tft-tournaments.html?view=list&amp;entry=offen">Open to everyone<span data-icon="arrow"></span></a></li>
-              <li><a href="tft-tournaments.html?view=list&amp;entry=rang">Rank requirement<span data-icon="arrow"></span></a></li>
-              <li><a href="tft-tournaments.html?view=list&amp;entry=quali">Qualified only<span data-icon="arrow"></span></a></li>
-            </ul>
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" data-view="liste" aria-pressed="true"><span data-icon="list"></span>List</button>
+            <button type="button" data-view="kalender" aria-pressed="false"><span data-icon="calendar"></span>Calendar</button>
           </div>
-          <img class="janna janna-thinking at-l" src="assets/img/janna/janna-thinking-bust.png" alt="" loading="lazy" decoding="async" />
-        </article>
-      </div>
+        </div>
+        <div class="finder-box" id="finder"></div>
+        <p class="editor-note"><span data-icon="shield"></span>All tournaments are added by the editors and checked against organizer sources. Sign-up runs directly through the organizer.</p>
+      </section>
 
-      <aside class="home-side" aria-label="Streams and set dates">
-        <article class="side-card stream-teaser">
-          <div class="side-stage">
-            <h2>Streams &amp; watch parties</h2>
-            <img class="janna janna-caster at-r" src="assets/img/janna/janna-caster-bust.png" alt="" loading="lazy" decoding="async" />
-          </div>
-          <p>Watch TFT together – tournament broadcasts, co-streams and creators.</p>
-          <a class="btn btn-primary" href="twitch.html">Go to streams<span data-icon="arrow"></span></a>
-        </article>
-
+      <aside class="home-side" aria-label="Set dates">
         <section class="side-card" id="set-dates-card" aria-labelledby="set-title">
           <div class="panel-head"><h2 id="set-title">Set dates</h2><span>Launch, PBE and end of set</span></div>
           <div id="set-dates"></div>
@@ -109,28 +82,48 @@
       </aside>
     </div>
 
-    <!-- Around TFT -->
-    <nav class="round-band" aria-label="Around TFT">
-      <span class="round-title"><span data-crown></span>Around TFT</span>
-      <a href="#set-dates-card"><span data-icon="calendar"></span>Set dates</a>
-      <a href="live-matches.html"><span data-icon="radio"></span>Live Matches</a>
-      <a href="pro-players.html"><span data-icon="star"></span>Pro Players</a>
-      <a href="news.html"><span data-icon="news"></span>Community news</a>
-    </nav>
-
-    <!-- Recently played + News -->
-    <section class="section glance-grid" aria-label="Recently played and news">
-      <div class="panel">
-        <div class="panel-head"><h3>Recently played</h3></div>
-        <div id="recent"></div>
-        <a class="link-arrow" href="tft-tournaments.html?view=list&amp;range=all">All tournaments, including past ones<span data-icon="arrow"></span></a>
+    <!-- Live jetzt: Janna als Caster am rechten Rand -->
+    <section class="live-band" aria-labelledby="streams-title">
+      <div class="section-head">
+        <div>
+          <h2 id="streams-title"><span class="rec-dot" aria-hidden="true"></span>Live now on Twitch</h2>
+          <p class="section-sub">The biggest TFT streams right now – click to watch them right here.</p>
+        </div>
+        <a class="link-arrow is-twitch" href="twitch.html">All live streams<span data-icon="arrow"></span></a>
       </div>
-      <div class="panel">
-        <div class="panel-head"><h3>News from the scene</h3></div>
-        <div id="home-news"></div>
-        <a class="link-arrow" href="news.html">All news<span data-icon="arrow"></span></a>
-      </div>
+      <div id="home-streams"></div>
+      <img class="janna janna-caster at-r" src="assets/img/janna/janna-caster-bust.png" alt="" loading="lazy" decoding="async" />
     </section>
+
+    <!-- Spieler -->
+    <section class="section" aria-labelledby="players-title">
+      <div class="section-head">
+        <h2 class="block-title" id="players-title">Players to watch</h2>
+        <a class="link-arrow" href="pro-players.html">All pro players<span data-icon="arrow"></span></a>
+      </div>
+      <div class="streamer-grid" id="creators"></div>
+    </section>
+
+    <!-- Unten: Which cup fits you? (Janna überlegt am linken Rand) und zuletzt gespielte offizielle Turniere -->
+    <div class="home-duo">
+    <article class="side-card cup-quiz">
+      <div class="cup-quiz-text">
+        <h2>Which cup fits you?</h2>
+        <p>Find tournaments for your rank – whether you just want to play or you have already qualified.</p>
+        <ul class="quiz-links">
+          <li><a href="tft-tournaments.html?view=list&amp;entry=offen">Open to everyone<span data-icon="arrow"></span></a></li>
+          <li><a href="tft-tournaments.html?view=list&amp;entry=rang">Rank requirement<span data-icon="arrow"></span></a></li>
+          <li><a href="tft-tournaments.html?view=list&amp;entry=quali">Qualified only<span data-icon="arrow"></span></a></li>
+        </ul>
+      </div>
+      <img class="janna janna-thinking at-l" src="assets/img/janna/janna-thinking-bust.png" alt="" loading="lazy" decoding="async" />
+    </article>
+    <section class="side-card" aria-labelledby="recent-title">
+      <div class="panel-head"><h2 id="recent-title">Recently played</h2><span>official events</span></div>
+      <div id="recent"></div>
+      <a class="link-arrow" href="live-matches.html">Results &amp; live matches<span data-icon="arrow"></span></a>
+    </section>
+    </div>
   </main>
 
   <footer id="site-footer"></footer>
@@ -140,5 +133,6 @@
   <script src="assets/data/set-termine.js"></script>
   <script src="assets/js/app.js"></script>
   <script src="assets/js/home.js"></script>
+  <script src="assets/js/twitch.js"></script>
 </body>
 </html>

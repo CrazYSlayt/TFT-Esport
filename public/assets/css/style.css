@@ -255,7 +255,7 @@ a.hstat:hover span { color: var(--green); text-decoration: underline; }
 /* Startseite: Raster unter der Begrüßung */
 .home-grid { display: grid; grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr); gap: 28px; margin-top: 30px; align-items: start; }
 .home-main { display: grid; grid-template-columns: minmax(0, 1fr); gap: 36px; min-width: 0; }
-.home-side { display: grid; gap: 24px; min-width: 0; padding-top: 54px; }
+.home-side { display: grid; gap: 20px; min-width: 0; padding-top: 50px; }
 .block-title { font-size: clamp(26px, 2.2vw, 34px); margin-bottom: 14px; }
 
 /* Das nächste große Match: grüne Bühne, nach rechts heller, Janna mit Pokal am rechten Rand */
@@ -779,6 +779,31 @@ h1 .ph, h2 .ph, h3 .ph { font-weight: inherit; }
 .res-missing a { display: inline-flex; align-items: center; gap: 3px; font-weight: 700; color: var(--green); }
 .res-missing .i { width: 14px; height: 14px; }
 
+/* ---------- Startseite: Kopf mit dem großen Event, Kennzahlen, Live-Streams ---------- */
+.home-hero { margin-top: 70px; }
+.home-main { gap: 0; }
+.home-main .editor-note { margin-top: 14px; }
+.home-duo { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 28px; margin-top: 76px; align-items: stretch; }
+.home-duo .cup-quiz { margin-top: 0; }
+.home-duo .cup-quiz-text { align-content: center; }
+.crown-hero .hh-kicker { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); --crown-cut: var(--green-deep); }
+.hh-kicker .crown { width: 22px; height: 18px; color: var(--gold); }
+.hh-title { font-size: clamp(38px, 4.4vw, 64px); font-weight: 800; line-height: 1; letter-spacing: -.025em; color: #fff; }
+.btn-ghost-dark { background: transparent; color: #fff; border: 1.5px solid rgba(255, 255, 255, .45); }
+.btn-ghost-dark:hover { border-color: #fff; background: rgba(255, 255, 255, .06); }
+.glance-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 18px; }
+.g-tile { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); text-decoration: none; }
+.g-tile:hover { border-color: var(--green); }
+.g-ic { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 12px; background: var(--gold-soft); color: var(--gold-deep); }
+.g-ic .i { width: 22px; height: 22px; }
+.g-tile span:last-child { display: grid; line-height: 1.2; }
+.g-tile b { font-size: 26px; font-weight: 800; color: var(--green-deep); }
+.g-tile small { font-size: 14px; font-weight: 600; color: var(--muted); }
+.live-band { position: relative; margin-top: 44px; padding: 24px 250px 24px 24px; border-radius: var(--radius-lg); background: var(--lilac); border: 1px solid var(--lilac-line); }
+.live-band .section-head h2 { display: flex; align-items: center; gap: 10px; font-size: clamp(24px, 2.4vw, 32px); }
+.live-band > .janna { height: calc(100% + 46px); max-height: 340px; }
+.home-streams { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
 /* ---------- Weltmeisterschaft: Hinweis auf der Startseite ---------- */
 .crown-banner {
   display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; margin-top: 18px; padding: 14px 22px; border-radius: var(--radius); text-decoration: none;
@@ -1093,11 +1118,16 @@ body.modal-open .modal-overlay { display: grid; }
 @media (max-width: 1020px) {
   /* Startseite: Seitenspalte unter die Turniere, Streams und Cup-Finder nebeneinander */
   .home-grid { grid-template-columns: minmax(0, 1fr); }
-  .home-side { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 30px; gap: 24px 20px; }
+  .home-duo { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .home-side { grid-template-columns: minmax(0, 1fr); padding-top: 0; gap: 24px 20px; }
   .pf-top, .pf-top:has(> :nth-child(2):last-child) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .pf-top > .pf-card { grid-column: 1 / -1; }
   .pf-live { grid-template-columns: 300px minmax(0, 1fr); }
   .pf-bottom { grid-template-columns: minmax(0, 1fr); }
+  .glance-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .home-streams { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .live-band { padding-right: 24px; }
+  .live-band > .janna { display: none; }
   .crown-watch, .crown-days, .crown-two { grid-template-columns: minmax(0, 1fr); }
   .roster-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .crown-hero { padding-right: 270px; }
@@ -1188,6 +1218,13 @@ body.modal-open .modal-overlay { display: grid; }
   .lb-title { display: none; }
   .pf-top, .pf-top:has(> :nth-child(2):last-child), .pf-live { grid-template-columns: minmax(0, 1fr); }
   .pf-facts { grid-template-columns: minmax(0, 1fr); }
+  .home-hero { margin-top: 24px; }
+  .crown-hero.home-hero { padding-bottom: 250px; }
+  .home-duo { margin-top: 60px; }
+  .home-streams { grid-template-columns: minmax(0, 1fr); }
+  .home-streams > :nth-child(n+3) { display: none; }
+  .g-tile { padding: 12px; gap: 10px; }
+  .g-tile b { font-size: 22px; }
   .crown-hero { margin-top: 24px; padding: 24px 18px 200px; }
   .crown-hero > .janna { height: 236px; max-height: none; }
   .cd-part { min-width: 66px; }
