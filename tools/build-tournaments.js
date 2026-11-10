@@ -10,7 +10,7 @@ const ROOT = path.join(__dirname, '..', 'public');
 const SITE = 'https://www.tft-esports.com';
 const OUT = path.join(ROOT, 'tft-tournaments');
 const STREAMERS = path.join(ROOT, 'tft-streamers');
-const STATIC_PAGES = ['/', '/tft-tournaments', '/tft-tacticians-crown', '/live-matches', '/twitch', '/pro-players', '/about'];
+const STATIC_PAGES = ['/', '/tft-tournaments', '/tft-tacticians-crown', '/live-matches', '/twitch', '/pro-players', '/news', '/about'];
 
 /* ---------- Seitenskripte ohne Browser laden: eine Attrappe genügt, gebraucht werden nur die Bausteine aus window.UI ---------- */
 const stub = () => new Proxy(function () {}, { get: (t, k) => (k === Symbol.toPrimitive ? () => '' : k === 'dataset' ? {} : stub()), apply: () => stub(), set: () => true });
@@ -25,7 +25,7 @@ global.history = { replaceState() {} };
 for (const f of ['assets/js/data.js', 'assets/data/turniere.js', 'assets/js/app.js', 'assets/js/turnier.js']) {
   vm.runInThisContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), { filename: f });
 }
-const { cups, creators } = window.TFTE;
+const { cups, creators, articles = [] } = window.TFTE;
 const { esc, tag, cupDays, cupPast, cupUrl, fmtDate, fmtDays, hostOf, label, icon, creatorImage } = window.UI;
 
 const clip = (s, n) => (s.length <= n ? s : `${s.slice(0, n - 1).replace(/\s+\S*$/, '')}…`);
@@ -255,7 +255,7 @@ fs.rmSync(STREAMERS, { recursive: true, force: true });
 fs.mkdirSync(STREAMERS, { recursive: true });
 for (const c of creators) fs.writeFileSync(path.join(STREAMERS, `${c.login}.html`), streamerHtml(c));
 
-const urls = [...STATIC_PAGES, ...built.filter(indexable).map((c) => `/tft-tournaments/${c.id}`), ...creators.map((c) => `/tft-streamers/${c.login}`)];
+const urls = [...STATIC_PAGES, ...built.filter(indexable).map((c) => `/tft-tournaments/${c.id}`), ...creators.map((c) => `/tft-streamers/${c.login}`), ...articles.map((a) => `/news/${a.slug}`)];
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <!-- Erzeugt von tools/build-tournaments.js. Nur Seiten, die in die Suche sollen (kein noindex). -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

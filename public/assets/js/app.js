@@ -178,9 +178,16 @@
 
   const tag = (text, kind = '') => `<span class="tag ${kind ? `tag-${kind}` : ''}">${esc(text)}</span>`;
 
+  // Titelbild ohne Foto: grüne Fläche mit Schriftzug und Janna (Pose aus a.cover) am rechten Rand
+  const newsCover = (a, cls = 'card-img') => `<div class="news-cover ${cls}" aria-hidden="true">
+      <span class="nc-brand">TFT <em>E-Sports</em></span>
+      <span class="nc-kicker">${esc(a.coverText || catLabel(a.cat))}</span>
+      <img class="nc-janna" src="${esc(link(`assets/img/janna/janna-${a.cover || 'tablet'}-bust.png`))}" alt="" loading="lazy" decoding="async" />
+    </div>`;
+
   function articleCard(a) {
     return `<a class="card news-card" href="${articleUrl(a)}">
-      ${a.image ? `<img class="card-img" src="${esc(link(a.image))}" alt="" loading="lazy" />` : imgPlaceholder('Article image', 'card-img')}
+      ${a.image ? `<img class="card-img" src="${esc(link(a.image))}" alt="" loading="lazy" />` : a.cover ? newsCover(a) : imgPlaceholder('Article image', 'card-img')}
       <div class="card-body">
         ${tag(catLabel(a.cat), a.cat)}
         <h3 class="card-title">${esc(a.title)}</h3>
@@ -645,7 +652,7 @@
   }
 
   window.UI = {
-    where, playableFrom, whereLabel, whereOptions, getWhere, setWhere, isWhere, countryOf,
+    newsCover, where, playableFrom, whereLabel, whereOptions, getWhere, setWhere, isWhere, countryOf,
     janna, finderRow, finderStatus, creatorUrl, creatorImage, loadChannels, icon, crown, esc, fmt, served, link, setUrl, toDate, fmtDate, fmtTime, dayMonth, label, catLabel, articleUrl, cupUrl,
     sortByDateDesc, upcomingCups, startOfToday, signupOpen, imgPlaceholder, empty, tag, articleCard, cupRow,
     calendarGrid, calLegend, SET_ICON,

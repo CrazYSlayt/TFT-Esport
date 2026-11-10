@@ -22,9 +22,24 @@ window.TFTE = {
   /*
    * Artikel. Jede Seite liegt als eigene Datei unter news/<slug>.html (Kopie von news/vorlage.html).
    * { slug: 'tft-…', cat: 'offiziell' | 'turniere' | 'szene' | 'orientierung', title, teaser, date: '2026-…', readMin: 4,
-   *   author: 'Name', image: 'assets/img/news/….webp' (optional), top: true (= Titelstory, optional) }
+   *   author: 'Name', image: 'assets/img/news/….webp' (optional), top: true (= Titelstory, optional),
+   *   cover: 'trophy' (ohne Foto: grünes Titelbild mit Janna in dieser Pose), coverText: 'Zeile unter dem Schriftzug' }
+   * Neue Artikel landen automatisch in der sitemap.xml (tools/build-tournaments.js).
    */
-  articles: [],
+  articles: [
+    {
+      slug: 'tacticians-crown-2026-preview', cat: 'turniere', date: '2026-11-10', readMin: 4, author: 'TFT E-Sports editors',
+      title: "Tactician's Crown 2026: Schedule, Players, Stream",
+      teaser: 'From Friday, 40 players fight for the Enchanted Wilds title and $470,000. Everything you need for the World Championship weekend.',
+      cover: 'trophy', coverText: 'World Championship · 13–15 Nov', top: true
+    },
+    {
+      slug: 'how-tft-esports-works', cat: 'orientierung', date: '2026-11-10', readMin: 6, author: 'TFT E-Sports editors',
+      title: 'How TFT Esports Works: From Ranked to Worlds',
+      teaser: 'Tactician\'s Trials, Pro Circuit, Regional Finals and the Tactician\'s Crown – the road to Worlds and how you can take part.',
+      cover: 'thinking', coverText: 'Guide · From ranked to Worlds'
+    }
+  ],
 
   /* Turnier-Filter
      Offizielle Turniere (Trials, Regionals) gehören zu einer der Riot-Regionen, kleinere Cups zusätzlich zu Ländern (cup.countries).
