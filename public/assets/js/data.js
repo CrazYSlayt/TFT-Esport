@@ -38,7 +38,34 @@ window.TFTE = {
       title: 'How TFT Esports Works: From Ranked to Worlds',
       teaser: 'Tactician\'s Trials, Pro Circuit, Regional Finals and the Tactician\'s Crown – the road to Worlds and how you can take part.',
       cover: 'thinking', coverText: 'Guide · From ranked to Worlds'
+    },
+    {
+      url: 'tft-tacticians-crown.html', cat: 'turniere', date: '2026-11-06', author: 'TFT E-Sports editors',
+      title: "Tactician's Crown: World Championship Guide",
+      teaser: 'Schedule, format, prize pool, qualified players and the live stream – all in one place.',
+      cover: 'crown', coverText: 'Guide · Live stream & schedule'
     }
+  ],
+
+  /*
+   * „TFT explained“ auf der Startseite: kurze Fragen mit einer Kennzahl, Link auf die Seite mit der Antwort.
+   * stat: feste Zahl – oder statFrom: 'topStream' | 'nextSet' | 'upcoming' (wird live berechnet). pose = Janna-Pose.
+   */
+  explained: [
+    { cat: 'Esports', q: 'How does TFT esports work?', text: 'From ranked to Worlds: Trials, Pro Circuit, Regional Finals and the Tactician\'s Crown.', stat: '5 steps', statLabel: 'from ranked to the World Championship', href: 'news/how-tft-esports-works.html', pose: 'thinking' },
+    { cat: 'Worlds', q: 'What is the Tactician\'s Crown?', text: 'The TFT World Championship at the end of every set – 40 players, three days.', stat: '$470,000', statLabel: 'prize pool in Set 18', href: 'tft-tacticians-crown.html', pose: 'trophy' },
+    { cat: 'Compete', q: 'How do I qualify for Tactician\'s Trials?', text: 'Compete Card, sign-up and the ladder snapshot decide who gets a slot.', stat: '256', statLabel: 'players per Trials event', href: 'news/how-tft-esports-works.html#trials', pose: 'tablet' },
+    { cat: 'Watch', q: 'Who is the biggest TFT streamer right now?', text: 'Measured live on Twitch – updated every few minutes.', statFrom: 'topStream', statLabel: 'most viewers right now', href: 'twitch.html', pose: 'caster' },
+    { cat: 'Set', q: 'When does the next TFT set start?', text: 'Launch, PBE and the last day of the current set.', statFrom: 'nextSet', statLabel: 'next set launch', href: '#set-title', pose: 'waving' },
+    { cat: 'Tournaments', q: 'Which TFT tournaments can I play?', text: 'Pick your country – we only show the cups you can actually enter.', statFrom: 'upcoming', statLabel: 'upcoming tournaments for you', href: 'tft-tournaments.html', pose: 'fan' }
+  ],
+  explainedLinks: [
+    { q: 'What is a Compete Card?', href: 'news/how-tft-esports-works.html#compete-card' },
+    { q: 'How do Tactician\'s Trials work?', href: 'news/how-tft-esports-works.html#trials' },
+    { q: 'What is the TFT Pro Circuit?', href: 'news/how-tft-esports-works.html#pro-circuit' },
+    { q: 'How do the Regional Finals work?', href: 'news/how-tft-esports-works.html#regional-finals' },
+    { q: 'How does the checkmate final work?', href: 'tft-tacticians-crown.html#faq' },
+    { q: 'Where can I watch TFT esports?', href: 'tft-tacticians-crown.html#watch' }
   ],
 
   /* Turnier-Filter

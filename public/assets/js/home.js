@@ -4,7 +4,7 @@
 (function () {
   const D = window.TFTE;
   const { icon, esc, fmt, empty, label, crown, finderRow, finderStatus, cupUrl, upcomingCups, signupOpen, loadStreams, streamCard, articleCard,
-    sortByDateDesc, fmtDay, endOf, toDate, ymd, cupDays, cupPast, cupEnd, startOfToday, calendarGrid, calLegend, SET_ICON, STREAM_REASONS,
+    sortByDateDesc, articleUrl, fmtDate, fmtDay, endOf, toDate, ymd, cupDays, cupPast, cupEnd, startOfToday, calendarGrid, calLegend, SET_ICON, STREAM_REASONS,
     playableFrom, whereOptions, whereLabel, getWhere, setWhere, where: whereOf } = window.UI;
   const $ = (id) => document.getElementById(id);
 
@@ -20,42 +20,85 @@
   let where = getWhere();
   const mine = (list) => list.filter((c) => playableFrom(c, where));
 
-  /* ---------- Top-Event ---------- */
-  const featured = D.cups.find((c) => c.page && !cupPast(c)) || upcoming[0];
-  function fillTopEvent() {
-    if (!featured || featured.page) return;   // Weltmeisterschaft steht fest im HTML
-    const b = nextBlock(featured);
-    $('te-tags').innerHTML = `<span class="te-tag is-gold">${esc(label('cupLevels', featured.level))}</span><span class="te-tag">${esc(range(b))}</span><span class="te-tag">${esc(whereOf(featured))}</span>`;
-    $('te-link').textContent = featured.name;
-    $('te-link').href = cupUrl(featured);
-    $('te-lead').textContent = featured.info || '';
-    $('hh-go').href = cupUrl(featured);
-    $('hh-go').firstChild.textContent = 'View tournament';
-    $('hh-watch').hidden = !featured.streamUrl;
-    if (featured.streamUrl) $('hh-watch').href = featured.streamUrl;
+  /* ---------- Beiträge: Artikel plus Ergebnis-Meldungen der offiziellen Turniere ---------- */
+  const shortName = (c) => c.name.replace(/ – .*$/, '');
+  const resultNews = pastOfficial.filter(winnerOf).map((c) => ({
+    url: c.page || `tft-tournaments/${c.id}.html`, cat: 'turniere', date: ymd(cupEnd(c)),
+    title: `${shortName(c)}: ${winnerOf(c)} wins`, cover: 'thumbs-up', coverText: `Result · ${whereOf(c)}`
+  }));
+  const articles = sortByDateDesc(D.articles || []);
+  const top = articles.find((a) => a.top) || articles[0];
+  const side = articles.filter((a) => a !== top).slice(0, 2);
+  const latest = sortByDateDesc([...articles.filter((a) => a !== top && !side.includes(a)), ...resultNews]).slice(0, 10);
+  const catShort = (id) => (D.newsCategories.find((c) => c.id === id) || {}).short || id;
+  const metaOf = (a) => `${fmtDate(a.date)}${a.readMin ? ` · ${a.readMin} min read` : ''}`;
+
+  // Top Story: große Bildkarte, Janna in ganzer Figur (Platzhalter bis zu eigenen Titelbildern)
+  function renderTopStory() {
+    if (!top) return;
+    const box = $('top-story');
+    box.innerHTML = `
+      <img class="janna ts-janna" src="assets/img/janna/janna-${esc(top.cover || 'trophy')}.png" alt="" decoding="async" />
+      <div class="ts-text">
+        <div class="ts-tags"><span class="te-tag is-gold">Top story</span><span class="te-tag">${esc(catShort(top.cat))}</span><span class="ts-meta">${esc(metaOf(top))}</span></div>
+        <h2 class="ts-title"><a href="${articleUrl(top)}">${esc(top.title)}</a></h2>
+        ${top.teaser ? `<p class="ts-teaser">${esc(top.teaser)}</p>` : ''}
+        <p class="ts-count" id="ts-count" aria-live="polite"></p>
+      </div>`;
   }
+  function renderSideNews() {
+    $('hub-news').innerHTML = side.length ? side.map(articleCard).join('')
+      : empty({ ic: 'news', cls: 'empty-tight', title: 'More stories are on their way', href: 'news.html', cta: 'News' });
+  }
+  function renderLatest() {
+    $('latest-news').innerHTML = latest.length ? latest.map(articleCard).join('')
+      : empty({ ic: 'news', cls: 'empty-tight', title: 'More news are on their way' });
+  }
+
+  /* ---------- Countdown in der Top Story: das große Event (Weltmeisterschaft, sonst das nächste Turnier) ---------- */
+  const featured = D.cups.find((c) => c.page && !cupPast(c)) || upcoming[0];
   function startOf(c) {
     if (c.startReported && new Date(c.startReported) > new Date(Date.now() - 864e5 * 3)) return new Date(c.startReported);
     return toDate(nextBlock(c).from);
   }
   function renderCountdown() {
-    const box = $('hh-countdown');
-    if (!featured || !nextBlock(featured)) { box.innerHTML = ''; return; }
+    const box = $('ts-count');
+    if (!box || !featured || !nextBlock(featured)) { if (box) box.innerHTML = ''; return; }
+    const name = esc(shortName(featured));
     if (isLiveNow(featured)) {
       const dates = cupDays(featured).flatMap((x) => { const out = []; for (let d = toDate(x.from.slice(0, 10)); d <= toDate(x.to.slice(0, 10)); d.setDate(d.getDate() + 1)) out.push(ymd(d)); return out; });
-      box.innerHTML = `<p class="cd-state"><span class="rec-dot" aria-hidden="true"></span>Day ${dates.indexOf(ymd(new Date())) + 1} of ${dates.length} – live now</p>`;
+      box.innerHTML = `<a href="${cupUrl(featured)}"><span class="rec-dot" aria-hidden="true"></span>${name}: Day ${dates.indexOf(ymd(new Date())) + 1} of ${dates.length} – live now${icon('arrow')}</a>`;
       return;
     }
     const left = Math.max(0, startOf(featured) - new Date());
-    const part = (v, l) => `<span class="cd-part"><b>${String(v).padStart(2, '0')}</b><small>${l}</small></span>`;
-    box.innerHTML = part(Math.floor(left / 864e5), 'days') + part(Math.floor(left / 36e5) % 24, 'hours') + part(Math.floor(left / 6e4) % 60, 'minutes');
+    const d = Math.floor(left / 864e5), h = Math.floor(left / 36e5) % 24, m = Math.floor(left / 6e4) % 60;
+    box.innerHTML = `<a href="${cupUrl(featured)}">${icon('clock')}${name} starts in <b>${d}d ${h}h ${String(m).padStart(2, '0')}m</b>${icon('arrow')}</a>`;
   }
 
-  /* ---------- Neueste Artikel ---------- */
-  function renderNews() {
-    const list = sortByDateDesc(D.articles || []).slice(0, 2);
-    $('hub-news').innerHTML = list.length ? list.map(articleCard).join('')
-      : empty({ ic: 'news', cls: 'empty-tight', title: 'The first articles are on their way', href: 'news.html', cta: 'News' });
+  /* ---------- TFT explained ---------- */
+  function statOf(x) {
+    if (x.statFrom === 'topStream') return liveData && liveData.streams[0] ? liveData.streams[0].name : 'Live';
+    if (x.statFrom === 'upcoming') return String(mine(upcoming).length);
+    if (x.statFrom === 'nextSet') {
+      const set = (D.setEvents || []).filter((e) => e.kind === 'set-start' && daysUntil(e.date) >= 0).sort((a, b) => a.date.localeCompare(b.date))[0];
+      return set ? fmtDate(set.date).replace(/ \d{4}$/, '') : '–';
+    }
+    return x.stat;
+  }
+  function renderExplained() {
+    $('explained').innerHTML = (D.explained || []).map((x) => `<a class="ex-card" href="${esc(x.href)}">
+        <span class="ex-box">
+          <span class="ex-cat">${esc(x.cat)}</span>
+          <b class="ex-q">${esc(x.q)}</b>
+          <span class="ex-text">${esc(x.text)}</span>
+          <span class="ex-stat">${esc(statOf(x))}</span>
+          <span class="ex-label">${esc(x.statLabel)}</span>
+          <img class="janna ex-janna" src="assets/img/janna/janna-${esc(x.pose)}-bust.png" alt="" loading="lazy" decoding="async" />
+        </span>
+        <span class="ex-foot"><span>TFT explained · ${esc(x.q.replace(/\?$/, ''))}</span>${icon('arrow')}</span>
+      </a>`).join('');
+    $('explained-links').innerHTML = (D.explainedLinks || []).map((x) => `<a class="chip" href="${esc(x.href)}">${esc(x.q)}</a>`).join('') +
+      '<a class="chip is-dark" href="news.html?category=orientierung">All guides →</a>';
   }
 
   /* ---------- Esports-Spalte ---------- */
@@ -177,7 +220,7 @@
   ['eb-where', 'home-where'].forEach((id) => $(id).addEventListener('change', (e) => {
     where = e.target.value;
     setWhere(where);
-    renderWhere(); renderEsports(); renderStrip(); renderFinder();
+    renderWhere(); renderEsports(); renderStrip(); renderFinder(); renderExplained();
   }));
 
   /* ---------- Set-Termine ---------- */
@@ -198,6 +241,7 @@
     liveData = data;
     $('hl-viewers').textContent = data ? fmt(data.totalViewers) : '–';
     renderStrip();
+    renderExplained();
     const box = $('home-streams');
     if (!data) {
       box.className = '';
@@ -210,9 +254,11 @@
     box.innerHTML = list.length ? list.map((s) => streamCard(s)).join('') : empty({ ic: 'radio', cls: 'empty-tight', title: 'No TFT stream is live right now' });
   }
 
-  fillTopEvent();
+  renderTopStory();
   renderCountdown();
-  renderNews();
+  renderSideNews();
+  renderLatest();
+  renderExplained();
   renderWhere();
   renderEsports();
   renderStrip();

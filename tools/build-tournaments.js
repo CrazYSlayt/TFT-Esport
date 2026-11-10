@@ -17,7 +17,7 @@ const stub = () => new Proxy(function () {}, { get: (t, k) => (k === Symbol.toPr
 global.window = global;
 global.document = {
   currentScript: { getAttribute: () => '../assets/js/app.js' },
-  querySelectorAll: () => [], getElementById: () => null, createElement: stub, addEventListener() {},
+  querySelectorAll: () => [], querySelector: () => null, getElementById: () => null, createElement: stub, addEventListener() {},
   body: { dataset: {}, appendChild() {}, insertAdjacentHTML() {} }
 };
 global.location = { protocol: 'https:', hostname: '', search: '' };
@@ -255,7 +255,7 @@ fs.rmSync(STREAMERS, { recursive: true, force: true });
 fs.mkdirSync(STREAMERS, { recursive: true });
 for (const c of creators) fs.writeFileSync(path.join(STREAMERS, `${c.login}.html`), streamerHtml(c));
 
-const urls = [...STATIC_PAGES, ...built.filter(indexable).map((c) => `/tft-tournaments/${c.id}`), ...creators.map((c) => `/tft-streamers/${c.login}`), ...articles.map((a) => `/news/${a.slug}`)];
+const urls = [...STATIC_PAGES, ...built.filter(indexable).map((c) => `/tft-tournaments/${c.id}`), ...creators.map((c) => `/tft-streamers/${c.login}`), ...articles.filter((a) => a.slug && !a.url).map((a) => `/news/${a.slug}`)];
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <!-- Erzeugt von tools/build-tournaments.js. Nur Seiten, die in die Suche sollen (kein noindex). -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

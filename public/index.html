@@ -43,30 +43,29 @@
         <a class="chip" href="pro-players.html">Pro players</a>
         <a class="chip" href="news.html">News &amp; guides</a>
       </nav>
-      <a class="hub-live" id="hub-live" href="twitch.html" aria-label="TFT on Twitch right now">
-        <span class="hl-num"><span data-icon="users"></span><b id="hl-viewers">–</b></span>
-        <small><span class="live-dot" aria-hidden="true"></span>watching TFT right now</small>
-      </a>
+      <div class="hub-stats">
+        <a class="hub-live" id="hub-live" href="twitch.html" aria-label="TFT on Twitch right now">
+          <span class="hl-num"><span data-icon="users"></span><b id="hl-viewers">–</b></span>
+          <small><span class="live-dot" aria-hidden="true"></span>watching TFT right now</small>
+        </a>
+        <a class="hub-own" id="hub-own" href="https://www.twitch.tv/crazyslayt" target="_blank" rel="noopener"></a>
+      </div>
     </section>
 
     <div class="hub-grid">
-      <!-- Top-Event: fest im HTML steht die Weltmeisterschaft; danach füllt home.js das nächste Turnier ein -->
-      <article class="top-event" aria-labelledby="te-title">
-        <div class="te-text">
-          <div class="te-tags" id="te-tags"><span class="te-tag is-gold">World Championship</span><span class="te-tag">13–15 Nov 2026</span><span class="te-tag">$470,000</span></div>
-          <h2 class="te-title" id="te-title"><a id="te-link" href="tft-tacticians-crown.html">Tactician's Crown 2026</a></h2>
-          <p class="te-lead" id="te-lead">The 40 best TFT players in the world fight for the Enchanted Wilds title.</p>
-          <div class="crown-countdown" id="hh-countdown" aria-live="polite"></div>
-          <div class="te-actions">
-            <a class="btn btn-cream" id="hh-go" href="tft-tacticians-crown.html">Guide &amp; schedule<span data-icon="arrow"></span></a>
-            <a class="btn btn-ghost-dark" id="hh-watch" href="tft-tacticians-crown.html#watch"><span data-icon="play"></span>Watch live</a>
-          </div>
+      <!-- Top Story: große Bildkarte wie bei dota2news, Text unten links. Fest im HTML steht der Worlds-Beitrag, home.js nimmt den Beitrag mit top: true -->
+      <article class="top-story" id="top-story">
+        <img class="janna ts-janna" src="assets/img/janna/janna-trophy.png" alt="" width="253" height="491" decoding="async" />
+        <div class="ts-text">
+          <div class="ts-tags"><span class="te-tag is-gold">Top story</span><span class="te-tag">Tournaments</span><span class="ts-meta">10 Nov 2026 · 4 min read</span></div>
+          <h2 class="ts-title"><a href="news/tacticians-crown-2026-preview.html">Tactician's Crown 2026: Schedule, Players, Stream</a></h2>
+          <p class="ts-teaser">From Friday, 40 players fight for the Enchanted Wilds title and $470,000. Everything you need for the World Championship weekend.</p>
+          <p class="ts-count" id="ts-count" aria-live="polite"></p>
         </div>
-        <img class="janna janna-trophy te-janna" src="assets/img/janna/janna-trophy.png" alt="Janna, the TFT E-Sports mascot, holding up a golden trophy" width="253" height="491" decoding="async" />
       </article>
 
-      <!-- die zwei neuesten Artikel -->
-      <div class="hub-news" id="hub-news" aria-label="Latest articles"></div>
+      <!-- die nächsten zwei Beiträge -->
+      <div class="hub-news" id="hub-news" aria-label="More stories"></div>
 
       <!-- Esports-Spalte: nächste Turniere und Ergebnisse, Janna schaut oben rechts heraus -->
       <aside class="esports-box" aria-labelledby="eb-title">
@@ -87,6 +86,20 @@
 
     <!-- Info-Leiste: letztes Ergebnis, als Nächstes, live, Anmeldungen, nächstes Set -->
     <div class="info-strip" id="info-strip" aria-label="At a glance"></div>
+
+    <!-- Latest news: Beiträge und Ergebnisse der offiziellen Turniere -->
+    <section class="hub-section" aria-labelledby="latest-title">
+      <div class="kicker-row"><h2 class="kicker-title" id="latest-title">Latest news</h2></div>
+      <div class="latest-grid" id="latest-news"></div>
+      <div class="hub-more"><a class="btn btn-outline" href="news.html">Show all news</a></div>
+    </section>
+
+    <!-- TFT explained: Fragen mit einer Kennzahl, Janna schaut oben aus jeder Karte -->
+    <section class="hub-section" aria-labelledby="explained-title">
+      <div class="kicker-row"><h2 class="kicker-title" id="explained-title">TFT explained</h2><a class="kicker-link" href="news.html?category=orientierung">All guides<span data-icon="arrow"></span></a></div>
+      <div class="explained-grid" id="explained"></div>
+      <div class="explained-links" id="explained-links"></div>
+    </section>
 
     <!-- Live jetzt: Janna als Caster am rechten Rand -->
     <section class="live-band" aria-labelledby="streams-title">
@@ -139,19 +152,6 @@
       <div class="streamer-grid" id="creators"></div>
     </section>
 
-    <!-- Which cup fits you? Janna überlegt am linken Rand -->
-    <article class="side-card cup-quiz home-quiz">
-      <div class="cup-quiz-text">
-        <h2>Which cup fits you?</h2>
-        <p>Find tournaments for your rank – whether you just want to play or you have already qualified.</p>
-        <ul class="quiz-links">
-          <li><a href="tft-tournaments.html?view=list&amp;entry=offen">Open to everyone<span data-icon="arrow"></span></a></li>
-          <li><a href="tft-tournaments.html?view=list&amp;entry=rang">Rank requirement<span data-icon="arrow"></span></a></li>
-          <li><a href="tft-tournaments.html?view=list&amp;entry=quali">Qualified only<span data-icon="arrow"></span></a></li>
-        </ul>
-      </div>
-      <img class="janna janna-thinking at-l" src="assets/img/janna/janna-thinking-bust.png" alt="" loading="lazy" decoding="async" />
-    </article>
   </main>
 
   <footer id="site-footer"></footer>

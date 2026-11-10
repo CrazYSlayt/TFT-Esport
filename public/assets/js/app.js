@@ -103,7 +103,8 @@
   }
 
   const catLabel = (id) => (D.newsCategories.find((c) => c.id === id) || {}).short || id;
-  const articleUrl = (a) => link(`news/${encodeURIComponent(a.slug)}.html`);
+  // a.url: Beitrag, der auf eine andere Seite zeigt (z. B. den Crown-Guide oder ein Turnierergebnis)
+  const articleUrl = (a) => link(a.url || `news/${encodeURIComponent(a.slug)}.html`);
   const sortByDateDesc = (list) => [...list].sort((a, b) => toDate(b.date) - toDate(a.date));
   function startOfToday() { const d = new Date(); d.setHours(0, 0, 0, 0); return d; }
   const ymd = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -459,19 +460,24 @@
       </div>`;
   }
 
-  /* ---------- Leiste unter dem Menü: Kanal des Betreibers mit grünem Live-Punkt oder grauem Offline-Punkt ---------- */
+  /* ---------- Kanal des Betreibers als Button oben rechts (grüner Live-Punkt / grauer Offline-Punkt) ----------
+     Startseite: Kachel in der Kopfzeile (#hub-own), alle anderen Seiten: Feld in der Menüleiste vor der Suche. */
   const OWN_CHANNEL = { login: 'crazyslayt', name: 'CrazYSlayt' };
   function renderLiveBar() {
-    const header = document.getElementById('site-header');
-    if (!header) return;
     const url = twitchUrl(OWN_CHANNEL.login);
-    header.insertAdjacentHTML('afterend', `<div class="live-bar" id="live-bar"><a class="wrap live-bar-in" href="${url}" target="_blank" rel="noopener"></a></div>`);
-    const box = document.querySelector('#live-bar a');
+    let box = document.getElementById('hub-own');
+    if (!box) {
+      const search = document.querySelector('#site-header .hb-search');
+      if (!search) return;
+      search.insertAdjacentHTML('beforebegin', `<a class="hb-cell hb-own" id="hb-own" href="${url}" target="_blank" rel="noopener"></a>`);
+      box = document.getElementById('hb-own');
+    } else box.href = url;
     const show = (ch) => {
-      document.getElementById('live-bar').classList.toggle('is-live', !!(ch && ch.live));
-      box.innerHTML = ch && ch.live
-        ? `<span class="dot is-live" aria-hidden="true"></span><b>${OWN_CHANNEL.name}</b><span class="lb-state">is live</span><span class="lb-title">${esc(ch.title || '')}</span><span class="lb-go">${fmt(ch.viewers)} viewers · Watch${icon('arrow')}</span>`
-        : `<span class="dot" aria-hidden="true"></span><b>${OWN_CHANNEL.name}</b><span class="lb-state">offline</span><span class="lb-go">Twitch${icon('external')}</span>`;
+      const live = !!(ch && ch.live);
+      box.classList.toggle('is-live', live);
+      box.setAttribute('aria-label', `${OWN_CHANNEL.name} on Twitch: ${live ? 'live now' : 'offline'}`);
+      box.innerHTML = `<span class="own-ic">${icon('twitch')}</span>
+        <span class="own-txt"><b>${OWN_CHANNEL.name}</b><small><span class="dot${live ? ' is-live' : ''}" aria-hidden="true"></span>${live ? `Live · ${fmt(ch.viewers)} viewers` : 'Offline on Twitch'}</small></span>`;
     };
     const update = async () => { const c = await loadChannels([OWN_CHANNEL.login]); show(c && c[OWN_CHANNEL.login]); };
     show(null);
