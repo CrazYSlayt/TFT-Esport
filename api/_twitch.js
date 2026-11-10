@@ -26,6 +26,16 @@ async function helix(path, creds, retry = true) {
   return r.json();
 }
 
+/* Letzte gute Antwort je Schlüssel, solange die Funktion warm ist.
+   remember() hebt sie auf, recall(key, maxAge) gibt sie zurück, wenn sie jünger als maxAge ms ist. */
+const memory = new Map();
+const remember = (key, body) => { memory.set(key, { body, at: Date.now() }); if (memory.size > 200) memory.delete(memory.keys().next().value); };
+const recall = (key, maxAge) => { const m = memory.get(key); return m && Date.now() - m.at < maxAge ? m.body : null; };
+
+// Cache-Regeln: frisch 60 s, danach bis 5 min alt ausliefern und im Hintergrund erneuern, bei Twitch-Fehlern bis 1 h alt
+const CACHE_OK = 's-maxage=60, stale-while-revalidate=300, stale-if-error=3600';
+const CACHE_ERR = 's-maxage=15';   // Fehler kurz zwischenspeichern, damit nicht jeder Besucher Twitch erneut anfragt
+
 function send(res, status, body, cache) {
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   if (cache) res.setHeader('Cache-Control', cache);
@@ -33,4 +43,4 @@ function send(res, status, body, cache) {
   res.end(JSON.stringify(body));
 }
 
-module.exports = { credentials, helix, send };
+module.exports = { credentials, helix, send, remember, recall, CACHE_OK, CACHE_ERR };
