@@ -67,6 +67,41 @@
   };
 
   const label = (list, id) => (D[list].find((x) => x.id === id) || {}).label || id;
+  /* ---------- Region und Land ---------- */
+  const countryOf = (id) => (D.countries || []).find((x) => x.id === id);
+  // Anzeige „Wo?“ eines Turniers: Ländergruppe (DACH), Ländernamen oder die Region
+  function where(c) {
+    const list = c.countries || [];
+    if (!list.length) return label('regions', c.region);
+    const group = (D.countryGroups || []).find((g) => g.countries.length === list.length && g.countries.every((x) => list.includes(x)));
+    if (group) return group.label;
+    const names = list.map((id) => (countryOf(id) || {}).label || id.toUpperCase());
+    return names.length > 2 ? `${names.slice(0, 2).join(', ')} +${names.length - 2}` : names.join(' & ');
+  }
+  // Darf man aus „w“ (Land oder Region, leer = egal) mitspielen? Weltweite Turniere zählen immer dazu.
+  function playableFrom(c, w) {
+    if (!w || c.region === 'global') return true;
+    const country = countryOf(w);
+    if (c.region !== (country ? country.region : w)) return false;
+    return !country || !(c.countries || []).length || c.countries.includes(country.id);
+  }
+  const isWhere = (w) => !!(countryOf(w) || (w && w !== 'global' && D.regions.some((r) => r.id === w)));
+  const whereLabel = (w) => (countryOf(w) || {}).label || label('regions', w);
+  // Gespeicherte Auswahl „Wo spielst du?“ (gilt für Startseite und Kalender)
+  const getWhere = () => { try { const w = localStorage.getItem('tfte-where') || ''; return isWhere(w) ? w : ''; } catch (_) { return ''; } };
+  const setWhere = (w) => { try { if (w) localStorage.setItem('tfte-where', w); else localStorage.removeItem('tfte-where'); } catch (_) { /* egal */ } };
+  // Auswahlliste: ganze Regionen, darunter die Länder je Region
+  function whereOptions(selected, allText = 'Everywhere') {
+    const opt = (id, text) => `<option value="${id}"${id === selected ? ' selected' : ''}>${esc(text)}</option>`;
+    const regions = D.regions.filter((r) => r.id !== 'global');
+    return opt('', allText) +
+      `<optgroup label="Whole region">${regions.map((r) => opt(r.id, `${r.label} (all)`)).join('')}</optgroup>` +
+      regions.map((r) => {
+        const list = (D.countries || []).filter((x) => x.region === r.id).sort((a, b) => a.label.localeCompare(b.label));
+        return list.length ? `<optgroup label="${esc(r.label)}">${list.map((x) => opt(x.id, x.label)).join('')}</optgroup>` : '';
+      }).join('');
+  }
+
   const catLabel = (id) => (D.newsCategories.find((c) => c.id === id) || {}).short || id;
   const articleUrl = (a) => link(`news/${encodeURIComponent(a.slug)}.html`);
   const sortByDateDesc = (list) => [...list].sort((a, b) => toDate(b.date) - toDate(a.date));
@@ -164,7 +199,7 @@
         <strong>${esc(c.name)}</strong>
         <span class="cup-row-meta">
           ${tag(label('cupLevels', c.level), c.level)}
-          <span>${esc(label('regions', c.region))}</span>
+          <span>${esc(where(c))}</span>
           <span class="signup is-${s.key}">${esc(s.text)}</span>
         </span>
       </span>
@@ -193,7 +228,7 @@
     return `<a class="finder-row" href="${cupUrl(c)}">
       <span class="date-badge"><b>${dm.day}</b><small>${dm.mon}</small></span>
       <span class="level-ic is-${esc(c.level)}">${c.level === 'offiziell' ? crown() : icon(LEVEL_IC[c.level] || 'trophy')}</span>
-      <span class="finder-main"><strong>${esc(c.name)}</strong><small>${esc(label('regions', c.region))} · ${esc(next.label || label('cupLevels', c.level))}</small></span>
+      <span class="finder-main"><strong>${esc(c.name)}</strong><small>${esc(where(c))} · ${esc(next.label || label('cupLevels', c.level))}</small></span>
       <span class="status-pill is-${st.key}">${icon(st.ic)}${esc(st.text)}</span>
       <span class="row-go">${icon('arrow')}</span>
     </a>`;
@@ -222,7 +257,7 @@
     const past = cupPast(c);
     return `<article class="cup-card ${past ? 'is-past' : ''}">
       <header class="cup-card-head">
-        <div class="cup-card-tags">${tag(label('cupLevels', c.level), c.level)}${tag(label('regions', c.region), 'region')}${past ? tag('Past', 'past') : ''}</div>
+        <div class="cup-card-tags">${tag(label('cupLevels', c.level), c.level)}${tag(where(c), 'region')}${past ? tag('Past', 'past') : ''}</div>
         <h3><a href="${cupUrl(c)}">${esc(c.name)}</a></h3>
         ${past ? '' : `<span class="signup-pill is-${s.key}">${esc(s.text)}</span>`}
       </header>
@@ -486,7 +521,7 @@
     const results = wrap.querySelector('.search-results');
     const items = () => [
       ...D.articles.map((a) => ({ kind: 'News', title: a.title, text: `${a.title} ${a.teaser || ''} ${catLabel(a.cat)}`, href: articleUrl(a) })),
-      ...D.cups.map((c) => ({ kind: 'Tournament', title: c.name, text: `${c.name} ${label('regions', c.region)} ${c.organizer || ''} ${c.format || ''}`, href: cupUrl(c) }))
+      ...D.cups.map((c) => ({ kind: 'Tournament', title: c.name, text: `${c.name} ${where(c)} ${c.organizer || ''} ${c.format || ''}`, href: cupUrl(c) }))
     ];
 
     function run() {
@@ -610,6 +645,7 @@
   }
 
   window.UI = {
+    where, playableFrom, whereLabel, whereOptions, getWhere, setWhere, isWhere, countryOf,
     janna, finderRow, finderStatus, creatorUrl, creatorImage, loadChannels, icon, crown, esc, fmt, served, link, setUrl, toDate, fmtDate, fmtTime, dayMonth, label, catLabel, articleUrl, cupUrl,
     sortByDateDesc, upcomingCups, startOfToday, signupOpen, imgPlaceholder, empty, tag, articleCard, cupRow,
     calendarGrid, calLegend, SET_ICON,

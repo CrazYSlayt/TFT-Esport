@@ -39,7 +39,7 @@
     return `<article class="live-card ${isLive ? 'is-live' : ''}">
       <div class="lc-top">${badge}<span class="lc-day">Day ${dates.indexOf(key) + 1} of ${dates.length}</span>${levelTag(c)}</div>
       <h3><a href="${cupUrl(c)}">${esc(c.name)}</a></h3>
-      <p class="lc-meta">${icon('pin')}${esc(label('regions', c.region))}${b.label ? ` · ${esc(b.label)}` : ''} · ${esc(when)}</p>
+      <p class="lc-meta">${icon('pin')}${esc(window.UI.where(c))}${b.label ? ` · ${esc(b.label)}` : ''} · ${esc(when)}</p>
       ${top(c).length
         ? `<div class="lc-score"><p class="lc-score-head">Current standings <small>entered by the editors</small></p>${standings(c, 4)}</div>`
         : `<div class="lc-score is-empty">${icon('info')}<span>Live points will follow once a data source is connected.</span></div>`}
@@ -54,7 +54,7 @@
       <div class="lc-top"><span class="lc-badge is-next">${esc(relDays(n))}</span>${levelTag(c)}</div>
       <h3><a href="${cupUrl(c)}">${esc(c.name)}</a></h3>
       <p class="lc-meta">${icon('calendar')}${esc(range)}${hasTime(b.from) ? `, ${fmtTime(b.from)}` : ''}${b.label ? ` · ${esc(b.label)}` : ''}</p>
-      <p class="lc-meta">${icon('pin')}${esc(label('regions', c.region))}</p>
+      <p class="lc-meta">${icon('pin')}${esc(window.UI.where(c))}</p>
       <div class="lc-watch"><span>Watch:</span>${watch(c)}</div>
     </article>`;
   }

@@ -31,7 +31,7 @@
     <section class="page-head" data-janna="tablet">
       <p class="eyebrow">Tournaments</p>
       <h1>TFT Tournaments &amp; Cups</h1>
-      <p class="lead">Official events, regional tournaments and smaller streamer cups – find the right dates by time frame, region and rank.</p>
+      <p class="lead">Official events, regional tournaments and smaller streamer cups – pick your country and see only what you can actually play.</p>
     </section>
 
     <div class="cups-toolbar">
@@ -39,8 +39,10 @@
         <button type="button" data-view="calendar" aria-pressed="true"><span data-icon="calendar"></span>Calendar</button>
         <button type="button" data-view="list" aria-pressed="false"><span data-icon="list"></span>List</button>
       </div>
+      <label class="where-pick"><span data-icon="pin"></span><span class="where-text">Where do you play?</span><select id="f-where"></select></label>
       <span class="result-count" id="cups-count" aria-live="polite"></span>
     </div>
+    <p class="where-note" id="where-note" hidden></p>
 
     <form class="cup-filters" id="cup-filters" aria-label="Filter tournaments">
       <label class="field" id="range-field"><span>Time frame</span>
@@ -52,7 +54,6 @@
           <option value="all">Including past</option>
         </select>
       </label>
-      <label class="field"><span>Region</span><select name="region" id="f-region"></select></label>
       <label class="field"><span>Entry</span><select name="entry" id="f-req"></select></label>
       <label class="field"><span>Type</span><select name="type" id="f-level"></select></label>
       <label class="check"><input type="checkbox" name="open" value="1" />Open sign-up only</label>

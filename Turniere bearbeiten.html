@@ -99,11 +99,11 @@
     const DRAFT = 'tftesport_turniere_entwurf';
 
     // Feste Reihenfolge der Felder in der Datei
-    const KEYS = ['id', 'name', 'level', 'region', 'organizer', 'requirement', 'eligibility', 'rank', 'signupStart', 'signupDeadline',
+    const KEYS = ['id', 'name', 'level', 'region', 'countries', 'organizer', 'requirement', 'eligibility', 'rank', 'signupStart', 'signupDeadline',
       'signupUrl', 'days', 'format', 'prize', 'streamUrl', 'info', 'sources', 'checked', 'result', 'page', 'startReported'];
     const RES_PLACES = 8;   // Ergebnis: Platz 1 bis 8 (Finallobby)
     const blankResult = () => ({ top: [], note: '', source: '' });
-    const blank = () => ({ id: '', name: '', level: 'offiziell', region: 'emea', organizer: '', requirement: 'offen', eligibility: '', rank: '',
+    const blank = () => ({ id: '', name: '', level: 'offiziell', region: 'emea', countries: [], organizer: '', requirement: 'offen', eligibility: '', rank: '',
       signupStart: '', signupDeadline: '', signupUrl: '', days: [{ from: '', to: '', label: '' }], format: '', prize: '', streamUrl: '', info: '',
       sources: [], checked: '', result: blankResult(), page: '', startReported: '' });
     const normalize = (c) => {
@@ -204,6 +204,7 @@
           <div class="ed-row">
             <label class="f req"><span>Art</span><select data-k="level">${opts(D.cupLevels, c.level)}</select></label>
             <label class="f req"><span>Region</span><select data-k="region">${opts(D.regions, c.region)}</select></label>
+            <label class="f"><span>Länder (Kürzel, z. B. de, at, ch – leer = ganze Region)</span><input type="text" data-k="countries" value="${esc((c.countries || []).join(', '))}" placeholder="${esc((D.countries || []).filter((x) => x.region === c.region).slice(0, 6).map((x) => x.id).join(', '))}" /></label>
           </div>
           ${field('organizer', 'Veranstalter', c.organizer, { hint: 'z. B. Riot Games oder Name des Streamers' })}
           ${field('info', 'Kurzbeschreibung', c.info, { area: 2, hint: 'Ein bis zwei Sätze, erscheint oben auf der Turnierseite.' })}
@@ -279,7 +280,8 @@
       if (!c) return;
       const el = e.target;
       if (el.dataset.k) {
-        c[el.dataset.k] = el.dataset.k === 'sources' ? el.value.split('\n').map((s) => s.trim()).filter(Boolean) : el.value;
+        c[el.dataset.k] = el.dataset.k === 'sources' ? el.value.split('\n').map((s) => s.trim()).filter(Boolean)
+          : el.dataset.k === 'countries' ? el.value.toLowerCase().split(/[\s,;]+/).filter((s) => /^[a-z]{2}$/.test(s)) : el.value;
       } else if (el.dataset.dt) {
         const box = el.closest('.dt');
         const d = box.querySelector('[data-part="d"]').value, t = box.querySelector('[data-part="t"]').value;
@@ -337,6 +339,7 @@
       const list = cups.map(normalize).sort((a, b) => (firstDay(a) || '9').localeCompare(firstDay(b) || '9')).map((c) => {
         // Ergebnis nur speichern, wenn etwas eingetragen ist; leere Plätze am Ende weglassen, Punkte nur wenn angegeben
         if (!c.page) delete c.page;
+        if (!(c.countries || []).length) delete c.countries;
         if (!c.startReported) delete c.startReported;
         if (!hasResult(c.result)) { delete c.result; return c; }
         let top = c.result.top.map((t) => ({ name: t.name.trim(), points: t.points }));

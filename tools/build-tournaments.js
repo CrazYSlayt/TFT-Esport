@@ -31,7 +31,7 @@ const { esc, tag, cupDays, cupPast, cupUrl, fmtDate, fmtDays, hostOf, label, ico
 const clip = (s, n) => (s.length <= n ? s : `${s.slice(0, n - 1).replace(/\s+\S*$/, '')}…`);
 const keyword = (name) => (/\bTFT\b/.test(name) ? name : `TFT ${name}`);
 const titleOf = (c) => `${clip(keyword(c.name).replace(/ – .*$/, (m) => (keyword(c.name).length > 44 ? '' : m)), 44)} | TFT E-Sports`;
-const descOf = (c) => clip(`${keyword(c.name)}: who can enter, rank rules, dates, format and sign-up for this ${label('regions', c.region)} tournament.`, 134);
+const descOf = (c) => clip(`${keyword(c.name)}: who can enter, rank rules, dates, format and sign-up for this ${window.UI.where(c)} tournament.`, 134);
 const indexable = (c) => c.level === 'offiziell' || !cupPast(c);
 
 function html(c) {

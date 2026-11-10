@@ -3,7 +3,8 @@
 (function () {
   const D = window.TFTE;
   const { icon, esc, fmt, empty, label, finderRow, finderStatus, cupUrl, upcomingCups, signupOpen, loadStreams, streamCard,
-    fmtDay, endOf, toDate, ymd, cupDays, cupPast, cupEnd, startOfToday, calendarGrid, calLegend, SET_ICON, STREAM_REASONS } = window.UI;
+    fmtDay, endOf, toDate, ymd, cupDays, cupPast, cupEnd, startOfToday, calendarGrid, calLegend, SET_ICON, STREAM_REASONS,
+    playableFrom, whereOptions, getWhere, setWhere } = window.UI;
   const $ = (id) => document.getElementById(id);
 
   const upcoming = upcomingCups();
@@ -21,7 +22,7 @@
     const b = nextBlock(featured);
     $('hh-title').textContent = featured.name;
     $('hh-meta').innerHTML = `<span class="feature-date">${icon('calendar')}${esc(range(b))}</span>
-      <span class="pill-dark">${icon('pin')}${esc(label('regions', featured.region))}</span>
+      <span class="pill-dark">${icon('pin')}${esc(window.UI.where(featured))}</span>
       <span class="pill-dark">${esc(label('cupLevels', featured.level))}</span>`;
     $('hh-go').href = cupUrl(featured);
     $('hh-go').firstChild.textContent = 'View tournament';
@@ -63,17 +64,19 @@
   const FILTERS = {
     alle: () => true,
     mitspielen: (c) => ['open', 'soon', 'unknown'].includes(finderStatus(c).key),
-    zuschauen: (c) => ['none', 'closed'].includes(finderStatus(c).key),
-    dach: (c) => c.region === 'dach'
+    zuschauen: (c) => ['none', 'closed'].includes(finderStatus(c).key)
   };
   const store = { get: (k) => { try { return localStorage.getItem(k); } catch (_) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (_) { /* egal */ } } };
   const thisMonth = () => ymd(new Date()).slice(0, 7);
   let filter = 'alle';
   let view = store.get('tfte-home-view') === 'kalender' ? 'kalender' : 'liste';
   let month = thisMonth();
+  let where = getWhere();   // „Wo spielst du?“ – gemeinsam mit dem Kalender gemerkt
+  $('home-where').innerHTML = whereOptions(where);
 
   function renderFinder() {
-    const pick = FILTERS[filter];
+    const pick = (c) => FILTERS[filter](c) && playableFrom(c, where);
+    $('home-where').closest('.where-pick').classList.toggle('is-set', !!where);
     const box = $('finder');
     document.querySelectorAll('[data-filter]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.filter === filter));
     document.querySelectorAll('[data-view]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.view === view));
@@ -96,8 +99,8 @@
     const list = upcoming.filter(pick);
     box.innerHTML = list.length
       ? `<div class="finder-list">${list.slice(0, 8).map(finderRow).join('')}</div>
-         ${list.length > 8 ? `<a class="finder-more link-arrow" href="tft-tournaments.html?view=list">All ${list.length} tournaments${icon('arrow')}</a>` : ''}`
-      : empty({ pose: 'sad', cls: 'empty-tight', title: filter === 'alle' ? 'No upcoming tournaments yet' : 'Nothing for this filter right now', text: 'New dates appear here automatically – or have a look at the calendar.', href: 'tft-tournaments.html', cta: 'Tournament calendar' });
+         ${list.length > 8 ? `<a class="finder-more link-arrow" href="tft-tournaments.html?view=list${where ? `&amp;where=${where}` : ''}">All ${list.length} tournaments${icon('arrow')}</a>` : ''}`
+      : empty({ pose: 'sad', cls: 'empty-tight', title: filter === 'alle' && !where ? 'No upcoming tournaments yet' : 'Nothing for this filter right now', text: 'New dates appear here automatically – or have a look at the calendar.', href: 'tft-tournaments.html', cta: 'Tournament calendar' });
   }
 
   document.querySelector('.finder-bar').addEventListener('click', (e) => {
@@ -108,6 +111,7 @@
     else return;
     renderFinder();
   });
+  $('home-where').addEventListener('change', (e) => { where = e.target.value; setWhere(where); renderFinder(); });
   $('finder').addEventListener('click', (e) => {
     if (e.target.closest('[data-today]')) { month = thisMonth(); renderFinder(); return; }
     const b = e.target.closest('[data-month]');

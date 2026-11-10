@@ -241,7 +241,12 @@ window.TFTE.cups = [
     "id": "tft-dach-meisterschaft-set-18",
     "name": "TFT DACH Championship – Set 18",
     "level": "regional",
-    "region": "dach",
+    "region": "emea",
+    "countries": [
+      "de",
+      "at",
+      "ch"
+    ],
     "organizer": "Skilled Esports (presented by LPGJustJohnny)",
     "requirement": "rang",
     "eligibility": "Players signed up on tftdach.de, up to 512 participants. The top 27 of the DACH ladder snapshot and five nominated DACH Pro Circuit players start directly on Day 2.",
@@ -266,7 +271,12 @@ window.TFTE.cups = [
     "id": "tft-dach-4v4-meisterschaft-2026",
     "name": "TFT DACH 4v4 Championship",
     "level": "regional",
-    "region": "dach",
+    "region": "emea",
+    "countries": [
+      "de",
+      "at",
+      "ch"
+    ],
     "organizer": "Skilled Esports",
     "requirement": "offen",
     "eligibility": "Teams of 4, each person signs up with their main account on tftdach.de. No substitutes, up to 64 teams. The event page names no country or age rules – see the rulebook.",
@@ -291,7 +301,12 @@ window.TFTE.cups = [
     "id": "tk-tft-cup-season-2-2026",
     "name": "TK TFT Cup Season II",
     "level": "streamer",
-    "region": "dach",
+    "region": "emea",
+    "countries": [
+      "de",
+      "at",
+      "ch"
+    ],
     "organizer": "Esports Media GmbH (EarlyGame) with Sologesang, supported by Techniker Krankenkasse",
     "requirement": "offen",
     "eligibility": "Adult players from Germany, Austria and Switzerland with an active EUW account (main account only). The first 256 sign-ups per qualifier get in.",

@@ -26,13 +26,61 @@ window.TFTE = {
    */
   articles: [],
 
-  /* Turnier-Filter */
+  /* Turnier-Filter
+     Offizielle Turniere (Trials, Regionals) gehören zu einer der Riot-Regionen, kleinere Cups zusätzlich zu Ländern (cup.countries).
+     „Wo spielst du?“ im Kalender: ein Land zeigt die weltweiten Turniere, die offiziellen seiner Region und die Cups für dieses Land. */
   regions: [
     { id: 'global', label: 'Global' },
+    { id: 'amer', label: 'Americas' },
     { id: 'emea', label: 'EMEA' },
-    { id: 'euw', label: 'EUW' },
-    { id: 'eune', label: 'EUNE' },
-    { id: 'dach', label: 'DACH' }
+    { id: 'apac', label: 'APAC' },
+    { id: 'cn', label: 'China' }
+  ],
+  countries: [
+    { id: 'de', label: 'Germany', region: 'emea' },
+    { id: 'at', label: 'Austria', region: 'emea' },
+    { id: 'ch', label: 'Switzerland', region: 'emea' },
+    { id: 'pl', label: 'Poland', region: 'emea' },
+    { id: 'it', label: 'Italy', region: 'emea' },
+    { id: 'fr', label: 'France', region: 'emea' },
+    { id: 'es', label: 'Spain', region: 'emea' },
+    { id: 'pt', label: 'Portugal', region: 'emea' },
+    { id: 'gb', label: 'United Kingdom', region: 'emea' },
+    { id: 'ie', label: 'Ireland', region: 'emea' },
+    { id: 'nl', label: 'Netherlands', region: 'emea' },
+    { id: 'be', label: 'Belgium', region: 'emea' },
+    { id: 'dk', label: 'Denmark', region: 'emea' },
+    { id: 'se', label: 'Sweden', region: 'emea' },
+    { id: 'no', label: 'Norway', region: 'emea' },
+    { id: 'fi', label: 'Finland', region: 'emea' },
+    { id: 'cz', label: 'Czechia', region: 'emea' },
+    { id: 'sk', label: 'Slovakia', region: 'emea' },
+    { id: 'hu', label: 'Hungary', region: 'emea' },
+    { id: 'ro', label: 'Romania', region: 'emea' },
+    { id: 'gr', label: 'Greece', region: 'emea' },
+    { id: 'tr', label: 'Türkiye', region: 'emea' },
+    { id: 'ua', label: 'Ukraine', region: 'emea' },
+    { id: 'us', label: 'United States', region: 'amer' },
+    { id: 'ca', label: 'Canada', region: 'amer' },
+    { id: 'br', label: 'Brazil', region: 'amer' },
+    { id: 'mx', label: 'Mexico', region: 'amer' },
+    { id: 'ar', label: 'Argentina', region: 'amer' },
+    { id: 'cl', label: 'Chile', region: 'amer' },
+    { id: 'kr', label: 'South Korea', region: 'apac' },
+    { id: 'jp', label: 'Japan', region: 'apac' },
+    { id: 'vn', label: 'Vietnam', region: 'apac' },
+    { id: 'tw', label: 'Taiwan', region: 'apac' },
+    { id: 'th', label: 'Thailand', region: 'apac' },
+    { id: 'ph', label: 'Philippines', region: 'apac' },
+    { id: 'sg', label: 'Singapore', region: 'apac' },
+    { id: 'au', label: 'Australia', region: 'apac' },
+    { id: 'nz', label: 'New Zealand', region: 'apac' }
+  ],
+  // Ländergruppen mit eigenem Namen (für die Anzeige, z. B. „DACH“ statt drei Ländern)
+  countryGroups: [
+    { label: 'DACH', countries: ['de', 'at', 'ch'] },
+    { label: 'Nordics', countries: ['dk', 'se', 'no', 'fi'] },
+    { label: 'Benelux', countries: ['be', 'nl'] }
   ],
   requirements: [
     { id: 'offen', label: 'Open to everyone' },
@@ -49,7 +97,8 @@ window.TFTE = {
   /*
    * Turniere – stehen in assets/data/turniere.js und werden mit „Turniere bearbeiten.html“ (Hauptordner) gepflegt.
    * Nur die Redaktion trägt Turniere ein – Besucher können keine erstellen. Eigene Seite pro Turnier: tft-tournaments/<id>.html (tools/build-tournaments.js), page: 'datei.html' = handgeschriebene Seite.
-   * { id, name, level: 'offiziell' | 'regional' | 'streamer' | 'eigener', region: 'emea', organizer,
+   * { id, name, level: 'offiziell' | 'regional' | 'streamer' | 'eigener', region: 'global' | 'amer' | 'emea' | 'apac' | 'cn',
+   *   countries: ['de', 'at', 'ch'] (nur Cups für bestimmte Länder; leer = ganze Region), organizer,
    *   requirement: 'offen' | 'rang' | 'quali', eligibility: 'Wer darf teilnehmen?', rank: 'Rangbeschränkung',
    *   signupStart / signupDeadline: '2026-09-14' oder '2026-09-14T18:00' (deutsche Zeit, leer = keine Anmeldung),
    *   signupUrl, days: [{ from, to, label }] (Spieltage), format, prize, streamUrl, info,

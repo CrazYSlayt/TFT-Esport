@@ -1,12 +1,13 @@
-/* Turniere: Monatskalender als Übersicht (Standard) und Listenansicht, Filter für Region, Datum, Teilnahme, Art und offene Anmeldung.
-   Darunter die Turniere als Karten mit den fünf Kernfragen. Einstellungen stehen in der Adresse (?view=list&region=emea …). */
+/* Turniere: Monatskalender als Übersicht (Standard) und Listenansicht. Oben „Wo spielst du?“ (Land oder Region, wird gemerkt):
+   zeigt die weltweiten Turniere, die offiziellen der eigenen Region und die Cups für das eigene Land.
+   Dazu Filter für Datum, Teilnahme, Art und offene Anmeldung. Einstellungen stehen in der Adresse (?view=list&where=de …). */
 (function () {
   const D = window.TFTE;
-  const { icon, esc, link, setUrl, empty, ymd, startOfToday, cupStart, cupPast, cupDates, byStart, signupOpen, cupCard, calendarGrid, calLegend } = window.UI;
+  const { icon, esc, link, setUrl, empty, playableFrom, whereLabel, whereOptions, getWhere, setWhere, isWhere, countryOf, label, ymd, startOfToday, cupStart, cupPast, cupDates, byStart, signupOpen, cupCard, calendarGrid, calLegend } = window.UI;
   const $ = (id) => document.getElementById(id);
   const form = $('cup-filters');
 
-  const DEFAULTS = { view: 'calendar', month: '', range: 'upcoming', date: '', region: '', entry: '', type: '', open: '' };
+  const DEFAULTS = { view: 'calendar', month: '', range: 'upcoming', date: '', where: '', entry: '', type: '', open: '' };
   const ym = (d) => ymd(d).slice(0, 7);
   const monthName = (d, opts) => d.toLocaleDateString('en-GB', opts);
 
@@ -16,6 +17,9 @@
   Object.keys(DEFAULTS).forEach((k) => { state[k] = params.get(k) || DEFAULTS[k]; });
   if (!['list', 'calendar'].includes(state.view)) state.view = 'calendar';
   if (!/^\d{4}-\d{2}$/.test(state.month)) state.month = ym(new Date());
+  // alte Adressen mit ?region=… weiter verstehen; ohne Angabe gilt die gemerkte Auswahl
+  if (!state.where && params.get('region')) state.where = params.get('region') === 'dach' ? 'de' : params.get('region');
+  if (!isWhere(state.where)) state.where = getWhere();
 
   function syncUrl() {
     const url = new URL(location.href);
@@ -29,13 +33,14 @@
 
   /* ---------- Filterfelder ---------- */
   const options = (list, all) => `<option value="">${all}</option>` + list.map((x) => `<option value="${x.id}">${esc(x.label)}</option>`).join('');
-  $('f-region').innerHTML = options(D.regions, 'All regions');
   $('f-req').innerHTML = options(D.requirements, 'All');
   $('f-level').innerHTML = options(D.cupLevels, 'All types');
 
   function fillForm() {
     form.elements.range.value = state.range;
-    form.elements.region.value = state.region;
+    $('f-where').innerHTML = whereOptions(state.where);
+    $('f-where').closest('.where-pick').classList.toggle('is-set', !!state.where);
+    renderWhereNote();
     form.elements.entry.value = state.entry;
     form.elements.type.value = state.type;
     form.elements.open.checked = state.open === '1';
@@ -46,11 +51,7 @@
   }
 
   /* ---------- Filtern ---------- */
-  // Region: EUW/EUNE/DACH zeigen auch EMEA-Turniere, jede Region auch weltweite
-  const SUB_EMEA = ['euw', 'eune', 'dach'];
-  const inRegion = (c) => !state.region || c.region === state.region || c.region === 'global' ||
-    (SUB_EMEA.includes(state.region) && c.region === 'emea');
-  const matchesBase = (c) => cupStart(c) && inRegion(c) &&
+  const matchesBase = (c) => cupStart(c) && playableFrom(c, state.where) &&
     (!state.entry || c.requirement === state.entry) &&
     (!state.type || c.level === state.type) &&
     (state.open !== '1' || signupOpen(c));
@@ -62,7 +63,7 @@
     if (state.range === '7' || state.range === '30') return cupStart(c) < new Date(today.getTime() + Number(state.range) * 864e5);
     return true;
   }
-  const filtersActive = () => ['region', 'entry', 'type', 'open'].some((k) => state[k]) || (state.view === 'list' && state.range !== 'upcoming');
+  const filtersActive = () => ['where', 'entry', 'type', 'open'].some((k) => state[k]) || (state.view === 'list' && state.range !== 'upcoming');
   const count = (n, suffix = '') => `${n} ${n === 1 ? 'tournament' : 'tournaments'}${suffix}`;
 
   const noCupsAtAll = () => empty({ pose: 'sad', title: 'No tournaments listed yet', text: 'As soon as the editors add new dates, they appear here – with entry rules, sign-up deadlines and game days.' });
@@ -84,7 +85,7 @@
     const list = D.cups.filter((c) => matchesBase(c) && inRange(c)).sort(byStart);
     $('cups-count').textContent = count(list.length);
     if (!D.cups.length) return noCupsAtAll();
-    if (!list.length) return noMatch(filtersActive() ? 'Try another time frame or region.' : 'There are no upcoming tournaments right now. New dates appear here automatically.');
+    if (!list.length) return noMatch(filtersActive() ? 'Try another time frame or country.' : 'There are no upcoming tournaments right now. New dates appear here automatically.');
     return grouped(list);
   }
 
@@ -124,7 +125,6 @@
   /* ---------- Ereignisse ---------- */
   form.addEventListener('change', () => {
     state.range = form.elements.range.value;
-    state.region = form.elements.region.value;
     state.entry = form.elements.entry.value;
     state.type = form.elements.type.value;
     state.open = form.elements.open.checked ? '1' : '';
@@ -133,9 +133,25 @@
     render();
   });
   form.addEventListener('submit', (e) => e.preventDefault());
+  $('f-where').addEventListener('change', (e) => {
+    state.where = e.target.value;
+    setWhere(state.where);
+    render();
+  });
+  // Hinweis unter der Auswahl: was gezeigt wird
+  function renderWhereNote() {
+    const note = $('where-note');
+    note.hidden = !state.where;
+    if (!state.where) return;
+    const c = countryOf(state.where);
+    const region = label('regions', c ? c.region : state.where);
+    note.innerHTML = c
+      ? `${icon('info')}<span>Showing what you can enter from <b>${esc(c.label)}</b>: global events, official ${esc(region)} events and cups for ${esc(c.label)}.</span>`
+      : `${icon('info')}<span>Showing global events and everything in <b>${esc(region)}</b>. Pick your country for a shorter list.</span>`;
+  }
   $('reset-filters').addEventListener('click', () => {
     const view = state.view;
-    Object.assign(state, DEFAULTS, { view, month: ym(new Date()) });
+    Object.assign(state, DEFAULTS, { view, month: ym(new Date()), where: state.where });   // das eigene Land bleibt
     render();
   });
   document.querySelector('.seg').addEventListener('click', (e) => {

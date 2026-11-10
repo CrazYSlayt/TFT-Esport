@@ -7,7 +7,7 @@
     const s = signupState(c);
     const past = cupPast(c);
 
-    const tags = tag(label('cupLevels', c.level), c.level) + tag(label('regions', c.region), 'region') +
+    const tags = tag(label('cupLevels', c.level), c.level) + tag(window.UI.where(c), 'region') +
       (past ? tag('Past', 'past') : `<span class="signup-pill is-${s.key}">${esc(s.text)}</span>`);
 
     /* Termine als Zeitleiste, nach Datum sortiert (bei mehreren Qualifiern kann der Anmeldeschluss zwischen Spieltagen liegen) */

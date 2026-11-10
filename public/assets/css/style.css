@@ -1006,7 +1006,19 @@ h1 .ph, h2 .ph, h3 .ph { font-weight: inherit; }
 .seg button { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; border: 0; border-radius: 10px; background: none; font-weight: 700; color: var(--ink-soft); cursor: pointer; }
 .seg button[aria-pressed="true"] { background: var(--surface); color: var(--green-deep); box-shadow: 0 1px 3px rgba(28, 43, 37, .15); }
 .seg .i { width: 18px; height: 18px; }
-.cup-filters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) auto; gap: 12px; align-items: end; padding: 16px; border-radius: var(--radius); background: var(--sage); border: 1px solid var(--sage-line); }
+/* „Wo spielst du?“ – Land oder Region, gold hervorgehoben sobald gewählt */
+.where-pick { position: relative; display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 6px 0 14px; border-radius: 14px; background: var(--surface); border: 1.5px solid var(--line); box-shadow: var(--shadow); cursor: pointer; }
+.where-pick > .i { width: 18px; height: 18px; color: var(--gold-deep); }
+.where-text { font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); white-space: nowrap; }
+.where-pick select { min-height: 38px; max-width: 220px; padding: 0 10px; border: 0; border-radius: 10px; background: var(--surface-2); color: var(--green-deep); font-weight: 700; font-size: 16px; cursor: pointer; }
+.where-pick select:focus-visible { outline: 2px solid var(--green); }
+.where-pick.is-set { border-color: var(--gold); background: var(--gold-soft); }
+.where-pick.is-set select { background: var(--surface); }
+.where-pick.is-compact { min-height: 38px; padding: 0 4px 0 12px; border-radius: 999px; box-shadow: none; }
+.where-pick.is-compact select { min-height: 30px; border-radius: 999px; font-size: 15px; max-width: 170px; }
+.where-note { display: flex; align-items: center; gap: 8px; margin: -4px 0 14px; color: var(--ink-soft); font-size: 15px; }
+.where-note .i { flex: none; width: 17px; height: 17px; color: var(--gold-deep); }
+.cup-filters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; gap: 12px; align-items: end; padding: 16px; border-radius: var(--radius); background: var(--sage); border: 1px solid var(--sage-line); }
 .field { display: grid; gap: 6px; min-width: 0; }
 .field select { width: 100%; }
 .field > span { font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
