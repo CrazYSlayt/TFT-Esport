@@ -780,37 +780,125 @@ h1 .ph, h2 .ph, h3 .ph { font-weight: inherit; }
 .res-missing .i { width: 14px; height: 14px; }
 
 /* ---------- Startseite: Kopf mit dem großen Event, Kennzahlen, Live-Streams ---------- */
-.home-hero { margin-top: 70px; }
 .home-main { gap: 0; }
 .home-main .editor-note { margin-top: 14px; }
-.home-duo { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 28px; margin-top: 76px; align-items: stretch; }
-.home-duo .cup-quiz { margin-top: 0; }
-.home-duo .cup-quiz-text { align-content: center; }
-/* Flaches Banner: Text | Countdown | Buttons in einer Zeile, Janna klein am rechten Rand */
-.crown-hero.home-hero { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 14px 28px; margin-top: 46px; padding: 20px 200px 20px 28px; }
-.hh-text { display: grid; gap: 6px; justify-items: start; min-width: 0; }
-.home-hero .feature-date { font-size: 17px; }
-.home-hero .crown-countdown { min-height: 0; gap: 8px; }
-.home-hero .cd-part { min-width: 60px; padding: 6px 8px; }
-.home-hero .cd-part b { font-size: 24px; }
-.home-hero .cd-part small { font-size: 11px; }
-.home-hero .cd-state { font-size: 18px; }
-.hh-actions { display: grid; gap: 8px; }
-.hh-actions .btn { justify-content: center; }
-.crown-hero.home-hero > .janna { height: calc(100% + 40px); max-height: 230px; }
-.crown-hero .hh-kicker { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); --crown-cut: var(--green-deep); }
-.hh-kicker .crown { width: 22px; height: 18px; color: var(--gold); }
-.hh-title { font-size: clamp(28px, 2.8vw, 42px); font-weight: 800; line-height: 1; letter-spacing: -.025em; color: #fff; }
+/* ---------- Startseite im Aufbau von dota2news ---------- */
+.hub-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px 24px; margin-top: 26px; }
+.hub-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; }
+.hub-title h1 { font-size: clamp(28px, 2.4vw, 36px); }
+.hub-title p { color: var(--muted); font-size: 16px; }
+.hub-chips { grid-column: 1; }
+.hub-chips .chip { min-height: 34px; padding: 0 14px; font-size: 15px; background: var(--surface-2); text-decoration: none; }
+.hub-chips .chip:hover { background: var(--green); color: #fff; }
+.hub-live { grid-column: 2; grid-row: 1 / span 2; display: grid; gap: 2px; padding: 10px 18px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); text-decoration: none; }
+.hub-live:hover { border-color: var(--twitch); }
+.hl-num { display: flex; align-items: center; gap: 8px; }
+.hl-num .i { width: 22px; height: 22px; color: var(--twitch); }
+.hl-num b { font-size: 30px; font-weight: 800; line-height: 1; color: var(--green-deep); }
+.hub-live small { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--muted); }
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: #2fb35b; box-shadow: 0 0 0 3px rgba(47, 179, 91, .18); }
+
+.hub-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr) minmax(0, .95fr); gap: 20px; margin-top: 18px; align-items: stretch; }
+/* Top-Event: dunkle Bühne, Text unten links, Janna in ganzer Figur rechts – ragt oben über den Rand */
+.top-event {
+  position: relative; display: flex; align-items: flex-end; min-height: 560px; padding: 30px; border-radius: var(--radius-lg); color: #fff; box-shadow: var(--shadow);
+  background: radial-gradient(55% 60% at 78% 38%, rgba(241, 190, 41, .32), transparent 70%), linear-gradient(160deg, #2f6a43 0%, var(--green-deep) 75%);
+}
+.te-text { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; justify-items: start; min-width: 0; width: 100%; }
+.te-tags, .te-title, .te-lead { max-width: 58%; }
+.te-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.te-tag { padding: 3px 10px; border-radius: 6px; background: rgba(255, 255, 255, .14); font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.te-tag.is-gold { background: var(--gold); color: var(--green-deep); }
+.te-title { font-size: clamp(34px, 3.4vw, 54px); line-height: 1.02; letter-spacing: -.025em; color: #fff; }
+.te-title a { color: inherit; text-decoration: none; }
+.te-title a:hover { text-decoration: underline; text-decoration-color: var(--gold); text-decoration-thickness: 3px; text-underline-offset: 6px; }
+.te-lead { font-size: 18px; color: #d7e8dc; max-width: 520px; }
+.te-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.top-event .crown-countdown { min-height: 0; }
+/* Janna springt oben rechts aus der Bühne (ganze Figur, Originalgröße) */
+.top-event > .janna { position: absolute; top: -30px; right: 10px; height: 470px; width: auto; }
+/* zwei neueste Artikel übereinander */
+.hub-news { display: grid; grid-template-rows: 1fr 1fr; gap: 20px; min-width: 0; }
+.hub-news .news-card .card-img { aspect-ratio: 16 / 7; }
+.hub-news .nc-brand { font-size: 26px; }
+.nc-brand { white-space: nowrap; }
+.hub-news .card-title { font-size: 20px; }
+/* Esports-Spalte */
+.esports-box { position: relative; display: flex; flex-direction: column; min-width: 0; max-height: 590px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
+.eb-head { position: relative; padding: 18px 150px 18px 20px; border-radius: var(--radius-lg) var(--radius-lg) 0 0; color: #fff; background: linear-gradient(120deg, var(--green-deep), var(--green)); --out: 10px; }
+.eb-head h2 { display: flex; align-items: center; gap: 10px; font-size: 28px; font-style: italic; color: #fff; }
+.eb-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 4px rgba(241, 190, 41, .25); }
+.eb-head p { font-size: 15px; font-weight: 600; color: #d7e8dc; }
+.eb-head > .janna { height: calc(100% + 34px); max-height: 140px; }
+.eb-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 12px 14px 0; padding: 4px; border-radius: 999px; background: var(--surface-2); }
+.eb-tabs button { min-height: 36px; border: 0; border-radius: 999px; background: none; font-weight: 700; color: var(--ink-soft); cursor: pointer; }
+.eb-tabs button[aria-selected="true"] { background: var(--gold); color: var(--green-deep); }
+.eb-where { display: flex; align-items: center; gap: 8px; margin: 10px 14px 0; font-size: 13px; font-weight: 700; color: var(--muted); }
+.eb-where .i { width: 16px; height: 16px; color: var(--gold-deep); }
+.eb-where select { flex: 1; min-width: 0; min-height: 32px; padding: 0 8px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--surface); font-weight: 700; color: var(--green-deep); }
+.eb-where.is-set select { border-color: var(--gold); background: var(--gold-soft); }
+.eb-list { display: grid; align-content: start; gap: 10px; padding: 12px 14px; overflow-y: auto; flex: 1; min-height: 0; }
+.eb-item { display: grid; gap: 6px; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); text-decoration: none; }
+.eb-item:hover { border-color: var(--green); }
+.eb-item.is-live { border-color: #f1b1ad; background: #fff6f5; }
+.eb-top { display: flex; align-items: center; gap: 8px; }
+.eb-ic { display: grid; place-items: center; flex: none; width: 26px; height: 26px; border-radius: 8px; background: var(--mint); color: var(--green); }
+.eb-ic .i { width: 15px; height: 15px; }
+.eb-ic .crown { width: 17px; height: 14px; color: #c9961a; }
+.eb-ic.is-offiziell { background: var(--gold-soft); --crown-cut: var(--gold-soft); }
+.eb-ic.is-streamer { background: var(--lilac); color: var(--twitch); }
+.eb-kind { font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.eb-item .badge-live { position: static; margin-left: auto; }
+.eb-name { font-size: 17px; line-height: 1.2; color: var(--green-deep); }
+.eb-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 10px; font-size: 14px; color: var(--ink-soft); }
+.eb-meta > span:first-child { display: inline-flex; align-items: center; gap: 6px; }
+.eb-meta .i { width: 15px; height: 15px; }
+.eb-meta .status-pill { padding: 3px 10px; font-size: 13px; }
+.eb-winner { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: var(--gold-deep); }
+.eb-watch { display: flex; align-items: center; gap: 6px; padding-top: 6px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+.eb-watch span { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; color: var(--twitch); }
+.eb-watch .i { width: 14px; height: 14px; }
+.eb-foot { margin: 0 14px 14px; }
+/* Info-Leiste */
+.info-strip { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; margin-top: 18px; }
+.is-tile { display: grid; gap: 2px; align-content: center; padding: 12px 16px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); text-decoration: none; min-width: 0; }
+.is-tile:hover { border-color: var(--green); }
+.is-tile small { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.is-tile small .i { flex: none; width: 14px; height: 14px; color: var(--gold-deep); }
+.is-tile b { font-size: 17px; line-height: 1.2; color: var(--green-deep); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.is-tile span { font-size: 14px; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.is-tile em { font-style: normal; font-weight: 800; color: var(--green); }
+.is-tile.is-dark { background: linear-gradient(120deg, var(--green-deep), var(--green)); border-color: transparent; }
+.is-tile.is-dark small, .is-tile.is-dark span { color: #d7e8dc; }
+.is-tile.is-dark small .i, .is-tile.is-dark em { color: var(--gold); }
+.is-tile.is-dark b { color: #fff; font-size: 22px; }
+.home-quiz { margin-top: 70px; }
+@media (max-width: 1200px) {
+  .hub-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .top-event { grid-column: 1 / -1; min-height: 440px; margin-top: 30px; }
+  .info-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .hub-head { grid-template-columns: minmax(0, 1fr); }
+  .hub-live { grid-column: 1; grid-row: auto; justify-self: start; }
+  .hub-chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .hub-grid { grid-template-columns: minmax(0, 1fr); }
+  .hub-news { grid-template-rows: none; }
+  .esports-box { max-height: none; }
+  .eb-list { overflow: visible; }
+  .info-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .info-strip .is-dark { grid-column: 1 / -1; }
+  .top-event { display: block; min-height: 0; margin-top: 34px; padding: 22px 18px; }
+  .te-tags, .te-title, .te-lead { max-width: 62%; }
+  .te-title { font-size: 32px; }
+  .te-lead { font-size: 16px; }
+  .te-actions { display: grid; width: 100%; }
+  .te-actions .btn { justify-content: center; }
+  .top-event > .janna { top: -30px; right: 0; height: 250px; }
+}
+
 .btn-ghost-dark { background: transparent; color: #fff; border: 1.5px solid rgba(255, 255, 255, .45); }
 .btn-ghost-dark:hover { border-color: #fff; background: rgba(255, 255, 255, .06); }
-.glance-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 18px; }
-.g-tile { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); text-decoration: none; }
-.g-tile:hover { border-color: var(--green); }
-.g-ic { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 12px; background: var(--gold-soft); color: var(--gold-deep); }
-.g-ic .i { width: 22px; height: 22px; }
-.g-tile span:last-child { display: grid; line-height: 1.2; }
-.g-tile b { font-size: 26px; font-weight: 800; color: var(--green-deep); }
-.g-tile small { font-size: 14px; font-weight: 600; color: var(--muted); }
 .live-band { position: relative; margin-top: 44px; padding: 24px 250px 24px 24px; border-radius: var(--radius-lg); background: var(--lilac); border: 1px solid var(--lilac-line); }
 .live-band .section-head h2 { display: flex; align-items: center; gap: 10px; font-size: clamp(24px, 2.4vw, 32px); }
 .live-band > .janna { height: calc(100% + 46px); max-height: 340px; }
@@ -1151,16 +1239,11 @@ body.modal-open .modal-overlay { display: grid; }
 @media (max-width: 1020px) {
   /* Startseite: Seitenspalte unter die Turniere, Streams und Cup-Finder nebeneinander */
   .home-grid { grid-template-columns: minmax(0, 1fr); }
-  .home-duo { grid-template-columns: minmax(0, 1fr); gap: 20px; }
-  .crown-hero.home-hero { grid-template-columns: auto minmax(0, 1fr); padding-right: 190px; }
-  .hh-text { grid-column: 1 / -1; }
-  .hh-actions { display: flex; flex-wrap: wrap; }
   .home-side { grid-template-columns: minmax(0, 1fr); padding-top: 0; gap: 24px 20px; }
   .pf-top, .pf-top:has(> :nth-child(2):last-child) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .pf-top > .pf-card { grid-column: 1 / -1; }
   .pf-live { grid-template-columns: 300px minmax(0, 1fr); }
   .pf-bottom { grid-template-columns: minmax(0, 1fr); }
-  .glance-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .home-streams { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .live-band { padding-right: 24px; }
   .live-band > .janna { display: none; }
@@ -1254,20 +1337,8 @@ body.modal-open .modal-overlay { display: grid; }
   .lb-title { display: none; }
   .pf-top, .pf-top:has(> :nth-child(2):last-child), .pf-live { grid-template-columns: minmax(0, 1fr); }
   .pf-facts { grid-template-columns: minmax(0, 1fr); }
-  .home-hero { margin-top: 24px; }
-  .crown-hero.home-hero { grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 18px; margin-top: 40px; }
-  .crown-hero.home-hero > .janna { height: 176px; max-height: none; }
-  .home-hero .crown-countdown, .home-hero .hh-actions { margin-right: 140px; }
-  .home-hero .hh-actions .btn { padding: 0 12px; font-size: 16px; }
-  .home-hero .cd-part { min-width: 0; flex: 1; }
-  .home-hero .hh-kicker { font-size: 12px; letter-spacing: .08em; }
-  .home-hero .feature-meta { margin-top: 4px; }
-  .hh-actions { display: grid; }
-  .home-duo { margin-top: 60px; }
   .home-streams { grid-template-columns: minmax(0, 1fr); }
   .home-streams > :nth-child(n+3) { display: none; }
-  .g-tile { padding: 12px; gap: 10px; }
-  .g-tile b { font-size: 22px; }
   .crown-hero { margin-top: 24px; padding: 24px 18px 200px; }
   .crown-hero > .janna { height: 236px; max-height: none; }
   .cd-part { min-width: 66px; }
