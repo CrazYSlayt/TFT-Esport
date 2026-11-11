@@ -162,7 +162,9 @@ window.TFTE = {
    *   stats: { wins, top8, events } (offizielle Turniere laut tftlobby.gg), prize: { amount, note, source },
    *   career: [{ team, from, to }] (neueste zuerst, ohne to = aktuell),
    *   results: [{ date, place, event, tier, prize }], events: ['turnier-id'],
-   *   image: 'assets/img/streamers/<login>.png' (Karikatur, nur mit Einverständnis), links: [{ label, url }], sources: ['https://…'], checked }
+   *   image: 'assets/img/streamers/<login>.png' (Karikatur, nur mit Einverständnis), links: [{ label, url }], sources: ['https://…'], checked,
+   *   noTwitch: true (Profi ohne belegten Twitch-Kanal – login ist dann nur der Seitenname, kein Live-Block),
+   *   riotId: { id: 'Name#TAG', server: 'euw1', source } (nur mit Quelle – ergibt den MetaTFT-Link) }
    * Nur belegte Angaben, keine Geburtsdaten, keine Zuschauerzahlen ohne Datum.
    */
   creators: [
@@ -599,6 +601,165 @@ window.TFTE = {
         "https://earlygame.com/de/news/tk-tft-cup/der-tk-tft-cup-feat.-sologesang-geht-an-den-start-ablauf-preispool-mehr"
       ],
       "checked": "2026-11-06"
+    },
+    {
+      "login": "zyk0o",
+      "noTwitch": true,
+      "name": "ZyK0o",
+      "pro": true,
+      "country": "France",
+      "role": "Pro player",
+      "focus": "Riftbeast Cup champion, 2021 Worlds runner-up",
+      "region": "EMEA",
+      "about": "ZyK0o is a French TFT player who competes in EMEA under the MIH tag. He finished 2nd at the Fates World Championship in April 2021 and has since played at the Runeterra Reforged Championship (2023) and the Space Gods Tactician's Crown (2026). In Set 18 he won the EMEA Riftbeast Cup, the first TFT Pro Circuit stop, and qualified directly for the Tactician's Crown.",
+      "prize": {
+        "amount": "$44,292",
+        "note": "Esports Earnings, without Pro Circuit 2025–26",
+        "source": "https://www.esportsearnings.com/players/91635-zyk0o-"
+      },
+      "results": [
+        { "date": "2026-11-01", "place": "12th", "event": "EMEA Regional Finals (Enchanted Wilds)", "tier": "Regional" },
+        { "date": "2026-09-20", "place": "6th", "event": "Elderwood Cup (EMEA)", "tier": "Pro Circuit" },
+        { "date": "2026-09-06", "place": "1st", "event": "Riftbeast Cup (EMEA)", "tier": "Pro Circuit" },
+        { "date": "2026-07-12", "place": "38th", "event": "Space Gods Tactician's Crown", "tier": "World" },
+        { "date": "2025-09-21", "place": "4th", "event": "Soul Fighter Cup (EMEA)", "tier": "Pro Circuit" },
+        { "date": "2023-11-05", "place": "28th", "event": "Runeterra Reforged Championship", "tier": "World", "prize": "$3,500" },
+        { "date": "2023-10-22", "place": "2nd", "event": "Runeterra Reforged EMEA Finals", "tier": "Regional", "prize": "$10,572" },
+        { "date": "2021-04-09", "place": "2nd", "event": "Fates World Championship", "tier": "World", "prize": "$26,000" },
+        { "date": "2021-03-14", "place": "5th", "event": "Fates EMEA Regional Finals", "tier": "Regional", "prize": "$1,789" }
+      ],
+      "events": ["tacticians-crown-set-18"],
+      "image": "",
+      "links": [
+        { "label": "tftlobby.gg", "url": "https://tftlobby.gg/players/zyk0o" }
+      ],
+      "sources": [
+        "https://competetft.com/en-US/tournament/116918001686340951/qualification/overview",
+        "https://riftdaily.com/tft-enchanted-wilds-tacticians-crown/",
+        "https://tftlobby.gg/players/zyk0o",
+        "https://www.esportsearnings.com/players/91635-zyk0o-",
+        "https://www.invenglobal.com/articles/13757/8ljaywalking-named-teamfight-tactics-fates-world-champion"
+      ],
+      "checked": "2026-11-11"
+    },
+    {
+      "login": "bensac",
+      "noTwitch": true,
+      "name": "Bensac",
+      "pro": true,
+      "country": "France",
+      "role": "Pro player",
+      "focus": "EMEA Pro Points leader, Worlds 5th in 2026",
+      "region": "EMEA",
+      "about": "Bensac is a French TFT player who competes in EMEA under the MIH tag. He played the Cyber City Tactician's Crown in 2025 and finished 5th at the Space Gods Tactician's Crown in 2026. In Set 18 he reached the Grand Final of the EMEA Regional Finals and, as the region's Pro Points leader, qualified directly for the Tactician's Crown.",
+      "stats": { "wins": 0, "top8": 3, "events": 7 },
+      "prize": {
+        "amount": "$7,590",
+        "note": "Esports Earnings, without 2026 results",
+        "source": "https://www.esportsearnings.com/players/144307-bensac-"
+      },
+      "results": [
+        { "date": "2026-11-01", "place": "Top 3", "event": "EMEA Regional Finals (Enchanted Wilds)", "tier": "Regional" },
+        { "date": "2026-10-04", "place": "3rd", "event": "Blossom Cup (EMEA)", "tier": "Pro Circuit" },
+        { "date": "2026-07-12", "place": "5th", "event": "Space Gods Tactician's Crown", "tier": "World" },
+        { "date": "2025-07-13", "place": "21st", "event": "Cyber City Tactician's Crown", "tier": "World", "prize": "$5,500" },
+        { "date": "2024-03-11", "place": "9th–16th", "event": "Magic n' Mayhem EMEA Regional Finals", "tier": "Regional", "prize": "$598" }
+      ],
+      "events": ["tacticians-crown-set-18"],
+      "image": "",
+      "links": [
+        { "label": "tftlobby.gg", "url": "https://tftlobby.gg/players/bensac" }
+      ],
+      "sources": [
+        "https://tftlobby.gg/players/bensac",
+        "https://tftlobby.gg/t/emea-regional-finals-enchanted-wilds/grand-finals",
+        "https://www.esportsearnings.com/players/144307-bensac-",
+        "https://riftdaily.com/tft-enchanted-wilds-tacticians-crown/",
+        "https://teamfighttactics.leagueoflegends.com/en-au/news/esports/5-questions-with-aur-huanmie-the-space-gods-champion"
+      ],
+      "checked": "2026-11-11"
+    },
+    {
+      "login": "chunington",
+      "name": "Chunington",
+      "pro": true,
+      "realName": "Austin Chun",
+      "country": "United States",
+      "role": "Pro player",
+      "focus": "Elderwood Cup champion (AMER)",
+      "region": "AMER",
+      "team": "Final Lobby Gaming",
+      "teamSince": "May 2026",
+      "about": "Chunington (real name Austin Chun) is a TFT player from the United States who competes in AMER for Final Lobby Gaming. He won the AMER Elderwood Cup in Set 18 and qualified directly for the Tactician's Crown. Earlier in the set he finished 4th at the Riftbeast Cup and 5th at the Blossom Cup.",
+      "stats": { "wins": 1, "top8": 7, "events": 22 },
+      "prize": {
+        "amount": "$31,166",
+        "note": "according to Liquipedia",
+        "source": "https://liquipedia.net/tft/Chunington"
+      },
+      "career": [
+        { "team": "Final Lobby Gaming", "from": "May 2026" },
+        { "team": "Isurus (loan)", "from": "Apr 2026", "to": "May 2026" },
+        { "team": "Final Lobby Gaming", "from": "Mar 2026", "to": "Apr 2026" }
+      ],
+      "results": [
+        { "date": "2026-11-01", "place": "13th", "event": "AMER Regional Finals (Enchanted Wilds)", "tier": "Regional", "prize": "$600" },
+        { "date": "2026-10-04", "place": "5th", "event": "Blossom Cup (AMER)", "tier": "Pro Circuit", "prize": "$1,300" },
+        { "date": "2026-09-20", "place": "1st", "event": "Elderwood Cup (AMER)", "tier": "Pro Circuit", "prize": "$3,000" },
+        { "date": "2026-09-06", "place": "4th", "event": "Riftbeast Cup (AMER)", "tier": "Pro Circuit", "prize": "$1,500" },
+        { "date": "2026-02-15", "place": "7th", "event": "Demacia Cup (AMER)", "tier": "Pro Circuit", "prize": "$1,100" },
+        { "date": "2026-02-01", "place": "2nd", "event": "Bilgewater Cup (AMER)", "tier": "Pro Circuit", "prize": "$2,000" }
+      ],
+      "events": ["tacticians-crown-set-18"],
+      "image": "",
+      "links": [
+        { "label": "X", "url": "https://x.com/Chunington_tft" },
+        { "label": "tftlobby.gg", "url": "https://tftlobby.gg/players/chunington" }
+      ],
+      "sources": [
+        "https://liquipedia.net/tft/Chunington",
+        "https://tftlobby.gg/players/chunington",
+        "https://riftdaily.com/tft-enchanted-wilds-tacticians-crown/"
+      ],
+      "checked": "2026-11-11"
+    },
+    {
+      "login": "wigwugg",
+      "noTwitch": true,
+      "name": "wigwugg",
+      "pro": true,
+      "country": "Canada",
+      "role": "Pro player",
+      "focus": "Elderwood Cup champion (EMEA side)",
+      "region": "AMER",
+      "team": "Final Lobby Gaming",
+      "teamSince": "July 2026",
+      "about": "wigwugg is a Canadian TFT player who competes in AMER and has played for Final Lobby Gaming since July 2026. In Set 18 he won the EMEA side of the cross-region Elderwood Cup. That win qualified him directly for the Tactician's Crown, where he takes one of the AMER slots.",
+      "stats": { "wins": 1, "top8": 4, "events": 17 },
+      "career": [
+        { "team": "Final Lobby Gaming", "from": "Jul 2026" }
+      ],
+      "results": [
+        { "date": "2026-11-01", "place": "46th", "event": "AMER Regional Finals (Enchanted Wilds)", "tier": "Regional" },
+        { "date": "2026-10-04", "place": "23rd", "event": "Blossom Cup (AMER)", "tier": "Pro Circuit" },
+        { "date": "2026-09-20", "place": "1st", "event": "Elderwood Cup (EMEA)", "tier": "Pro Circuit", "prize": "$3,000" },
+        { "date": "2026-05-24", "place": "5th", "event": "Dark Star Cup (AMER)", "tier": "Pro Circuit" },
+        { "date": "2026-05-10", "place": "8th", "event": "Stargazer Cup (AMER)", "tier": "Pro Circuit" },
+        { "date": "2026-01-18", "place": "2nd", "event": "Tactician's Cup 1 (AMER)", "tier": "Regional" }
+      ],
+      "events": ["tacticians-crown-set-18"],
+      "image": "",
+      "links": [
+        { "label": "X", "url": "https://x.com/wigwugg" },
+        { "label": "tftlobby.gg", "url": "https://tftlobby.gg/players/wigwugg" }
+      ],
+      "sources": [
+        "https://tftlobby.gg/players/wigwugg",
+        "https://riftdaily.com/tft-enchanted-wilds-tacticians-crown/",
+        "https://liquipedia.net/tft/Wigwugg",
+        "https://finallobbygaming.com/"
+      ],
+      "checked": "2026-11-11"
     }
   ],
 

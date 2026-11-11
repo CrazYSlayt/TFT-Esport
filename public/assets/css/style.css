@@ -1430,3 +1430,7 @@ body.modal-open .modal-overlay { display: grid; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
+
+/* Profi ohne Twitch: Links im Profilkasten */
+.pf-links { margin-top: 18px; }
+

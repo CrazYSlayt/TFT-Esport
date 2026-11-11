@@ -317,7 +317,7 @@
     ? `<img class="creator-img" src="${esc(link(c.image))}" alt="Caricature of ${esc(c.name)}" loading="lazy" decoding="async" />`
     : `<span class="creator-initial" aria-hidden="true">${esc(c.name.charAt(0))}</span>`);
   const creatorCard = (c) => `<a class="card creator-card" href="${creatorUrl(c)}">
-      <div class="creator-top">${creatorImage(c)}<span class="creator-live" data-live="${esc(c.login)}"><span class="dot" aria-hidden="true"></span><span>Offline</span></span></div>
+      <div class="creator-top">${creatorImage(c)}${c.noTwitch ? '' : `<span class="creator-live" data-live="${esc(c.login)}"><span class="dot" aria-hidden="true"></span><span>Offline</span></span>`}</div>
       <div class="card-body">
         <span><strong>${esc(c.name)}</strong><small>${esc(c.focus || '')}</small></span>
         <span class="card-go">${icon('arrow')}</span>

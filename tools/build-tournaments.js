@@ -127,13 +127,23 @@ for (const c of built) fs.writeFileSync(path.join(OUT, `${c.id}.html`), html(c))
 /* ---------- Streamer-Profile ---------- */
 function streamerHtml(c) {
   const url = `${SITE}/tft-streamers/${c.login}`;
-  const title = esc(`${c.name}: TFT Streamer Profile | TFT E-Sports`);
-  const desc = esc(clip(`${c.name}, TFT streamer on Twitch: profile, live status and channel links. ${c.focus || ''}`, 134));
+  // noTwitch: true = Profi ohne (belegten) Twitch-Kanal – login ist dann nur der Seitenname, kein Live-Block
+  const tw = !c.noTwitch;
+  const title = esc(tw ? `${c.name}: TFT Streamer Profile | TFT E-Sports` : `${c.name}: TFT Pro Player Profile | TFT E-Sports`);
+  const desc = esc(clip(tw ? `${c.name}, TFT streamer on Twitch: profile, live status and channel links. ${c.focus || ''}`
+    : `${c.name}, TFT pro player: profile, results and links. ${c.focus || ''}`, 134));
+  // Riot-ID → MetaTFT-Profil (nur mit Quelle in den Daten: riotId: { id: 'Name#TAG', server: 'euw1', source })
+  const meta = c.riotId && c.riotId.id && c.riotId.server
+    ? `https://www.metatft.com/player/${encodeURIComponent(c.riotId.server)}/${encodeURIComponent(c.riotId.id.replace('#', '-'))}` : '';
+  const links = [...(meta ? [{ label: 'MetaTFT', url: meta }] : []), ...(c.links || [])];
   const st = c.stats || {};
   const facts = [
     c.realName && ['users', 'Real name', esc(c.realName)],
-    ['twitch', 'Twitch', `<a href="https://www.twitch.tv/${esc(c.login)}" target="_blank" rel="noopener">${esc(c.login)}</a>`, 'stream channel'],
+    tw && ['twitch', 'Twitch', `<a href="https://www.twitch.tv/${esc(c.login)}" target="_blank" rel="noopener">${esc(c.login)}</a>`, 'stream channel'],
+    meta && ['link', 'Riot ID', `<a href="${esc(meta)}" target="_blank" rel="noopener">${esc(c.riotId.id)}</a>`, 'stats on MetaTFT'],
     ['shield', 'Role', esc(c.role || 'Streamer')],
+    !tw && c.region && ['pin', 'Region', esc(c.region), esc(c.country || '')],
+    !tw && c.team && ['users', 'Team', esc(c.team), c.teamSince ? `since ${esc(c.teamSince)}` : ''],
     c.worldTitles && ['trophy', 'World titles', esc(c.worldTitles), 'Tactician\'s Crown'],
     st.wins !== undefined && ['star', 'Tournament wins', esc(st.wins), 'official events'],
     st.top8 !== undefined && ['list', 'Top 8 finishes', esc(st.top8), 'official events'],
@@ -143,7 +153,7 @@ function streamerHtml(c) {
   ].filter(Boolean);
   const upcoming = (c.events || []).map((id) => cups.find((x) => x.id === id)).filter((e) => e && !cupPast(e));
   const placeClass = (p) => (/^1/.test(p) ? 'p1' : /^2/.test(p) ? 'p2' : /^3/.test(p) ? 'p3' : '');
-  const person = { '@context': 'https://schema.org', '@type': 'Person', name: c.name, url, sameAs: [`https://www.twitch.tv/${c.login}`, ...(c.links || []).map((l) => l.url)] };
+  const person = { '@context': 'https://schema.org', '@type': 'Person', name: c.name, url, sameAs: [...(tw ? [`https://www.twitch.tv/${c.login}`] : []), ...links.map((l) => l.url)] };
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -170,12 +180,12 @@ function streamerHtml(c) {
   <script src="../assets/js/ga.js"></script>
   <script type="application/ld+json">${JSON.stringify(person).replace(/</g, '\\u003c')}</script>
 </head>
-<body data-page="twitch" data-streamer="${esc(c.login)}">
+<body data-page="${tw ? 'twitch' : 'pros'}"${tw ? ` data-streamer="${esc(c.login)}"` : ''}>
   <header id="site-header"></header>
 
   <main class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb">
-      <a href="../index.html">Home</a><span data-icon="chevronRight"></span><a href="../twitch.html">Live Streams</a><span data-icon="chevronRight"></span><span>${esc(c.name)}</span>
+      <a href="../index.html">Home</a><span data-icon="chevronRight"></span>${tw ? '<a href="../twitch.html">Live Streams</a>' : '<a href="../pro-players.html">Pro Players</a>'}<span data-icon="chevronRight"></span><span>${esc(c.name)}</span>
     </nav>
 
     <div class="pf-top">
@@ -197,10 +207,11 @@ function streamerHtml(c) {
       <section class="pf-box" aria-labelledby="facts-title">
         <div class="pf-head">${icon('users')}<h2 id="facts-title">Profile</h2></div>
         <dl class="pf-facts">${facts.map(([ic, k, v, sub]) => `<div><span class="pf-ic">${icon(ic)}</span><span><dt>${k}</dt><dd>${v}</dd>${sub ? `<small>${sub}</small>` : ''}</span></div>`).join('')}</dl>
+        ${!tw && links.length ? `<div class="hero-actions pf-links">${links.map((l) => `<a class="btn btn-ghost" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}${icon('external')}</a>`).join('')}</div>` : ''}
       </section>
     </div>
 
-    <section class="pf-live" id="streamer-live" aria-label="Live stream">
+    ${tw ? `<section class="pf-live" id="streamer-live" aria-label="Live stream">
       <div class="pf-media" id="streamer-player"><span class="pf-offline">${icon('twitch')}Offline</span></div>
       <div class="pf-live-text">
         <p class="streamer-status" id="streamer-status"><span class="dot" aria-hidden="true"></span>${esc(c.name)} is offline right now</p>
@@ -208,11 +219,11 @@ function streamerHtml(c) {
         <div class="hero-actions">
           <button type="button" class="btn btn-primary" id="streamer-load">Watch here</button>
           <a class="btn btn-ghost" href="https://www.twitch.tv/${esc(c.login)}" target="_blank" rel="noopener">Open on Twitch${icon('external')}</a>
-          ${(c.links || []).map((l) => `<a class="btn btn-ghost" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}${icon('external')}</a>`).join('')}
+          ${links.map((l) => `<a class="btn btn-ghost" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}${icon('external')}</a>`).join('')}
         </div>
         <p class="pf-note">The player loads from Twitch only after you click “Watch here”.</p>
       </div>
-    </section>
+    </section>` : ''}
 
     <section class="pf-box pf-who" aria-labelledby="who-title">
       <h2 id="who-title">Who is ${esc(c.name)}?</h2>
@@ -246,7 +257,7 @@ function streamerHtml(c) {
   <script src="../assets/js/data.js"></script>
   <script src="../assets/data/turniere.js"></script>
   <script src="../assets/js/app.js"></script>
-  <script src="../assets/js/streamer.js"></script>
+  ${tw ? '<script src="../assets/js/streamer.js"></script>' : ''}
 </body>
 </html>
 `;

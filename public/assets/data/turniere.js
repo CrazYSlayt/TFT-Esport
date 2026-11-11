@@ -85,7 +85,7 @@ window.TFTE.cups = [
     "checked": "2026-10-26",
     "result": {
       "top": [{ "name": "wigwugg" }],
-      "note": "EMEA winner, qualified directly for the Tactician's Crown.",
+      "note": "Won the EMEA side of this cross-region cup and qualified directly for the Tactician's Crown – on an AMER slot.",
       "source": "https://riftdaily.com/tft-enchanted-wilds-tacticians-crown/"
     }
   },

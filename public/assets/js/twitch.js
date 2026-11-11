@@ -7,7 +7,7 @@
   box.innerHTML = list.map(creatorCard).join('');
 
   async function renderStatus() {
-    const channels = await loadChannels(list.map((c) => c.login));
+    const channels = await loadChannels(list.filter((c) => !c.noTwitch).map((c) => c.login));
     if (!channels) return;
     document.querySelectorAll('[data-live]').forEach((el) => {
       const ch = channels[el.dataset.live];
