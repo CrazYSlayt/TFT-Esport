@@ -165,7 +165,7 @@ window.TFTE = {
    *   image: 'assets/img/streamers/<login>.png' (Karikatur, nur mit Einverständnis), links: [{ label, url }], sources: ['https://…'], checked,
    *   noTwitch: true (Profi ohne belegten Twitch-Kanal – login ist dann nur der Seitenname, kein Live-Block),
    *   riotId: { id: 'Name#TAG', server: 'euw1', source } (nur mit Quelle – ergibt den MetaTFT-Link) }
-   * Nur belegte Angaben, keine Geburtsdaten, keine Zuschauerzahlen ohne Datum.
+   * Nur belegte Angaben, keine Zuschauerzahlen ohne Datum. born: '2001-06-26' oder nur '2006' (nur mit Quelle in sources) – angezeigt wird das Alter bzw. das Geburtsjahr.
    */
   creators: [
     {
@@ -195,6 +195,7 @@ window.TFTE = {
       "name": "Dishsoap",
       "pro": true,
       "realName": "Joseph Goldsmith",
+      "born": "2001-06-26",
       "country": "United States",
       "role": "Pro player",
       "focus": "Two-time TFT World Champion",
@@ -314,6 +315,7 @@ window.TFTE = {
       ],
       "sources": [
         "https://tftacademy.com/about/dishsoap",
+        "https://liquipedia.net/tft/Dishsoap",
         "https://tftlobby.gg/players/dishsoap",
         "https://www.esportsearnings.com/players/115504-dishsoap-joseph-goldsmith",
         "https://baike.baidu.com/en/item/Dishsoap/4954994",
@@ -436,6 +438,7 @@ window.TFTE = {
       "name": "k3soju",
       "pro": true,
       "realName": "Michael Zhang",
+      "born": "1996-11-16",
       "country": "United States",
       "role": "Pro player & streamer",
       "focus": "TFT pro and streamer",
@@ -605,6 +608,7 @@ window.TFTE = {
     {
       "login": "zyk0o",
       "noTwitch": true,
+      "realName": "Zakariya Olabi",
       "name": "ZyK0o",
       "pro": true,
       "country": "France",
@@ -638,13 +642,15 @@ window.TFTE = {
         "https://riftdaily.com/tft-enchanted-wilds-tacticians-crown/",
         "https://tftlobby.gg/players/zyk0o",
         "https://www.esportsearnings.com/players/91635-zyk0o-",
-        "https://www.invenglobal.com/articles/13757/8ljaywalking-named-teamfight-tactics-fates-world-champion"
+        "https://www.invenglobal.com/articles/13757/8ljaywalking-named-teamfight-tactics-fates-world-champion",
+        "https://liquipedia.net/tft/ZyK0o"
       ],
       "checked": "2026-11-11"
     },
     {
       "login": "bensac",
       "noTwitch": true,
+      "realName": "Alexandre Mokhefi",
       "name": "Bensac",
       "pro": true,
       "country": "France",
@@ -675,7 +681,8 @@ window.TFTE = {
         "https://tftlobby.gg/t/emea-regional-finals-enchanted-wilds/grand-finals",
         "https://www.esportsearnings.com/players/144307-bensac-",
         "https://riftdaily.com/tft-enchanted-wilds-tacticians-crown/",
-        "https://teamfighttactics.leagueoflegends.com/en-au/news/esports/5-questions-with-aur-huanmie-the-space-gods-champion"
+        "https://teamfighttactics.leagueoflegends.com/en-au/news/esports/5-questions-with-aur-huanmie-the-space-gods-champion",
+        "https://liquipedia.net/tft/Bensac"
       ],
       "checked": "2026-11-11"
     },
@@ -684,6 +691,7 @@ window.TFTE = {
       "name": "Chunington",
       "pro": true,
       "realName": "Austin Chun",
+      "born": "2004-01-17",
       "country": "United States",
       "role": "Pro player",
       "focus": "Elderwood Cup champion (AMER)",
@@ -726,6 +734,7 @@ window.TFTE = {
     {
       "login": "wigwugg",
       "noTwitch": true,
+      "born": "2006",
       "name": "wigwugg",
       "pro": true,
       "country": "Canada",

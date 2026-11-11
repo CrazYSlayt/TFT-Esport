@@ -607,10 +607,20 @@ h1 .ph, h2 .ph, h3 .ph { font-weight: inherit; }
 .creator-card .card-go { color: var(--twitch); }
 
 /* Streamer-Karten und -Profile: Karikatur oder Anfangsbuchstabe */
-.creator-top { position: relative; display: grid; place-items: end center; height: 190px; overflow: hidden; background: var(--fresh); }
-.creator-img { width: auto; height: 100%; object-fit: contain; }
-.creator-initial { display: grid; place-items: center; align-self: center; width: 96px; height: 96px; border-radius: 50%; background: var(--green); color: #fff; font-size: 44px; font-weight: 800; }
-.creator-initial.is-empty { background: var(--surface); border: 2px dashed var(--sage-line); color: var(--muted); }
+/* Spielerkarte wie eine Sammelkarte: Bild oben auf grünem Grund mit Goldrand, darunter Name, Alter · Herkunft */
+.creator-card { border: 2px solid var(--gold-line); }
+.creator-card:hover { border-color: var(--gold); }
+.creator-top { position: relative; display: grid; place-items: center; height: 250px; overflow: hidden; border-bottom: 2px solid var(--gold); background: radial-gradient(70% 60% at 50% 38%, rgba(241, 190, 41, .28), transparent 70%), linear-gradient(180deg, #2f6a45, var(--green-deep)); }
+.creator-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+.creator-initial { display: grid; place-items: center; font-size: 110px; font-style: italic; font-weight: 800; line-height: 1; color: var(--gold); text-shadow: 0 8px 24px rgba(0, 0, 0, .35); }
+.creator-region { position: absolute; top: 10px; right: 10px; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 800; letter-spacing: .08em; background: var(--gold); color: var(--green-deep); }
+.creator-crown { position: absolute; left: 10px; bottom: 10px; display: inline-flex; align-items: center; gap: 3px; padding: 3px 9px; border-radius: 999px; font-size: 13px; font-weight: 800; background: rgba(23, 45, 31, .85); border: 1.5px solid var(--gold); color: var(--gold); }
+.creator-crown svg { width: 18px; height: 18px; color: var(--gold); --crown-cut: var(--green-deep); }
+.creator-text { display: grid; gap: 3px; min-width: 0; }
+.creator-card .creator-meta { display: inline-flex; align-items: center; gap: 5px; font-size: 15px; font-weight: 600; color: var(--ink-soft); }
+.creator-meta .i { width: 15px; height: 15px; color: var(--gold-deep); }
+.creator-card .creator-text small { font-size: 14px; color: var(--muted); }
+.creator-initial.is-empty { width: 96px; height: 96px; border-radius: 50%; font-size: 44px; background: var(--surface); border: 2px dashed var(--sage-line); color: var(--muted); text-shadow: none; }
 .creator-initial .i { width: 36px; height: 36px; }
 .creator-live { position: absolute; top: 10px; left: 10px; display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; background: var(--surface); font-size: 13px; font-weight: 700; color: var(--muted); }
 .creator-live.is-live { color: var(--green); }
@@ -1431,6 +1441,90 @@ body.modal-open .modal-overlay { display: grid; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
 
-/* Profi ohne Twitch: Links im Profilkasten */
-.pf-links { margin-top: 18px; }
 
+/* ---------- Player Card (Profilseite): links die Karte (Bild, Preisgeld, Name · Alter · Herkunft), Mitte 8 feste Themen, rechts die Teams als Zeitleiste.
+   Feste Höhe, damit alle Profile gleich aussehen. ---------- */
+.pc {
+  display: grid; grid-template-columns: minmax(240px, 320px) minmax(0, 1fr) 250px; height: 440px; margin-top: 14px; overflow: hidden;
+  border: 2px solid var(--gold); border-radius: var(--radius-lg); color: #fff; box-shadow: var(--shadow);
+  background: radial-gradient(60% 90% at 100% 0%, rgba(241, 190, 41, .18), transparent 60%), linear-gradient(120deg, var(--green-deep) 0%, var(--green) 75%, #3f8a5a 100%);
+}
+.pc-side { display: flex; flex-direction: column; min-width: 0; min-height: 0; background: rgba(14, 32, 21, .35); border-right: 2px solid var(--gold); }
+.pc-photo {
+  position: relative; display: grid; place-items: center; flex: 1; min-height: 0; overflow: hidden;
+  background: radial-gradient(70% 60% at 50% 35%, rgba(241, 190, 41, .28), transparent 70%), linear-gradient(180deg, #2f6a45, var(--green-deep));
+  border-bottom: 2px solid var(--gold);
+}
+.pc-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+.pc-initial { font-size: clamp(100px, 10vw, 150px); font-style: italic; font-weight: 800; line-height: 1; color: var(--gold); text-shadow: 0 10px 30px rgba(0, 0, 0, .35); }
+.pc-badge { position: absolute; left: 12px; top: 12px; padding: 3px 11px; border-radius: 999px; font-size: 12px; font-weight: 800; letter-spacing: .08em; background: var(--gold); color: var(--green-deep); }
+.pc-crown { position: absolute; right: 12px; top: 10px; display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 999px; background: rgba(23, 45, 31, .85); border: 1.5px solid var(--gold); color: var(--gold); }
+.pc-crown svg { width: 20px; height: 20px; color: var(--gold); --crown-cut: var(--green-deep); }
+.pc-prize { display: grid; justify-items: center; gap: 1px; padding: 8px 14px; text-align: center; background: rgba(241, 190, 41, .14); border-bottom: 1px solid rgba(241, 190, 41, .45); }
+.pc-prize small { font-size: 12px; color: #d7e8dc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.pc-prize small:first-child { font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #b9d2c0; }
+.pc-prize b { font-size: 28px; font-weight: 800; line-height: 1.1; color: var(--gold); }
+.pc-id { display: grid; justify-items: center; gap: 4px; padding: 10px 14px 14px; text-align: center; }
+.pc-id h1 { font-size: clamp(26px, 2.2vw, 34px); font-style: italic; line-height: 1; letter-spacing: -.03em; color: #fff; overflow-wrap: anywhere; }
+.pc-id p { display: inline-flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 8px; font-weight: 600; color: #e3efe6; }
+.pc-id .i { width: 16px; height: 16px; color: var(--gold); }
+.pc-dot { color: var(--gold); }
+
+.pc-info { display: grid; grid-template-rows: auto auto 1fr auto; gap: 10px; padding: 22px 26px; min-width: 0; min-height: 0; }
+.pc-kicker { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); }
+.pc-kicker .i { width: 16px; height: 16px; }
+.pc-role { font-size: clamp(19px, 1.6vw, 24px); font-weight: 800; line-height: 1.2; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pc-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 10px; margin: 0; align-content: center; }
+.pc-stats > div { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 10px 12px; border-radius: 14px; background: rgba(255, 255, 255, .07); border: 1px solid rgba(241, 190, 41, .3); }
+.pc-ic { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 10px; background: rgba(241, 190, 41, .16); color: var(--gold); }
+.pc-ic .i, .pc-ic svg { width: 20px; height: 20px; }
+.pc-ic .crown { --crown-cut: #2b5639; }
+.pc-tx { display: grid; min-width: 0; }
+.pc-stats dt { font-size: 11px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: #b9d2c0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pc-stats dd { margin: 0; font-size: 19px; font-weight: 800; line-height: 1.15; color: #fff; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.pc-stats small { font-size: 12px; color: #b9d2c0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pc-stats .is-gold { background: rgba(241, 190, 41, .14); border-color: var(--gold); }
+.pc-stats .is-gold dd { color: var(--gold); }
+.pc-stats .is-empty dd { color: #8fb39a; }
+
+.pc-links { display: flex; flex-wrap: wrap; gap: 6px; }
+.pc-link { display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 999px; border: 1px solid rgba(241, 190, 41, .6); font-size: 13px; font-weight: 700; color: #fff; text-decoration: none; }
+.pc-link:hover { background: var(--gold); border-color: var(--gold); color: var(--green-deep); }
+.pc-link .i { width: 13px; height: 13px; }
+.pc-link.is-twitch { background: var(--twitch); border-color: var(--twitch); }
+.pc-link.is-twitch:hover { background: #6d28d9; color: #fff; }
+
+/* Teams als Zeitleiste ganz rechts */
+.pc-timeline { display: flex; flex-direction: column; gap: 12px; min-height: 0; padding: 22px 20px; overflow-y: auto; background: rgba(14, 32, 21, .3); border-left: 1px solid rgba(241, 190, 41, .4); }
+.pc-timeline ol { list-style: none; margin: 0; padding: 0 0 0 16px; display: grid; gap: 12px; border-left: 2px solid rgba(241, 190, 41, .45); }
+.pc-timeline li { position: relative; display: grid; gap: 1px; }
+.pc-timeline li::before { content: ''; position: absolute; left: -22px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: #8fb39a; box-shadow: 0 0 0 3px var(--green-deep); }
+.pc-timeline li.is-now::before { background: var(--gold); }
+.pc-timeline b { font-size: 15px; line-height: 1.25; color: #fff; }
+.pc-timeline li.is-now b { color: var(--gold); }
+.pc-timeline small { font-size: 12px; color: #b9d2c0; }
+.pc-none { font-size: 14px; color: #b9d2c0; }
+
+.pf-col { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; min-width: 0; }
+.pf-col .pf-who { margin-top: 0; }
+@media (max-width: 1300px) {
+  .pc-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .pc-stats > div { padding: 7px 10px; }
+  .pc-stats small { display: none; }
+  .pc { grid-template-columns: minmax(220px, 280px) minmax(0, 1fr) 220px; }
+}
+@media (max-width: 1000px) {
+  .pc { grid-template-columns: minmax(0, 1fr); height: auto; }
+  .pc-side { border-right: 0; border-bottom: 2px solid var(--gold); }
+  .pc-photo { flex: none; height: clamp(200px, 60vw, 280px); }
+  .pc-info { padding: 20px 18px; }
+  .pc-stats small { display: block; }
+  .pc-role { white-space: normal; }
+}
+@media (max-width: 520px) {
+  .pc-stats > div { gap: 8px; padding: 8px; }
+  .pc-ic { width: 28px; height: 28px; border-radius: 8px; }
+  .pc-ic .i, .pc-ic svg { width: 16px; height: 16px; }
+  .pc-stats dt { font-size: 10px; letter-spacing: .04em; }
+  .pc-timeline { border-left: 0; border-top: 1px solid rgba(241, 190, 41, .4); overflow: visible; }
+}

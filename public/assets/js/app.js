@@ -26,6 +26,8 @@
     play: '<path d="M8 5.5v13l10-6.5z"/>',
     swords: '<path d="M14.5 17.5 3.5 6.5v-3h3l11 11M13 19l6-6M16 16l4 4M19 21l2-2"/><path d="m14.5 6.5 3-3h3v3l-3 3M5 14l4 4M7 17l-3 3M3 19l2 2"/>',
     star: '<path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/>',
+    globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 3.6 9A14 14 0 0 1 12 21a14 14 0 0 1-3.6-9A14 14 0 0 1 12 3z"/>',
+    medal: '<path d="M8 3h8l-2.5 6h-3z"/><path d="m8 3 3 6M16 3l-3 6"/><circle cx="12" cy="15" r="5.5"/><path d="M12 12.5v5"/>',
     mail: '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/>',
     shield: '<path d="M12 3.5 19 6v5.5c0 4.3-2.9 7.6-7 9-4.1-1.4-7-4.7-7-9V6z"/>',
     info: '<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/>',
@@ -316,13 +318,34 @@
   const creatorImage = (c) => (c.image
     ? `<img class="creator-img" src="${esc(link(c.image))}" alt="Caricature of ${esc(c.name)}" loading="lazy" decoding="async" />`
     : `<span class="creator-initial" aria-hidden="true">${esc(c.name.charAt(0))}</span>`);
-  const creatorCard = (c) => `<a class="card creator-card" href="${creatorUrl(c)}">
-      <div class="creator-top">${creatorImage(c)}${c.noTwitch ? '' : `<span class="creator-live" data-live="${esc(c.login)}"><span class="dot" aria-hidden="true"></span><span>Offline</span></span>`}</div>
+  // Alter aus born ('2001-06-26' → „25“; nur Jahr '2006' → „born 2006“), sonst leer
+  function ageOf(c, now = new Date()) {
+    if (!c.born) return '';
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(c.born)) return `born ${c.born.slice(0, 4)}`;
+    const [y, m, d] = c.born.split('-').map(Number);
+    let age = now.getFullYear() - y;
+    if (now.getMonth() + 1 < m || (now.getMonth() + 1 === m && now.getDate() < d)) age -= 1;
+    return `${age} years`;
+  }
+  // Spielerkarte: Bild oben (Region und Live-Status darauf), darunter Name, Alter · Herkunft, Kurzzeile
+  const creatorCard = (c) => {
+    const meta = [ageOf(c), c.country].filter(Boolean).join(' · ');
+    return `<a class="card creator-card" href="${creatorUrl(c)}">
+      <div class="creator-top">${creatorImage(c)}
+        ${c.noTwitch ? '' : `<span class="creator-live" data-live="${esc(c.login)}"><span class="dot" aria-hidden="true"></span><span>Offline</span></span>`}
+        ${c.region ? `<span class="creator-region">${esc(c.region)}</span>` : ''}
+        ${c.worldTitles ? `<span class="creator-crown" title="World titles">${crown()}×${esc(c.worldTitles)}</span>` : ''}
+      </div>
       <div class="card-body">
-        <span><strong>${esc(c.name)}</strong><small>${esc(c.focus || '')}</small></span>
+        <span class="creator-text">
+          <strong>${esc(c.name)}</strong>
+          ${meta ? `<span class="creator-meta">${icon('pin')}${esc(meta)}</span>` : ''}
+          ${c.focus ? `<small>${esc(c.focus)}</small>` : ''}
+        </span>
         <span class="card-go">${icon('arrow')}</span>
       </div>
     </a>`;
+  };
   // Leerer Platz: bleibt als beschrifteter Platzhalter sichtbar, bis die Redaktion Creator auswählt
   const creatorSlot = (n) => `<div class="card creator-card">
       <div class="creator-top"><span class="creator-initial is-empty" aria-hidden="true">${icon('users')}</span></div>
@@ -663,7 +686,7 @@
     sortByDateDesc, upcomingCups, startOfToday, signupOpen, imgPlaceholder, empty, tag, articleCard, cupRow,
     calendarGrid, calLegend, SET_ICON,
     ymd, endOf, fmtDay, fmtWhen, cupDays, cupStart, cupNext, cupEnd, cupPast, cupDates, byStart, fmtDays, signupState, hostOf, keyFacts, cupCard,
-    twitchUrl, creatorCard, creatorSlot, streamCard, langName, loadStreams, STREAM_REASONS
+    twitchUrl, creatorCard, creatorSlot, ageOf, streamCard, langName, loadStreams, STREAM_REASONS
   };
 
   // Symbole im statischen HTML: <span data-icon="arrow"></span> wird zum SVG

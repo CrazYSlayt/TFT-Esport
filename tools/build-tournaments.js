@@ -26,7 +26,7 @@ for (const f of ['assets/js/data.js', 'assets/data/turniere.js', 'assets/js/app.
   vm.runInThisContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), { filename: f });
 }
 const { cups, creators, articles = [] } = window.TFTE;
-const { esc, tag, cupDays, cupPast, cupUrl, fmtDate, fmtDays, hostOf, label, icon, creatorImage } = window.UI;
+const { esc, tag, cupDays, cupPast, cupUrl, fmtDate, fmtDays, hostOf, label, icon, crown, ageOf } = window.UI;
 
 const clip = (s, n) => (s.length <= n ? s : `${s.slice(0, n - 1).replace(/\s+\S*$/, '')}…`);
 const keyword = (name) => (/\bTFT\b/.test(name) ? name : `TFT ${name}`);
@@ -137,20 +137,37 @@ function streamerHtml(c) {
     ? `https://www.metatft.com/player/${encodeURIComponent(c.riotId.server)}/${encodeURIComponent(c.riotId.id.replace('#', '-'))}` : '';
   const links = [...(meta ? [{ label: 'MetaTFT', url: meta }] : []), ...(c.links || [])];
   const st = c.stats || {};
-  const facts = [
-    c.realName && ['users', 'Real name', esc(c.realName)],
-    tw && ['twitch', 'Twitch', `<a href="https://www.twitch.tv/${esc(c.login)}" target="_blank" rel="noopener">${esc(c.login)}</a>`, 'stream channel'],
-    meta && ['link', 'Riot ID', `<a href="${esc(meta)}" target="_blank" rel="noopener">${esc(c.riotId.id)}</a>`, 'stats on MetaTFT'],
-    ['shield', 'Role', esc(c.role || 'Streamer')],
-    !tw && c.region && ['pin', 'Region', esc(c.region), esc(c.country || '')],
-    !tw && c.team && ['users', 'Team', esc(c.team), c.teamSince ? `since ${esc(c.teamSince)}` : ''],
-    c.worldTitles && ['trophy', 'World titles', esc(c.worldTitles), 'Tactician\'s Crown'],
-    st.wins !== undefined && ['star', 'Tournament wins', esc(st.wins), 'official events'],
-    st.top8 !== undefined && ['list', 'Top 8 finishes', esc(st.top8), 'official events'],
-    st.events !== undefined && ['calendar', 'Tournaments played', esc(st.events), 'official events since 2024'],
-    (c.career || []).length && ['swords', 'Teams so far', esc(c.career.length)],
-    ...(c.extra || []).map(([ic, k, v, sub]) => [ic, esc(k), esc(v), sub && esc(sub)])
-  ].filter(Boolean);
+  // Player Card rechts: immer dieselben 8 Themen mit Symbol (fehlt ein Wert: „–“), damit alle Karten gleich aussehen.
+  // [Symbol, Bezeichnung, Wert, Zusatz, Klasse]
+  const NA = '–';
+  const num = (v) => (v === undefined || v === null || v === '' ? NA : esc(v));
+  const placeNum = (p) => { const m = String(p).match(/\d+/); return m ? Number(m[0]) : 99; };
+  const worlds = (c.results || []).filter((r) => r.tier === 'World').sort((a, b) => placeNum(a.place) - placeNum(b.place))[0];
+  const shortEvent = (e) => e.replace(/ Tactician's Crown$| World Championship$| Championship$/, '');
+  const latest = (c.results || []).slice().sort((a, b) => b.date.localeCompare(a.date))[0];
+  // Teams als Zeitleiste ganz rechts in der Karte (neueste oben); ohne career nur das aktuelle Team
+  const teams = (c.career || []).length ? c.career : c.team ? [{ team: c.team, from: c.teamSince || '' }] : [];
+  const tiles = c.pro || !(c.extra || []).length ? [
+    ['crown', 'World titles', c.worldTitles ? esc(c.worldTitles) : NA, 'Tactician\'s Crown', c.worldTitles ? 'is-gold' : ''],
+    ['medal', 'Best at Worlds', worlds ? esc(worlds.place) : NA, worlds ? esc(shortEvent(worlds.event)) : 'no Worlds result yet'],
+    ['trophy', 'Wins', num(st.wins), 'official events'],
+    ['star', 'Top 8s', num(st.top8), 'official events'],
+    ['calendar', 'Events played', num(st.events), 'official, since 2024'],
+    ['swords', 'Latest', latest ? esc(latest.place) : NA, latest ? esc(shortEvent(latest.event)) : 'no result listed'],
+    ['globe', 'Region', c.region ? esc(c.region) : NA, c.country ? esc(c.country) : ''],
+    ['users', 'Real name', c.realName ? esc(c.realName) : NA, c.realName ? '' : 'not public']
+  ] : [
+    ...(c.extra || []).map(([ic, k, v, sub]) => [ic, esc(k), esc(v), sub ? esc(sub) : '']),
+    ['globe', 'Region', c.region ? esc(c.region) : NA, c.country ? esc(c.country) : ''],
+    ['users', 'Real name', c.realName ? esc(c.realName) : NA, ''],
+    ['shield', 'Role', esc(c.role || 'Streamer'), ''],
+    ['twitch', 'Channel', tw ? esc(c.login) : NA, tw ? 'on Twitch' : '']
+  ].slice(0, 8);
+  const tileIcon = (ic) => (ic === 'crown' ? crown() : icon(ic));
+  const photo = c.image
+    ? `<img class="pc-img" src="../${esc(c.image)}" alt="${esc(c.name)}" decoding="async" />`
+    : `<span class="pc-initial" aria-hidden="true">${esc(c.name.charAt(0))}</span>`;
+  const linkBtn = (l) => `<a class="pc-link" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}${icon('external')}</a>`;
   const upcoming = (c.events || []).map((id) => cups.find((x) => x.id === id)).filter((e) => e && !cupPast(e));
   const placeClass = (p) => (/^1/.test(p) ? 'p1' : /^2/.test(p) ? 'p2' : /^3/.test(p) ? 'p3' : '');
   const person = { '@context': 'https://schema.org', '@type': 'Person', name: c.name, url, sameAs: [...(tw ? [`https://www.twitch.tv/${c.login}`] : []), ...links.map((l) => l.url)] };
@@ -188,28 +205,33 @@ function streamerHtml(c) {
       <a href="../index.html">Home</a><span data-icon="chevronRight"></span>${tw ? '<a href="../twitch.html">Live Streams</a>' : '<a href="../pro-players.html">Pro Players</a>'}<span data-icon="chevronRight"></span><span>${esc(c.name)}</span>
     </nav>
 
-    <div class="pf-top">
-      <aside class="pf-card">
-        <div class="pf-portrait">${creatorImage(c)}</div>
-        <h1>${esc(c.name)}</h1>
-        <p class="pf-sub">TFT player profile</p>
-        <div class="pf-tags">${tag(c.role || 'Streamer', 'solid')}${c.region ? tag(c.region, 'region') : ''}</div>
-        ${c.country ? `<p class="pf-country">${icon('pin')}${esc(c.country)}</p>` : ''}
-        ${c.team ? `<div class="pf-team"><small>Team</small><b>${esc(c.team)}</b>${c.teamSince ? `<small>since ${esc(c.teamSince)}</small>` : ''}</div>` : ''}
-        ${c.prize ? `<div class="pf-prize"><small>Total prize money</small><b>${esc(c.prize.amount)}</b>${c.prize.note ? `<small>${esc(c.prize.note)}</small>` : ''}</div>` : ''}
-      </aside>
-
-      ${(c.career || []).length ? `<section class="pf-box" aria-labelledby="career-title">
-        <div class="pf-head">${icon('clock')}<h2 id="career-title">Career</h2><span>every team, newest first</span></div>
-        <ol class="pf-career">${c.career.map((t) => `<li class="${t.to ? '' : 'is-now'}"><b>${esc(t.team)}</b><span>${esc(t.from)} – ${esc(t.to || 'today')}</span></li>`).join('')}</ol>
-      </section>` : ''}
-
-      <section class="pf-box" aria-labelledby="facts-title">
-        <div class="pf-head">${icon('users')}<h2 id="facts-title">Profile</h2></div>
-        <dl class="pf-facts">${facts.map(([ic, k, v, sub]) => `<div><span class="pf-ic">${icon(ic)}</span><span><dt>${k}</dt><dd>${v}</dd>${sub ? `<small>${sub}</small>` : ''}</span></div>`).join('')}</dl>
-        ${!tw && links.length ? `<div class="hero-actions pf-links">${links.map((l) => `<a class="btn btn-ghost" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}${icon('external')}</a>`).join('')}</div>` : ''}
-      </section>
-    </div>
+    <!-- Player Card: links die Karte (Bild aus assets/img/streamers/, sobald vorhanden – darunter Preisgeld, Name, Alter, Herkunft),
+         rechts die Einzelheiten -->
+    <section class="pc" aria-label="Player card">
+      <div class="pc-side">
+        <div class="pc-photo">
+          ${photo}
+          ${c.region ? `<span class="pc-badge">${esc(c.region)}</span>` : ''}
+          ${c.worldTitles ? `<span class="pc-crown" title="World titles">${crown()}<b>×${esc(c.worldTitles)}</b></span>` : ''}
+        </div>
+        <div class="pc-prize"><small>Prize money won</small><b>${c.prize ? esc(c.prize.amount) : NA}</b><small>${c.prize && c.prize.note ? esc(c.prize.note) : c.prize ? 'all official events' : 'not known yet'}</small></div>
+        <div class="pc-id">
+          <h1>${esc(c.name)}</h1>
+          <p>${[ageOf(c) && (/^born/.test(ageOf(c)) ? esc(ageOf(c).replace('born', 'Born')) : `Age ${esc(ageOf(c).replace(' years', ''))}`), c.country && `${icon('pin')}${esc(c.country)}`].filter(Boolean).join('<span class="pc-dot" aria-hidden="true">·</span>')}</p>
+        </div>
+      </div>
+      <div class="pc-info">
+        <p class="pc-kicker">Player details</p>
+        <p class="pc-role">${esc(c.role || 'Streamer')}${c.focus ? ` · ${esc(c.focus)}` : ''}</p>
+        <dl class="pc-stats">${tiles.map(([ic, k, v, sub, cls]) => `<div class="${cls || ''}${v === NA ? ' is-empty' : ''}"><span class="pc-ic">${tileIcon(ic)}</span><span class="pc-tx"><dt>${k}</dt><dd>${v}</dd>${sub ? `<small>${sub}</small>` : ''}</span></div>`).join('')}</dl>
+        ${tw || links.length ? `<div class="pc-links">${tw ? `<a class="pc-link is-twitch" href="https://www.twitch.tv/${esc(c.login)}" target="_blank" rel="noopener">${icon('twitch')}twitch.tv/${esc(c.login)}</a>` : ''}${links.map(linkBtn).join('')}</div>` : ''}
+      </div>
+      <div class="pc-timeline">
+        <p class="pc-kicker">${icon('shield')}Teams</p>
+        ${teams.length ? `<ol>${teams.map((t) => `<li class="${t.to ? '' : 'is-now'}"><b>${esc(t.team)}</b><small>${esc(t.from)}${t.to ? ` – ${esc(t.to)}` : t.from ? ' – today' : 'today'}</small></li>`).join('')}</ol>`
+          : '<p class="pc-none">No team listed</p>'}
+      </div>
+    </section>
 
     ${tw ? `<section class="pf-live" id="streamer-live" aria-label="Live stream">
       <div class="pf-media" id="streamer-player"><span class="pf-offline">${icon('twitch')}Offline</span></div>
@@ -219,31 +241,31 @@ function streamerHtml(c) {
         <div class="hero-actions">
           <button type="button" class="btn btn-primary" id="streamer-load">Watch here</button>
           <a class="btn btn-ghost" href="https://www.twitch.tv/${esc(c.login)}" target="_blank" rel="noopener">Open on Twitch${icon('external')}</a>
-          ${links.map((l) => `<a class="btn btn-ghost" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}${icon('external')}</a>`).join('')}
         </div>
         <p class="pf-note">The player loads from Twitch only after you click “Watch here”.</p>
       </div>
     </section>` : ''}
 
-    <section class="pf-box pf-who" aria-labelledby="who-title">
-      <h2 id="who-title">Who is ${esc(c.name)}?</h2>
-      <p>${esc(c.about || '')}</p>
-    </section>
-
-    ${(c.results || []).length || upcoming.length ? `<div class="pf-bottom">
+    <div class="pf-bottom">
+      <div class="pf-col">
+      <section class="pf-box pf-who" aria-labelledby="who-title">
+        <h2 id="who-title">Who is ${esc(c.name)}?</h2>
+        <p>${esc(c.about || '')}</p>
+      </section>
       ${(c.results || []).length ? `<section class="pf-box" aria-labelledby="results-title">
-        <h2 id="results-title">${esc(c.name)}'s biggest results</h2>
-        <p class="pf-sub-left">Selected finishes, newest first</p>
+        <h2 id="results-title">Tournament history</h2>
+        <p class="pf-sub-left">${esc(c.name)}'s selected finishes, newest first</p>
         <div class="pf-table-wrap"><table class="pf-table">
           <thead><tr><th>Date</th><th>Place</th><th>Tournament</th><th>Prize</th></tr></thead>
           <tbody>${c.results.map((r) => `<tr><td>${esc(fmtDate(r.date))}</td><td><span class="pf-place ${placeClass(r.place)}">${esc(r.place)}</span></td><td><b>${esc(r.event)}</b> <span class="pf-tier ${r.tier === 'World' ? 'is-world' : ''}">${esc(r.tier)}</span></td><td>${esc(r.prize || '–')}</td></tr>`).join('')}</tbody>
         </table></div>
       </section>` : ''}
+      </div>
       ${upcoming.length ? `<section class="pf-box" aria-labelledby="next-title">
         <h2 id="next-title">Next tournaments</h2>
         <ul class="deadline-list">${upcoming.map((e) => `<li><a href="${cupUrl(e)}"><b>${esc(e.name)}</b><span class="is-muted">${esc(fmtDays(e).split(' · ').pop())}</span></a></li>`).join('')}</ul>
       </section>` : ''}
-    </div>` : ''}
+    </div>
 
     ${(c.sources || []).length ? `<div class="source-box crown-sources">
       <b>Sources</b>
