@@ -665,7 +665,7 @@ window.TFTE = {
         "source": "https://www.esportsearnings.com/players/144307-bensac-"
       },
       "results": [
-        { "date": "2026-11-01", "place": "Top 3", "event": "EMEA Regional Finals (Enchanted Wilds)", "tier": "Regional" },
+        { "date": "2026-11-01", "place": "3rd", "event": "EMEA Regional Finals (Enchanted Wilds)", "tier": "Regional", "prize": "€5,000" },
         { "date": "2026-10-04", "place": "3rd", "event": "Blossom Cup (EMEA)", "tier": "Pro Circuit" },
         { "date": "2026-07-12", "place": "5th", "event": "Space Gods Tactician's Crown", "tier": "World" },
         { "date": "2025-07-13", "place": "21st", "event": "Cyber City Tactician's Crown", "tier": "World", "prize": "$5,500" },
@@ -682,7 +682,8 @@ window.TFTE = {
         "https://www.esportsearnings.com/players/144307-bensac-",
         "https://riftdaily.com/tft-enchanted-wilds-tacticians-crown/",
         "https://teamfighttactics.leagueoflegends.com/en-au/news/esports/5-questions-with-aur-huanmie-the-space-gods-champion",
-        "https://liquipedia.net/tft/Bensac"
+        "https://liquipedia.net/tft/Bensac",
+        "https://liquipedia.net/tft/Enchanted_Wilds/EMEA/Regional_Finals"
       ],
       "checked": "2026-11-11"
     },
