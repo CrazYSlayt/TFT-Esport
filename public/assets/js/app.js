@@ -26,6 +26,7 @@
     play: '<path d="M8 5.5v13l10-6.5z"/>',
     swords: '<path d="M14.5 17.5 3.5 6.5v-3h3l11 11M13 19l6-6M16 16l4 4M19 21l2-2"/><path d="m14.5 6.5 3-3h3v3l-3 3M5 14l4 4M7 17l-3 3M3 19l2 2"/>',
     star: '<path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/>',
+    target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
     globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 3.6 9A14 14 0 0 1 12 21a14 14 0 0 1-3.6-9A14 14 0 0 1 12 3z"/>',
     medal: '<path d="M8 3h8l-2.5 6h-3z"/><path d="m8 3 3 6M16 3l-3 6"/><circle cx="12" cy="15" r="5.5"/><path d="M12 12.5v5"/>',
     mail: '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/>',
@@ -384,6 +385,52 @@
     </a>`;
   }
 
+  /* ---------- Twitch-Player über die Twitch-Player-API (lädt erst nach dem Klick).
+     Twitch hält eingebettete Player beim Wechsel in den Vollbildmodus teils an – pausiert der Player
+     direkt beim Wechsel (± 2,5 s), läuft er automatisch weiter. Ohne API: normales iframe. ---------- */
+  let twitchApi = null;
+  const loadTwitchApi = () => {
+    if (window.Twitch && window.Twitch.Player) return Promise.resolve();
+    if (!twitchApi) {
+      twitchApi = new Promise((ok, fail) => {
+        const s = document.createElement('script');
+        s.src = 'https://player.twitch.tv/js/embed/v1.js';
+        s.onload = ok;
+        s.onerror = () => { twitchApi = null; fail(); };
+        document.head.appendChild(s);
+      });
+    }
+    return twitchApi;
+  };
+  const players = new Set();
+  let fsAt = 0;
+  const onFullscreen = () => {
+    fsAt = Date.now();
+    players.forEach((p) => { if (fsAt - p.pausedAt < 2500) p.player.play(); });
+  };
+  document.addEventListener('fullscreenchange', onFullscreen);
+  document.addEventListener('webkitfullscreenchange', onFullscreen);
+  const playerIframe = (channel, title) => `<iframe src="https://player.twitch.tv/?channel=${encodeURIComponent(channel)}&parent=${encodeURIComponent(location.hostname)}&autoplay=true" allowfullscreen allow="autoplay; fullscreen" title="${esc(title)}"></iframe>`;
+  async function mountPlayer(box, channel, title = 'Twitch player') {
+    players.forEach((p) => { if (!p.el.isConnected) players.delete(p); });
+    try {
+      await loadTwitchApi();
+      box.innerHTML = '<div class="twitch-embed"></div>';
+      const el = box.firstElementChild;
+      const player = new window.Twitch.Player(el, { channel, parent: [location.hostname], width: '100%', height: '100%', autoplay: true });
+      const entry = { player, el, pausedAt: 0 };
+      players.add(entry);
+      player.addEventListener(window.Twitch.Player.PAUSE, () => {
+        entry.pausedAt = Date.now();
+        if (entry.pausedAt - fsAt < 2500) player.play();
+      });
+      const frame = el.querySelector('iframe');
+      if (frame) { frame.title = title; frame.setAttribute('allow', 'autoplay; fullscreen'); }
+    } catch (_) {
+      box.innerHTML = playerIframe(channel, title);
+    }
+  }
+
   const modal = document.createElement('div');
   modal.className = 'modal-overlay';
   const closeModal = () => { document.body.classList.remove('modal-open'); modal.innerHTML = ''; };
@@ -396,11 +443,12 @@
         <button type="button" class="icon-btn" aria-label="Close" data-close-modal>${icon('x')}</button>
       </div>
       <div class="watch-main">
-        <div class="player"><iframe src="https://player.twitch.tv/?channel=${encodeURIComponent(s.login)}&parent=${host}&autoplay=true" allowfullscreen allow="autoplay; fullscreen" title="Twitch player"></iframe></div>
+        <div class="player" id="watch-player"></div>
         <iframe class="chat" src="https://www.twitch.tv/embed/${encodeURIComponent(s.login)}/chat?parent=${host}" title="Twitch chat"></iframe>
       </div>
     </div>`;
     document.body.classList.add('modal-open');
+    mountPlayer(modal.querySelector('#watch-player'), s.login, `Stream by ${s.name}`);
   }
   function initWatch() {
     document.body.appendChild(modal);
@@ -686,7 +734,7 @@
     sortByDateDesc, upcomingCups, startOfToday, signupOpen, imgPlaceholder, empty, tag, articleCard, cupRow,
     calendarGrid, calLegend, SET_ICON,
     ymd, endOf, fmtDay, fmtWhen, cupDays, cupStart, cupNext, cupEnd, cupPast, cupDates, byStart, fmtDays, signupState, hostOf, keyFacts, cupCard,
-    twitchUrl, creatorCard, creatorSlot, ageOf, streamCard, langName, loadStreams, STREAM_REASONS
+    twitchUrl, creatorCard, creatorSlot, ageOf, mountPlayer, streamCard, langName, loadStreams, STREAM_REASONS
   };
 
   // Symbole im statischen HTML: <span data-icon="arrow"></span> wird zum SVG

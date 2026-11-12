@@ -3,7 +3,7 @@
    Nach dem Turnier erscheint das im Editor eingetragene Ergebnis oben. */
 (function () {
   const D = window.TFTE;
-  const { icon, esc, served, cupPast, cupDays, endOf, toDate, startOfToday, loadStreams, streamCard, fmt, STREAM_REASONS } = window.UI;
+  const { icon, esc, served, cupPast, cupDays, endOf, toDate, startOfToday, loadStreams, streamCard, fmt, STREAM_REASONS, mountPlayer } = window.UI;
   const $ = (id) => document.getElementById(id);
 
   const CHANNEL = 'teamfighttactics';
@@ -39,7 +39,7 @@
   $('crown-load').addEventListener('click', () => {
     const host = encodeURIComponent(location.hostname);
     if (!served || !host) { window.open(`https://www.twitch.tv/${CHANNEL}`, '_blank', 'noopener'); return; }
-    $('crown-player').innerHTML = `<iframe src="https://player.twitch.tv/?channel=${CHANNEL}&parent=${host}&autoplay=true" allowfullscreen allow="autoplay; fullscreen" title="Official Teamfight Tactics broadcast on Twitch"></iframe>`;
+    mountPlayer($('crown-player'), CHANNEL, 'Official Teamfight Tactics broadcast on Twitch');
   });
 
   /* ---------- Offizieller Kanal und Co-Streams ---------- */

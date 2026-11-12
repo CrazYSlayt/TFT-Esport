@@ -1,6 +1,6 @@
 /* Streamer-Profil: Live-Block mit Vorschaubild und Status; der Twitch-Player lädt erst nach dem Klick. Das Profil selbst steht fest im HTML (tools/build-tournaments.js). */
 (function () {
-  const { fmt, esc, served, loadChannels } = window.UI;
+  const { fmt, esc, served, loadChannels, mountPlayer } = window.UI;
   const $ = (id) => document.getElementById(id);
   const login = document.body.dataset.streamer;
   const name = document.querySelector('h1').textContent;
@@ -27,7 +27,7 @@
     if (!served || !host) { window.open(`https://www.twitch.tv/${login}`, '_blank', 'noopener'); return; }
     playing = true;
     $('streamer-live').classList.add('is-playing');
-    $('streamer-player').innerHTML = `<iframe src="https://player.twitch.tv/?channel=${encodeURIComponent(login)}&parent=${host}&autoplay=true" allowfullscreen allow="autoplay; fullscreen" title="Twitch player"></iframe>`;
+    mountPlayer($('streamer-player'), login, `${name} on Twitch`);
   });
 
   renderStatus();

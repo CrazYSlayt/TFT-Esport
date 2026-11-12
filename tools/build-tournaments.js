@@ -147,6 +147,7 @@ function streamerHtml(c) {
   const latest = (c.results || []).slice().sort((a, b) => b.date.localeCompare(a.date))[0];
   // Teams als Zeitleiste ganz rechts in der Karte (neueste oben); ohne career nur das aktuelle Team
   const teams = (c.career || []).length ? c.career : c.team ? [{ team: c.team, from: c.teamSince || '' }] : [];
+  const nextUp = (c.events || []).map((id) => cups.find((x) => x.id === id)).filter((e) => e && !cupPast(e))[0];
   const tiles = c.pro || !(c.extra || []).length ? [
     ['crown', 'World titles', c.worldTitles ? esc(c.worldTitles) : NA, 'Tactician\'s Crown', c.worldTitles ? 'is-gold' : ''],
     ['medal', 'Best at Worlds', worlds ? esc(worlds.place) : NA, worlds ? esc(shortEvent(worlds.event)) : 'no Worlds result yet'],
@@ -154,15 +155,19 @@ function streamerHtml(c) {
     ['star', 'Top 8s', num(st.top8), 'official events'],
     ['calendar', 'Events played', num(st.events), 'official, since 2024'],
     ['swords', 'Latest', latest ? esc(latest.place) : NA, latest ? esc(shortEvent(latest.event)) : 'no result listed'],
-    ['globe', 'Region', c.region ? esc(c.region) : NA, c.country ? esc(c.country) : ''],
-    ['users', 'Real name', c.realName ? esc(c.realName) : NA, c.realName ? '' : 'not public']
+    ['clock', 'Next event', nextUp ? esc(nextUp.name.replace(/ – .*$/, '')) : NA, nextUp ? esc(fmtDays(nextUp).split(' · ').pop()) : 'none announced'],
+    ['target', 'Top 8 rate', st.top8 !== undefined && st.events ? `${Math.round((st.top8 / st.events) * 100)}%` : NA,
+      st.top8 !== undefined && st.events ? `${esc(st.top8)} of ${esc(st.events)} events` : 'not enough data']
   ] : [
     ...(c.extra || []).map(([ic, k, v, sub]) => [ic, esc(k), esc(v), sub ? esc(sub) : '']),
     ['globe', 'Region', c.region ? esc(c.region) : NA, c.country ? esc(c.country) : ''],
-    ['users', 'Real name', c.realName ? esc(c.realName) : NA, ''],
+    ['pin', 'Country', c.country ? esc(c.country) : NA, ''],
     ['shield', 'Role', esc(c.role || 'Streamer'), ''],
     ['twitch', 'Channel', tw ? esc(c.login) : NA, tw ? 'on Twitch' : '']
   ].slice(0, 8);
+  // Name links in der Karte: Vorname klein – Spielername groß – Nachname klein
+  const [first, ...rest] = (c.realName || '').split(' ').filter(Boolean);
+  const last = rest.join(' ');
   const tileIcon = (ic) => (ic === 'crown' ? crown() : icon(ic));
   const photo = c.image
     ? `<img class="pc-img" src="../${esc(c.image)}" alt="${esc(c.name)}" decoding="async" />`
@@ -211,17 +216,16 @@ function streamerHtml(c) {
       <div class="pc-side">
         <div class="pc-photo">
           ${photo}
-          ${c.region ? `<span class="pc-badge">${esc(c.region)}</span>` : ''}
           ${c.worldTitles ? `<span class="pc-crown" title="World titles">${crown()}<b>×${esc(c.worldTitles)}</b></span>` : ''}
         </div>
         <div class="pc-prize"><small>Prize money won</small><b>${c.prize ? esc(c.prize.amount) : NA}</b><small>${c.prize && c.prize.note ? esc(c.prize.note) : c.prize ? 'all official events' : 'not known yet'}</small></div>
         <div class="pc-id">
-          <h1>${esc(c.name)}</h1>
+          ${c.region ? `<p class="pc-region">${icon('globe')}${esc(c.region)}</p>` : ''}
           <p>${[ageOf(c) && (/^born/.test(ageOf(c)) ? esc(ageOf(c).replace('born', 'Born')) : `Age ${esc(ageOf(c).replace(' years', ''))}`), c.country && `${icon('pin')}${esc(c.country)}`].filter(Boolean).join('<span class="pc-dot" aria-hidden="true">·</span>')}</p>
         </div>
       </div>
       <div class="pc-info">
-        <p class="pc-kicker">Player details</p>
+        <h1 class="pc-name">${first ? `<small>${esc(first)}</small> ` : ''}<b>${esc(c.name)}</b>${last ? ` <small>${esc(last)}</small>` : ''}</h1>
         <p class="pc-role">${esc(c.role || 'Streamer')}${c.focus ? ` · ${esc(c.focus)}` : ''}</p>
         <dl class="pc-stats">${tiles.map(([ic, k, v, sub, cls]) => `<div class="${cls || ''}${v === NA ? ' is-empty' : ''}"><span class="pc-ic">${tileIcon(ic)}</span><span class="pc-tx"><dt>${k}</dt><dd>${v}</dd>${sub ? `<small>${sub}</small>` : ''}</span></div>`).join('')}</dl>
         ${tw || links.length ? `<div class="pc-links">${tw ? `<a class="pc-link is-twitch" href="https://www.twitch.tv/${esc(c.login)}" target="_blank" rel="noopener">${icon('twitch')}twitch.tv/${esc(c.login)}</a>` : ''}${links.map(linkBtn).join('')}</div>` : ''}
