@@ -386,50 +386,14 @@
     </a>`;
   }
 
-  /* ---------- Twitch-Player über die Twitch-Player-API (lädt erst nach dem Klick).
-     Twitch hält eingebettete Player beim Wechsel in den Vollbildmodus teils an – pausiert der Player
-     direkt beim Wechsel (± 2,5 s), läuft er automatisch weiter. Ohne API: normales iframe. ---------- */
-  let twitchApi = null;
-  const loadTwitchApi = () => {
-    if (window.Twitch && window.Twitch.Player) return Promise.resolve();
-    if (!twitchApi) {
-      twitchApi = new Promise((ok, fail) => {
-        const s = document.createElement('script');
-        s.src = 'https://player.twitch.tv/js/embed/v1.js';
-        s.onload = ok;
-        s.onerror = () => { twitchApi = null; fail(); };
-        document.head.appendChild(s);
-      });
-    }
-    return twitchApi;
-  };
-  const players = new Set();
-  let fsAt = 0;
-  const onFullscreen = () => {
-    fsAt = Date.now();
-    players.forEach((p) => { if (fsAt - p.pausedAt < 2500) p.player.play(); });
-  };
-  document.addEventListener('fullscreenchange', onFullscreen);
-  document.addEventListener('webkitfullscreenchange', onFullscreen);
+  /* ---------- Twitch-Player: einfaches iframe (lädt erst nach dem Klick).
+     Bekannt (getestet 12.11.): Twitch pausiert eingebettete Player beim Wechsel in den Vollbildmodus – auch auf einer
+     leeren Testseite. Per Code lässt sich das nicht fortsetzen (Twitch nimmt nur einen echten Klick auf Play an),
+     deshalb steht unter den Playern ein Hinweis (PLAYER_HINT). ---------- */
+  const PLAYER_HINT = 'Twitch pauses embedded streams when you switch to fullscreen – press play once and it keeps running.';
   const playerIframe = (channel, title) => `<iframe src="https://player.twitch.tv/?channel=${encodeURIComponent(channel)}&parent=${encodeURIComponent(location.hostname)}&autoplay=true" allowfullscreen allow="autoplay; fullscreen" title="${esc(title)}"></iframe>`;
-  async function mountPlayer(box, channel, title = 'Twitch player') {
-    players.forEach((p) => { if (!p.el.isConnected) players.delete(p); });
-    try {
-      await loadTwitchApi();
-      box.innerHTML = '<div class="twitch-embed"></div>';
-      const el = box.firstElementChild;
-      const player = new window.Twitch.Player(el, { channel, parent: [location.hostname], width: '100%', height: '100%', autoplay: true });
-      const entry = { player, el, pausedAt: 0 };
-      players.add(entry);
-      player.addEventListener(window.Twitch.Player.PAUSE, () => {
-        entry.pausedAt = Date.now();
-        if (entry.pausedAt - fsAt < 2500) player.play();
-      });
-      const frame = el.querySelector('iframe');
-      if (frame) { frame.title = title; frame.setAttribute('allow', 'autoplay; fullscreen'); }
-    } catch (_) {
-      box.innerHTML = playerIframe(channel, title);
-    }
+  function mountPlayer(box, channel, title = 'Twitch player') {
+    box.innerHTML = playerIframe(channel, title);
   }
 
   const modal = document.createElement('div');
@@ -447,6 +411,7 @@
         <div class="player" id="watch-player"></div>
         <iframe class="chat" src="https://www.twitch.tv/embed/${encodeURIComponent(s.login)}/chat?parent=${host}" title="Twitch chat"></iframe>
       </div>
+      <p class="watch-hint">${icon('info')}${PLAYER_HINT}</p>
     </div>`;
     document.body.classList.add('modal-open');
     mountPlayer(modal.querySelector('#watch-player'), s.login, `Stream by ${s.name}`);
@@ -735,7 +700,7 @@
     sortByDateDesc, upcomingCups, startOfToday, signupOpen, imgPlaceholder, empty, tag, articleCard, cupRow,
     calendarGrid, calLegend, SET_ICON,
     ymd, endOf, fmtDay, fmtWhen, cupDays, cupStart, cupNext, cupEnd, cupPast, cupDates, byStart, fmtDays, signupState, hostOf, keyFacts, cupCard,
-    twitchUrl, creatorCard, creatorSlot, ageOf, mountPlayer, streamCard, langName, loadStreams, STREAM_REASONS
+    twitchUrl, creatorCard, creatorSlot, ageOf, mountPlayer, PLAYER_HINT, streamCard, langName, loadStreams, STREAM_REASONS
   };
 
   // Symbole im statischen HTML: <span data-icon="arrow"></span> wird zum SVG

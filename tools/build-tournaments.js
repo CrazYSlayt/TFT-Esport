@@ -246,7 +246,7 @@ function streamerHtml(c) {
           <button type="button" class="btn btn-primary" id="streamer-load">Watch here</button>
           <a class="btn btn-ghost" href="https://www.twitch.tv/${esc(c.login)}" target="_blank" rel="noopener">Open on Twitch${icon('external')}</a>
         </div>
-        <p class="pf-note">The player loads from Twitch only after you click “Watch here”.</p>
+        <p class="pf-note">The player loads from Twitch only after you click “Watch here”. Twitch pauses embedded streams when you switch to fullscreen – press play once and it keeps running.</p>
       </div>
     </section>` : ''}
 
