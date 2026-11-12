@@ -1,5 +1,5 @@
 /* Tactician's Crown: Countdown, Startzeiten in Ortszeit, Twitch-Player (lädt erst auf Klick) und laufende Co-Streams.
-   Die Startzeit 11:00 UTC stammt aus Drittquellen, Riot nennt noch keine Uhrzeit – auf der Seite steht das dazu.
+   Startzeit laut Riots Primer (11.11.): 4 AM PT / 1 PM CET = 12:00 UTC an allen drei Tagen.
    Nach dem Turnier erscheint das im Editor eingetragene Ergebnis oben. */
 (function () {
   const D = window.TFTE;
@@ -7,7 +7,7 @@
   const $ = (id) => document.getElementById(id);
 
   const CHANNEL = 'teamfighttactics';
-  const START = new Date('2026-11-13T11:00:00Z');
+  const START = new Date('2026-11-13T12:00:00Z');
   const cup = D.cups.find((c) => c.id === 'tacticians-crown-set-18');
   const lastDay = endOf(cupDays(cup).slice(-1)[0].to);
 

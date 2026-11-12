@@ -147,7 +147,7 @@ window.TFTE = {
    *   sources: ['https://…'] (Veranstalterquellen), checked: '2026-10-26' (zuletzt geprüft),
    *   result: { top: [{ name, points }] (Platz 1, 2, … – Punkte optional), note: 'kurzer Hinweis', source: 'https://…' } }
    *   page: 'datei.html' (eigene Seite, z. B. Weltmeisterschaft, steht dann groß oben auf der Startseite),
-   *   startReported: '2026-11-13T11:00:00Z' (gemeldete Startzeit in UTC für den Countdown, optional)
+   *   startReported: '2026-11-13T12:00:00Z' (gemeldete Startzeit in UTC für den Countdown, optional)
    *   „result“ trägt die Redaktion nach dem Turnier ein; leer = Ergebnis noch nicht eingetragen (Live Matches, Turnierseite).
    */
   cups: [],

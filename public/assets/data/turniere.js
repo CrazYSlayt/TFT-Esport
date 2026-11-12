@@ -213,7 +213,7 @@ window.TFTE.cups = [
     "id": "tacticians-crown-set-18",
     "name": "Tactician's Crown – Set 18 World Championship",
     "page": "tft-tacticians-crown.html",
-    "startReported": "2026-11-13T11:00:00Z",
+    "startReported": "2026-11-13T12:00:00Z",
     "level": "offiziell",
     "region": "global",
     "organizer": "Riot Games",
