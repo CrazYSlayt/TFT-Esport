@@ -161,7 +161,7 @@ function streamerHtml(c) {
   ] : [
     ...(c.extra || []).map(([ic, k, v, sub]) => [ic, esc(k), esc(v), sub ? esc(sub) : '']),
     ['globe', 'Region', c.region ? esc(c.region) : NA, c.country ? esc(c.country) : ''],
-    ['pin', 'Country', c.country ? esc(c.country) : NA, ''],
+    ['pin', 'Lives in', c.lives ? esc(c.lives) : c.country ? esc(c.country) : NA, ''],
     ['shield', 'Role', esc(c.role || 'Streamer'), ''],
     ['twitch', 'Channel', tw ? esc(c.login) : NA, tw ? 'on Twitch' : '']
   ].slice(0, 8);

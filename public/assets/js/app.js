@@ -321,6 +321,7 @@
     : `<span class="creator-initial" aria-hidden="true">${esc(c.name.charAt(0))}</span>`);
   // Alter aus born ('2001-06-26' → „25“; nur Jahr '2006' → „born 2006“), sonst leer
   function ageOf(c, now = new Date()) {
+    if (c.age) return `${c.age} years`;   // eigene Angabe ohne Geburtsdatum (age + ageChecked)
     if (!c.born) return '';
     if (!/^\d{4}-\d{2}-\d{2}$/.test(c.born)) return `born ${c.born.slice(0, 4)}`;
     const [y, m, d] = c.born.split('-').map(Number);
