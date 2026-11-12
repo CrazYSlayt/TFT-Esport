@@ -177,10 +177,9 @@ window.TFTE = {
       "realName": "Claudio",
       "age": 34,
       "ageChecked": "2026-11-12",
-      "country": "Italy",
-      "lives": "Frankfurt, Germany",
+      "country": "Germany",
       "region": "EMEA",
-      "about": "CrazYSlayt (Claudio) is an Italian TFT player and streamer based in Frankfurt, Germany. He has been a TFT Challenger since Set 15 and a coach since Set 17, with a peak of 1,002 LP. He founded TFTClimb, the home of tier lists, tools and coaching for Teamfight Tactics, together with his partner Kevin10K, and runs TFT E-Sports.",
+      "about": "CrazYSlayt (Claudio) is a German TFT player and streamer from Frankfurt who streams in German. He has been a TFT Challenger since Set 15 and a coach since Set 17, with a peak of 1,002 LP. He founded TFTClimb, the home of tier lists, tools and coaching for Teamfight Tactics, together with his partner Kevin10K, and runs TFT E-Sports.",
       "image": "assets/img/streamers/crazyslayt.png",
       "links": [
         {
