@@ -43,6 +43,13 @@
         <p id="live-sub"></p>
       </div>
       <div class="live-cards" id="live-cards"></div>
+      <!-- Weltmeisterschaft: Lobbys der laufenden Runde und Live-Tabelle aus dem Score Sheet (worlds-live.js, standings.js) -->
+      <div class="wl" id="worlds-live" hidden>
+        <div class="wl-head"><h3 id="wl-title">Tactician's Crown live lobbies</h3><p id="wl-sub"></p><p class="wl-updated" id="wl-updated"></p></div>
+        <div id="wl-lobbies"></div>
+        <h3 class="wl-table-title" id="wl-table-title">Tactician's Crown live standings</h3>
+        <div data-standings="live"></div>
+      </div>
       <img class="janna janna-caster at-r" src="assets/img/janna/janna-caster-bust.png" alt="" decoding="async" />
     </section>
 
@@ -62,15 +69,19 @@
       </section>
     </div>
 
-    <p class="editor-note"><span data-icon="info"></span>Dates, streams and results are added by the editors and checked against organizer sources. Live points from running lobbies will follow once a reliable data source is connected.</p>
+    <p class="editor-note"><span data-icon="info"></span>Dates, streams and results are added by the editors and checked against organizer sources. During the Tactician's Crown the live lobbies and standings come straight from the tournament score sheet and update automatically.</p>
   </main>
 
   <footer id="site-footer"></footer>
 
   <script src="assets/js/data.js"></script>
   <script src="assets/data/turniere.js"></script>
+  <script src="assets/data/crown-standings.js"></script>
   <script src="assets/data/set-termine.js"></script>
   <script src="assets/js/app.js"></script>
+  <script src="assets/js/crown-live.js"></script>
+  <script src="assets/js/standings.js"></script>
+  <script src="assets/js/worlds-live.js"></script>
   <script src="assets/js/live.js"></script>
 </body>
 </html>

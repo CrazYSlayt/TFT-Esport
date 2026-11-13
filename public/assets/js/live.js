@@ -42,7 +42,8 @@
       <p class="lc-meta">${icon('pin')}${esc(window.UI.where(c))}${b.label ? ` · ${esc(b.label)}` : ''} · ${esc(when)}</p>
       ${top(c).length
         ? `<div class="lc-score"><p class="lc-score-head">Current standings <small>entered by the editors</small></p>${standings(c, 4)}</div>`
-        : `<div class="lc-score is-empty">${icon('info')}<span>Live points will follow once a data source is connected.</span></div>`}
+        : c.id === 'tacticians-crown-set-18' ? `<div class="lc-score is-empty">${icon('info')}<span>Live lobbies and standings below – straight from the tournament score sheet.</span></div>`
+      : `<div class="lc-score is-empty">${icon('info')}<span>Live points will follow once a data source is connected.</span></div>`}
       <div class="lc-watch"><span>Watch:</span>${watch(c)}</div>
     </article>`;
   }

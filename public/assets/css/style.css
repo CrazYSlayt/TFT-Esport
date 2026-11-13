@@ -1820,3 +1820,59 @@ body.modal-open .modal-overlay { display: grid; }
 .cd-tagline .gi { width: 18px; height: 18px; border-radius: 4px; }
 .cd-pod-rank .gi { width: 30px; height: 30px; border-radius: 7px; }
 .feature-tag .gi { width: 20px; height: 20px; border-radius: 5px; }
+
+/* Live-Tabelle */
+.sg-live { display: inline-flex; align-items: center; gap: 6px; margin-right: 8px; font-weight: 800; color: var(--green); }
+.sg-chip.is-empty { background: transparent; color: var(--muted); box-shadow: inset 0 0 0 1px var(--line); }
+.eb-st-head .rec-dot { margin-right: 5px; }
+
+
+/* Finale: Checkmate ab 20 Punkten, Weltmeister */
+.sg-check { display: inline-block; margin-left: 4px; padding: 1px 7px; border-radius: 5px; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; background: var(--gold); color: var(--green-deep); }
+.sg-champ { display: inline-flex; align-items: center; gap: 4px; margin-left: 4px; padding: 1px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; background: var(--green-deep); color: var(--gold); }
+.sg-champ .gi { width: 16px; height: 16px; }
+
+.eb-st-champ { width: 18px; height: 18px; margin-right: 4px; }
+.eb-st-cm { padding: 0 5px; border-radius: 4px; font-size: 10px; font-weight: 800; background: var(--gold); color: var(--green-deep); }
+
+
+/* Live Matches: Lobbys des Tactician's Crown (worlds-live.js) */
+.wl { position: relative; z-index: 1; min-width: 0; max-width: 100%; margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line); }
+.wl-head h3 { font-size: clamp(20px, 1.8vw, 26px); color: var(--green-deep); }
+.wl-head p { margin-top: 4px; font-size: 14px; color: var(--muted); }
+.wl-updated { font-size: 12px; }
+.wl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; margin-top: 14px; }
+.wl-grid.is-final { grid-template-columns: minmax(0, 760px); }
+.wl-lobby { padding: 12px 14px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
+.wl-lobby-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px; }
+.wl-lobby-head b { font-size: 17px; color: var(--green-deep); }
+.wl-lobby-head span { font-size: 12px; color: var(--muted); }
+.wl-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.wl-table th { padding: 4px 4px; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); text-align: center; }
+.wl-table th:first-child { text-align: left; }
+.wl-table td { padding: 4px; border-top: 1px solid var(--line); }
+.wl-name { max-width: 0; width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.wl-name a { font-weight: 800; color: var(--ink); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wl-name a:hover { color: var(--green); }
+.wl-name small { font-size: 11px; color: var(--muted); }
+.wl-name .sg-reg { font-size: 10px; padding: 1px 5px; margin-left: 6px; vertical-align: 1px; }
+.wl-g, .wl-pts { text-align: center; width: 40px; }
+.wl-pts b { color: var(--green-deep); }
+.wl-table .sg-chip { width: 24px; height: 24px; font-size: 12px; }
+.wl-table tr.is-champ td { background: var(--gold-soft); }
+.wl-champ { width: 18px; height: 18px; margin-right: 4px; }
+.wl-table-title { margin: 22px 0 10px; font-size: clamp(18px, 1.6vw, 22px); color: var(--green-deep); }
+/* Lobbys und Tabelle im dunklen Kasten „Live now“ lesbar */
+.live-box .wl { border-top-color: rgba(255, 255, 255, .18); }
+.live-box .wl-head h3, .live-box .wl-table-title { color: #fff; }
+.live-box .wl-head p { color: #d7e8dc; }
+.live-box .sg-bar .chip { background: rgba(255, 255, 255, .1); border-color: rgba(255, 255, 255, .22); color: #fff; }
+.live-box .sg-bar .chip[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--green-deep); }
+.live-box .sg-bar .chip-count { color: inherit; opacity: .75; }
+.live-box .sg-legend { color: #d7e8dc; }
+.live-box .sg-live { color: var(--gold); }
+.live-box .sg-note { color: #d7e8dc; }
+.live-box .sg-note a { color: var(--gold); }
+.live-box .sg-note .i { color: var(--gold); }
+
+@media (max-width: 760px) { .wl-grid { grid-template-columns: minmax(0, 1fr); } .wl-head h3 { overflow-wrap: anywhere; } .wl-table { table-layout: fixed; } .wl-table th:not(:first-child) { width: 36px; } .wl-table .sg-chip { width: 22px; height: 22px; } .wl-name .sg-reg { display: none; } }
