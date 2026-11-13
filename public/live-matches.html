@@ -37,37 +37,29 @@
       </div>
     </section>
 
-    <section class="live-box" aria-labelledby="live-title">
+    <!-- Live now: Lobbys der laufenden Runde des Tactician's Crown (worlds-live.js, Score Sheet) – ohne Live-Daten ein kurzer Hinweis -->
+    <section class="live-box" id="worlds-live" aria-labelledby="wl-title">
       <div class="live-box-head">
-        <h2 id="live-title"></h2>
-        <p id="live-sub"></p>
+        <h2 id="wl-title"><span class="rec-dot" aria-hidden="true"></span>Live now</h2>
+        <p id="wl-sub">Loading the live lobbies …</p>
+        <p class="wl-updated" id="wl-updated"></p>
       </div>
-      <div class="live-cards" id="live-cards"></div>
-      <!-- Weltmeisterschaft: Lobbys der laufenden Runde und Live-Tabelle aus dem Score Sheet (worlds-live.js, standings.js) -->
-      <div class="wl" id="worlds-live" hidden>
-        <div class="wl-head"><h3 id="wl-title">Tactician's Crown live lobbies</h3><p id="wl-sub"></p><p class="wl-updated" id="wl-updated"></p></div>
-        <div id="wl-lobbies"></div>
-        <h3 class="wl-table-title" id="wl-table-title">Tactician's Crown live standings</h3>
-        <div data-standings="live"></div>
-      </div>
+      <div class="wl" id="wl-lobbies"></div>
       <img class="janna janna-caster at-r" src="assets/img/janna/janna-caster-bust.png" alt="" decoding="async" />
     </section>
 
-    <div class="live-cols">
-      <section class="side-card" aria-labelledby="today-title">
-        <div class="panel-head"><h2 id="today-title">Today</h2><span id="today-date"></span></div>
-        <div id="today"></div>
-      </section>
-      <section class="side-card" aria-labelledby="week-title">
-        <div class="panel-head"><h2 id="week-title">This week</h2><span>next 7 days</span></div>
-        <div id="week"></div>
-      </section>
-      <section class="side-card" aria-labelledby="results-title">
-        <div class="panel-head"><h2 id="results-title">Latest results</h2><span>official events</span></div>
-        <div id="results"></div>
-        <a class="link-arrow" href="tft-tournaments.html?view=list&amp;range=all">All tournaments, including past ones<span data-icon="arrow"></span></a>
-      </section>
-    </div>
+    <!-- Live-Tabelle unter dem Kasten -->
+    <section class="section" id="wl-standings" aria-labelledby="wl-table-title" hidden>
+      <h2 class="block-title" id="wl-table-title">Tactician's Crown live standings</h2>
+      <p class="section-sub" id="wl-table-sub">All 40 players, updated automatically from the tournament score sheet.</p>
+      <div class="wl-st-grid">
+        <div data-standings="live"></div>
+        <aside class="wl-regions" aria-labelledby="wl-reg-title">
+          <h3 id="wl-reg-title">Average placement by region</h3>
+          <div id="wl-regions"></div>
+        </aside>
+      </div>
+    </section>
 
     <p class="editor-note"><span data-icon="info"></span>Dates, streams and results are added by the editors and checked against organizer sources. During the Tactician's Crown the live lobbies and standings come straight from the tournament score sheet and update automatically.</p>
   </main>
@@ -82,6 +74,5 @@
   <script src="assets/js/crown-live.js"></script>
   <script src="assets/js/standings.js"></script>
   <script src="assets/js/worlds-live.js"></script>
-  <script src="assets/js/live.js"></script>
 </body>
 </html>
