@@ -1786,3 +1786,8 @@ body.modal-open .modal-overlay { display: grid; }
 .eb-list .eb-st { display: flex; flex-direction: column; min-height: 0; flex: 1; }
 .eb-list .eb-st-list { flex: 1; min-height: 0; max-height: none; }
 @media (max-width: 1200px) { .eb-list .eb-st-list { max-height: 420px; } .eb-list:has(.eb-st) { overflow: visible; } }
+
+/* Live Streams: eigener Kanal oben rechts (wie auf der Startseite) */
+.streams-side { display: grid; justify-items: end; gap: 10px; }
+@media (max-width: 760px) { .streams-side { justify-items: start; } }
+

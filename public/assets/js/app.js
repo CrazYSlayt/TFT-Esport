@@ -502,13 +502,10 @@
   const OWN_CHANNEL = { login: 'crazyslayt', name: 'CrazYSlayt' };
   function renderLiveBar() {
     const url = twitchUrl(OWN_CHANNEL.login);
-    let box = document.getElementById('hub-own');
-    if (!box) {
-      const search = document.querySelector('#site-header .hb-search');
-      if (!search) return;
-      search.insertAdjacentHTML('beforebegin', `<a class="hb-cell hb-own" id="hb-own" href="${url}" target="_blank" rel="noopener"></a>`);
-      box = document.getElementById('hb-own');
-    } else box.href = url;
+    // Eigener Kanal nur dort, wo die Seite einen Platz dafür hat (Startseite und Live Streams oben rechts), nicht im Menü
+    const box = document.getElementById('hub-own');
+    if (!box) return;
+    box.href = url;
     const show = (ch) => {
       const live = !!(ch && ch.live);
       box.classList.toggle('is-live', live);
