@@ -142,7 +142,7 @@
     const prof = (r) => (r.login ? `tft-streamers/${esc(r.login)}.html` : 'tft-tacticians-crown.html#standings');
     const firstOut = t.rows.findIndex((r) => r.out);
     return `<div class="eb-st">
-      <p class="eb-st-head">${window.UI.gameIcon('crown')}<b>Tactician's Crown</b><span>${t.live ? '<span class="rec-dot" aria-hidden="true"></span>' : ''}${esc(t.label)}</span></p>
+      <p class="eb-st-head">${window.UI.gameIcon('crown')}<b>Tactician's Crown</b><span>${esc(t.label)}</span></p>
       <ol class="eb-st-list">${t.rows.map((r, i) => `${i === firstOut && i > 0 ? `<li class="eb-st-cut"><span>${t.day === 1 ? 'Cut' : 'Out'}</span></li>` : ''}<li class="${r.out ? 'is-out' : ''}${r.rank <= 3 && !r.out ? ' is-top' : ''}">
         <span class="eb-st-rank">${r.rank}</span><a href="${prof(r)}">${r.champion ? window.UI.gameIcon('crown', 'eb-st-champ') : ''}${esc(r.name)}${r.checkmate ? ' <small class="eb-st-cm">CM</small>' : ''}</a><span class="sg-reg r-${esc(r.region.toLowerCase())}">${esc(r.region)}</span><b>${r.pts}</b></li>`).join('')}</ol>
       <div class="eb-st-links"><a class="link-arrow" href="tft-tacticians-crown.html#standings">Full standings${icon('arrow')}</a>${recapDay ? `<a class="link-arrow" href="news/tacticians-crown-2026-day-${recapDay}.html">Day ${recapDay} recap${icon('arrow')}</a>` : ''}</div>

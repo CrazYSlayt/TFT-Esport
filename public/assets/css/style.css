@@ -1909,3 +1909,14 @@ body.modal-open .modal-overlay { display: grid; }
   #worlds-live .live-box-head h2 { font-size: 22px; line-height: 1.15; }
   #worlds-live > .janna { top: -56px; right: -4px; bottom: auto; height: 170px; }
 }
+
+/* Live Matches: AVP je Region als schlichte Tabelle */
+.wl-avp { width: 100%; border-collapse: collapse; font-size: 15px; }
+.wl-avp th { padding: 6px 8px; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); text-align: left; border-bottom: 1px solid var(--line); }
+.wl-avp th:last-child, .wl-avp td:last-child { text-align: right; }
+.wl-avp td { padding: 9px 8px; border-bottom: 1px solid var(--line); }
+.wl-avp tr:last-child td { border-bottom: 0; }
+.wl-avp td:first-child { width: 28px; font-weight: 800; color: var(--muted); }
+.wl-avp b { font-size: 18px; color: var(--green-deep); }
+.wl-avp .sg-reg { font-size: 12px; }
+@media (max-width: 1100px) { .wl-regions { grid-template-columns: minmax(0, 1fr); } }
