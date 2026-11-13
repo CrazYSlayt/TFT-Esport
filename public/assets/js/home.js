@@ -122,8 +122,29 @@
       <span class="eb-meta">${w ? `<span class="eb-winner">${icon('trophy')}${esc(w)}</span>` : '<span class="is-muted">Result not entered yet</span>'}</span>
     </a>`;
   }
+  // Weltmeisterschaft: aktuelle Tabelle (assets/data/crown-standings.js), solange das Turnier läuft der erste Reiter
+  const CS = D.crownStandings;
+  const crownCup = D.cups.find((c) => c.id === 'tacticians-crown-set-18');
+  const csDay = CS ? Math.max(...Object.keys(CS.days).map(Number)) : 0;
+  const CUT = { 1: 32, 2: 8 };
+  const showWorlds = !!csDay && crownCup && cupEnd(crownCup) > new Date(Date.now() - 3 * 864e5);
+  if (showWorlds) tab = 'worlds';
+  else { const t = document.querySelector('[data-tab="worlds"]'); if (t) t.remove(); }
+  function ebStandings() {
+    const rows = CS.days[csDay] || [];
+    const cut = CUT[csDay] || 0;
+    const prof = (r) => (r.login ? `tft-streamers/${esc(r.login)}.html` : 'tft-tacticians-crown.html#standings');
+    return `<div class="eb-st">
+      <p class="eb-st-head">${crown()}<b>Tactician's Crown</b><span>after Day ${csDay}${cut ? ` · top ${cut} advance` : ''}</span></p>
+      <ol class="eb-st-list">${rows.map((r) => `${cut && r.rank === cut + 1 ? '<li class="eb-st-cut"><span>Cut</span></li>' : ''}<li class="${cut && r.rank > cut ? 'is-out' : ''}${r.rank <= 3 ? ' is-top' : ''}">
+        <span class="eb-st-rank">${r.rank}</span><a href="${prof(r)}">${esc(r.name)}</a><span class="sg-reg r-${esc(r.region.toLowerCase())}">${esc(r.region)}</span><b>${r.pts}</b></li>`).join('')}</ol>
+      <div class="eb-st-links"><a class="link-arrow" href="tft-tacticians-crown.html#standings">Full standings${icon('arrow')}</a><a class="link-arrow" href="news/tacticians-crown-2026-day-${csDay}.html">Day ${csDay} recap${icon('arrow')}</a></div>
+    </div>`;
+  }
   function renderEsports() {
     document.querySelectorAll('[data-tab]').forEach((b) => b.setAttribute('aria-selected', b.dataset.tab === tab));
+    document.querySelector('.eb-where').hidden = tab === 'worlds';
+    if (tab === 'worlds') { $('eb-list').innerHTML = ebStandings(); return; }
     const list = tab === 'next' ? mine(upcoming).slice(0, 6) : mine(pastOfficial).slice(0, 6);
     $('eb-list').innerHTML = list.length ? list.map(tab === 'next' ? ebNext : ebResult).join('')
       : empty({ ic: tab === 'next' ? 'calendar' : 'trophy', cls: 'empty-tight', title: tab === 'next' ? 'No upcoming tournaments for this selection' : 'No results for this selection yet' });

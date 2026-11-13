@@ -1760,3 +1760,29 @@ body.modal-open .modal-overlay { display: grid; }
   .cd-opt.is-pop, .cd-opt[aria-pressed="true"] .i, .cd-toast.is-on { animation: none; }
   .cd-toast.is-on { opacity: 1; transform: translate(-50%, 0); }
 }
+
+/* Startseite, Esports-Spalte: Reiter „Worlds“ mit der aktuellen Crown-Tabelle */
+.eb-st { display: grid; gap: 8px; }
+.eb-st-head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 13px; color: var(--muted); }
+.eb-st-head svg { width: 18px; height: 18px; color: var(--gold); --crown-cut: var(--surface); }
+.eb-st-head b { font-size: 15px; color: var(--green-deep); }
+.eb-st-list { list-style: none; margin: 0; padding: 0 4px 0 0; max-height: 430px; overflow-y: auto; display: grid; gap: 2px; scrollbar-width: thin; }
+.eb-st-list li { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto 30px; align-items: center; gap: 8px; padding: 5px 8px; border-radius: 8px; font-size: 14px; }
+.eb-st-list li:nth-child(odd) { background: var(--sage); }
+.eb-st-list li.is-top .eb-st-rank { color: var(--gold-deep); }
+.eb-st-list li.is-top:first-child { background: var(--gold-soft); }
+.eb-st-list li a { font-weight: 700; color: var(--ink); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.eb-st-list li a:hover { color: var(--green); }
+.eb-st-list li b { text-align: right; color: var(--green-deep); }
+.eb-st-list .sg-reg { font-size: 10px; padding: 1px 6px; }
+.eb-st-rank { font-weight: 800; color: var(--muted); text-align: center; }
+.eb-st-list li.is-out { opacity: .55; }
+.eb-st-list li.eb-st-cut { display: block; padding: 3px 0; background: none; }
+.eb-st-cut span { display: block; padding: 2px; border-radius: 6px; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-align: center; text-transform: uppercase; color: #fff; background: repeating-linear-gradient(135deg, #c0392b 0 8px, #d4493a 8px 16px); }
+.eb-st-links { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 14px; padding-top: 4px; }
+.eb-tabs:has(> :nth-child(3)) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.eb-tabs:has(> :nth-child(3)) button { font-size: 14px; }
+.eb-list:has(.eb-st) { overflow: hidden; display: flex; flex-direction: column; }
+.eb-list .eb-st { display: flex; flex-direction: column; min-height: 0; flex: 1; }
+.eb-list .eb-st-list { flex: 1; min-height: 0; max-height: none; }
+@media (max-width: 1200px) { .eb-list .eb-st-list { max-height: 420px; } .eb-list:has(.eb-st) { overflow: visible; } }
