@@ -91,7 +91,7 @@ ${indexable(c) ? '' : '  <meta name="robots" content="noindex, follow" />\n'}  <
         </header>
 
         <section class="glance" aria-labelledby="glance-title">
-          <h2 id="glance-title">Everything at a glance</h2>
+          <h2 id="glance-title">${esc(c.name)}: dates, format and rules</h2>
           <div id="cup-facts">${p.facts}</div>
         </section>
 
@@ -100,7 +100,7 @@ ${indexable(c) ? '' : '  <meta name="robots" content="noindex, follow" />\n'}  <
 
       <aside class="aside-card" aria-labelledby="signup-title">
         <div class="aside-stage">
-          <h2 id="signup-title">Sign-up</h2>
+          <h2 id="signup-title">How do you sign up for ${esc(c.name)}?</h2>
           <img class="janna janna-thumbs-up at-r" src="../assets/img/janna/janna-thumbs-up-bust.png" alt="" decoding="async" />
         </div>
         <div class="aside-body" id="cup-aside-body">${p.aside}</div>
@@ -151,7 +151,7 @@ function streamerHtml(c) {
   const tiles = c.pro || !(c.extra || []).length ? [
     ['crown', 'World titles', c.worldTitles ? esc(c.worldTitles) : NA, 'Tactician\'s Crown', c.worldTitles ? 'is-gold' : ''],
     ['medal', 'Best at Worlds', worlds ? esc(worlds.place) : NA, worlds ? esc(shortEvent(worlds.event)) : 'no Worlds result yet'],
-    ['trophy', 'Wins', num(st.wins), 'official events'],
+    ['spatula', 'Wins', num(st.wins), 'official events'],
     ['star', 'Top 8s', num(st.top8), 'official events'],
     ['calendar', 'Events played', num(st.events), 'official, since 2024'],
     ['swords', 'Latest', latest ? esc(latest.place) : NA, latest ? esc(shortEvent(latest.event)) : 'no result listed'],
@@ -168,7 +168,10 @@ function streamerHtml(c) {
   // Name links in der Karte: Vorname klein – Spielername groß – Nachname klein
   const [first, ...rest] = (c.realName || '').split(' ').filter(Boolean);
   const last = rest.join(' ');
-  const tileIcon = (ic) => (ic === 'crown' ? crown() : icon(ic));
+  // Spielsymbole: Krone (Tactician's Crown), Spatula (Siege), rank:<stufe> → Rang-Emblem; sonst Linien-Symbol
+  const gi = (file) => `<img class="gi" src="../assets/img/game/${file}" alt="" width="64" height="64" loading="lazy" decoding="async" />`;
+  const tileIcon = (ic) => (ic === 'crown' ? gi('tacticians-crown.png') : ic === 'spatula' ? gi('spatula.png')
+    : /^rank:/.test(ic) ? `<img class="rank-emb" src="../assets/img/ranks/${esc(ic.slice(5))}-s.webp" alt="" width="40" height="40" loading="lazy" decoding="async" />` : icon(ic));
   const photo = c.image
     ? `<img class="pc-img" src="../${esc(c.image)}" alt="${esc(c.name)}" decoding="async" />`
     : `<span class="pc-initial" aria-hidden="true">${esc(c.name.charAt(0))}</span>`;
@@ -216,7 +219,7 @@ function streamerHtml(c) {
       <div class="pc-side">
         <div class="pc-photo">
           ${photo}
-          ${c.worldTitles ? `<span class="pc-crown" title="World titles">${crown()}<b>×${esc(c.worldTitles)}</b></span>` : ''}
+          ${c.worldTitles ? `<span class="pc-crown" title="World titles"><img src="../assets/img/game/tacticians-crown.png" alt="" width="64" height="64" decoding="async" /><b>×${esc(c.worldTitles)}</b></span>` : ''}
         </div>
         <div class="pc-prize"><small>Prize money won</small><b>${c.prize ? esc(c.prize.amount) : NA}</b><small>${c.prize && c.prize.note ? esc(c.prize.note) : c.prize ? 'all official events' : 'not known yet'}</small></div>
         <div class="pc-id">
@@ -257,7 +260,7 @@ function streamerHtml(c) {
         <p>${esc(c.about || '')}</p>
       </section>
       ${(c.results || []).length ? `<section class="pf-box" aria-labelledby="results-title">
-        <h2 id="results-title">Tournament history</h2>
+        <h2 id="results-title">${esc(c.name)}'s TFT tournament history</h2>
         <p class="pf-sub-left">${esc(c.name)}'s selected finishes, newest first</p>
         <div class="pf-table-wrap"><table class="pf-table">
           <thead><tr><th>Date</th><th>Place</th><th>Tournament</th><th>Prize</th></tr></thead>
@@ -266,7 +269,7 @@ function streamerHtml(c) {
       </section>` : ''}
       </div>
       ${upcoming.length ? `<section class="pf-box" aria-labelledby="next-title">
-        <h2 id="next-title">Next tournaments</h2>
+        <h2 id="next-title">${esc(c.name)}'s next TFT tournaments</h2>
         <ul class="deadline-list">${upcoming.map((e) => `<li><a href="${cupUrl(e)}"><b>${esc(e.name)}</b><span class="is-muted">${esc(fmtDays(e).split(' · ').pop())}</span></a></li>`).join('')}</ul>
       </section>` : ''}
     </div>

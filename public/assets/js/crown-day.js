@@ -17,7 +17,7 @@
   /* Podium: die ersten vier */
   if ($('cd-podium')) {
     $('cd-podium').innerHTML = rows.slice(0, 4).map((r) => `<a class="cd-pod is-${r.rank}" href="${prof(r)}">
-        <span class="cd-pod-rank">${r.rank === 1 ? crown() : ''}${r.rank}</span>
+        <span class="cd-pod-rank">${r.rank === 1 ? window.UI.gameIcon('crown') : ''}${r.rank}</span>
         <span class="cd-pod-who"><b>${esc(r.name)}</b><small>${esc(r.tag ? `${r.tag} · ` : '')}${esc(r.region)}</small></span>
         <span class="cd-pod-pts"><b>${r.pts}</b><small>points</small></span>
         <span class="cd-pod-games">${chips(r.games)}</span>

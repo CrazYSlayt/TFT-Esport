@@ -42,6 +42,14 @@
   /* Krone aus dem Logo */
   const crown = (cls = '') =>
     `<svg class="crown ${cls}" viewBox="0 0 48 40" aria-hidden="true"><path fill="currentColor" d="M24 2.5 30.5 15 40 6.5l-2.8 22.5H10.8L8 6.5 17.5 15z"/><path fill="currentColor" d="M10.5 32h27a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-27A1.5 1.5 0 0 1 9 36.5v-3a1.5 1.5 0 0 1 1.5-1.5z"/><path fill="none" stroke="var(--crown-cut, #F7F3EA)" stroke-width="2.2" stroke-linecap="round" d="M24 14v10"/></svg>`;
+  // Offizielle Spielsymbole (Riot, über CommunityDragon / League Wiki, lokal in assets/img/game) – erlaubt nach Riots
+  // „Legal Jibber Jabber“; Logos und Marken (TFT-Logo, Event-Logos) dagegen nicht.
+  const GAME_IC = { crown: 'assets/img/game/tacticians-crown.png', spatula: 'assets/img/game/spatula.png', cape: 'assets/img/game/tacticians-cape.png' };
+  const gameIcon = (k, cls = '', alt = '') => `<img class="gi ${cls}" src="${link(GAME_IC[k] || GAME_IC.crown)}" alt="${esc(alt)}" width="64" height="64" loading="lazy" decoding="async" />`;
+  // Rang-Emblem zum ersten Rang im Text („Diamond or higher“ → Diamant-Emblem)
+  const RANKS = ['challenger', 'grandmaster', 'master', 'diamond', 'emerald', 'platinum', 'gold', 'silver', 'bronze', 'iron'];
+  const rankOf = (text) => { const t = String(text || '').toLowerCase(); return RANKS.find((r) => new RegExp(`\\b${r}\\b`).test(t)) || ''; };
+  const rankEmblem = (r, cls = '') => (r ? `<img class="rank-emb ${cls}" src="${link(`assets/img/ranks/${r}-s.webp`)}" alt="${r.charAt(0).toUpperCase() + r.slice(1)}" width="40" height="40" loading="lazy" decoding="async" />` : '');
 
   /* ---------- Helfer ---------- */
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -255,7 +263,7 @@
       : 'No sign-up – qualified players only';
     return `<dl class="keyfacts">
       <div><dt>${icon('users')}Who can enter?</dt><dd>${esc(c.eligibility || 'Not announced yet')}</dd></div>
-      <div><dt>${icon('shield')}Rank requirement</dt><dd>${esc(c.rank || 'Not announced yet')}</dd></div>
+      <div><dt>${icon('shield')}Rank requirement</dt><dd>${rankEmblem(rankOf(c.rank), 'kf-rank')}${esc(c.rank || 'Not announced yet')}</dd></div>
       <div class="kf-${s.key}"><dt>${icon('clock')}Sign-up deadline</dt><dd>${esc(deadline)}</dd></div>
       <div><dt>${icon('calendar')}Game days</dt><dd>${esc(fmtDays(c) || 'Not announced yet')}</dd></div>
       <div><dt>${icon('link')}Where to sign up</dt><dd>${where}</dd></div>
@@ -336,7 +344,7 @@
       <div class="creator-top">${creatorImage(c)}
         ${c.noTwitch ? '' : `<span class="creator-live" data-live="${esc(c.login)}"><span class="dot" aria-hidden="true"></span><span>Offline</span></span>`}
         ${c.region ? `<span class="creator-region">${esc(c.region)}</span>` : ''}
-        ${c.worldTitles ? `<span class="creator-crown" title="World titles">${crown()}×${esc(c.worldTitles)}</span>` : ''}
+        ${c.worldTitles ? `<span class="creator-crown" title="World titles">${gameIcon('crown')}×${esc(c.worldTitles)}</span>` : ''}
       </div>
       <div class="card-body">
         <span class="creator-text">
@@ -686,7 +694,7 @@
         <nav aria-label="Network"><h4>Network</h4><a class="footer-network" href="${D.site.network.url}" target="_blank" rel="noopener">${esc(D.site.network.name)}${icon('external')}</a><span class="footer-note">Tier lists, tools and coaching</span></nav>
       </div>
       <div class="wrap footer-legal">
-        <p>${D.site.name} isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</p>
+        <p>${D.site.name} was created under Riot Games' “Legal Jibber Jabber” policy using assets owned by Riot Games. Riot Games does not endorse or sponsor this project. ${D.site.name} doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</p>
         <p>© ${new Date().getFullYear()} ${esc(D.site.name)} · Part of the ${esc(D.site.network.name)} Network · <a href="${link('legal-notice.html')}">Legal notice</a> · <a href="${link('privacy.html')}">Privacy</a> · <a href="${link('privacy.html')}" data-ckb>Cookie settings</a></p>
       </div>`;
   }
@@ -697,12 +705,13 @@
     sortByDateDesc, upcomingCups, startOfToday, signupOpen, imgPlaceholder, empty, tag, articleCard, cupRow,
     calendarGrid, calLegend, SET_ICON,
     ymd, endOf, fmtDay, fmtWhen, cupDays, cupStart, cupNext, cupEnd, cupPast, cupDates, byStart, fmtDays, signupState, hostOf, keyFacts, cupCard,
-    twitchUrl, creatorCard, creatorSlot, ageOf, mountPlayer, PLAYER_HINT, streamCard, langName, loadStreams, STREAM_REASONS
+    twitchUrl, creatorCard, creatorSlot, ageOf, mountPlayer, PLAYER_HINT, gameIcon, rankOf, rankEmblem, streamCard, langName, loadStreams, STREAM_REASONS
   };
 
   // Symbole im statischen HTML: <span data-icon="arrow"></span> wird zum SVG
   document.querySelectorAll('[data-icon]').forEach((el) => { el.outerHTML = icon(el.dataset.icon); });
   document.querySelectorAll('[data-crown]').forEach((el) => { el.outerHTML = crown(); });
+  document.querySelectorAll('[data-game]').forEach((el) => { el.outerHTML = gameIcon(el.dataset.game, el.className); });
   // Seitenkopf als Box, aus der Janna oben herausragt: <section class="page-head" data-janna="tablet">
   document.querySelectorAll('.page-head[data-janna]').forEach((el) => {
     el.classList.add('has-janna');

@@ -135,7 +135,7 @@
     const cut = CUT[csDay] || 0;
     const prof = (r) => (r.login ? `tft-streamers/${esc(r.login)}.html` : 'tft-tacticians-crown.html#standings');
     return `<div class="eb-st">
-      <p class="eb-st-head">${crown()}<b>Tactician's Crown</b><span>after Day ${csDay}${cut ? ` · top ${cut} advance` : ''}</span></p>
+      <p class="eb-st-head">${window.UI.gameIcon('crown')}<b>Tactician's Crown</b><span>after Day ${csDay}${cut ? ` · top ${cut} advance` : ''}</span></p>
       <ol class="eb-st-list">${rows.map((r) => `${cut && r.rank === cut + 1 ? '<li class="eb-st-cut"><span>Cut</span></li>' : ''}<li class="${cut && r.rank > cut ? 'is-out' : ''}${r.rank <= 3 ? ' is-top' : ''}">
         <span class="eb-st-rank">${r.rank}</span><a href="${prof(r)}">${esc(r.name)}</a><span class="sg-reg r-${esc(r.region.toLowerCase())}">${esc(r.region)}</span><b>${r.pts}</b></li>`).join('')}</ol>
       <div class="eb-st-links"><a class="link-arrow" href="tft-tacticians-crown.html#standings">Full standings${icon('arrow')}</a><a class="link-arrow" href="news/tacticians-crown-2026-day-${csDay}.html">Day ${csDay} recap${icon('arrow')}</a></div>

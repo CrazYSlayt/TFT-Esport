@@ -178,7 +178,7 @@ window.TFTE = {
       "login": "crazyslayt",
       "name": "CrazYSlayt",
       "role": "Streamer & coach",
-      "extra": [["star", "Rank", "Challenger", "since Set 15"], ["trophy", "Peak", "1,002 LP"], ["users", "Coach", "since Set 17"], ["link", "Project", "TFTClimb", "founder"]],
+      "extra": [["rank:challenger", "Rank", "Challenger", "since Set 15"], ["trophy", "Peak", "1,002 LP"], ["users", "Coach", "since Set 17"], ["link", "Project", "TFTClimb", "founder"]],
       "focus": "TFT Challenger · Founder of TFTClimb",
       "realName": "Claudio",
       "age": 34,
