@@ -71,22 +71,50 @@
       <p class="cd-race-games">${r.games.map((g, i) => `<span>G${i + 1} ${`<span class="sg-chip p${g}">${g}</span>`}</span>`).join('')}</p>`;
   });
 
-  /* Abstimmungen (lokal) */
+  /* Abstimmungen: gemeinsame Auswertung über /api/poll (Upstash Redis). Ohne Datenbank oder lokal per Doppelklick
+     bleibt die Wahl nur auf dem Gerät. Ergebnisse erscheinen erst nach der eigenen Stimme. */
+  const { served } = window.UI;
   const read = (k) => { try { return localStorage.getItem(k); } catch (_) { return null; } };
   const write = (k, v) => { try { localStorage.setItem(k, v); } catch (_) { /* privat */ } };
+  let voter = read('tfte-voter');
+  if (!voter) {
+    voter = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : `v${Date.now().toString(36)}${Math.random().toString(36).slice(2, 10)}`;
+    write('tfte-voter', voter);
+  }
+  const api = async (id, option) => {
+    if (!served) return null;
+    try {
+      const r = option
+        ? await fetch('/api/poll', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, option, voter }) })
+        : await fetch(`/api/poll?id=${encodeURIComponent(id)}&voter=${encodeURIComponent(voter)}`, { cache: 'no-store' });
+      const j = await r.json();
+      return j && j.ok ? j : null;
+    } catch (_) { return null; }
+  };
   document.querySelectorAll('[data-poll]').forEach((box) => {
-    const key = `tfte-poll-${box.dataset.poll}`;
-    const opts = box.dataset.poll === 'champion'
-      ? [...rows.filter((r) => !cut || r.rank <= cut).slice(0, 8).map((r) => ({ id: r.name, label: r.name, sub: `${r.rank}. · ${r.region}` })), { id: 'other', label: 'Someone else', sub: 'from the top 32' }]
+    const kind = box.dataset.poll;
+    const pollId = kind === 'champion' ? `crown26-d${day}-champion` : 'crown26-region';
+    const key = `tfte-poll-${pollId}`;
+    const opts = kind === 'champion'
+      ? [...rows.filter((r) => !cut || r.rank <= cut).slice(0, 8).map((r) => ({ id: r.name, label: r.name, sub: `${r.rank}. · ${r.region}` })), { id: 'other', label: 'Someone else', sub: `from the top ${cut || rows.length}` }]
       : REGIONS.map(([r, full]) => ({ id: r, label: r, sub: full }));
+    let result = null;   // { counts, total } vom Server
     const draw = () => {
       const pick = read(key);
-      box.querySelector('.cd-poll-opts').innerHTML = opts.map((o) => `<button type="button" class="cd-opt" data-id="${esc(o.id)}" aria-pressed="${pick === o.id}"><b>${esc(o.label)}</b><small>${esc(o.sub)}</small>${pick === o.id ? icon('star') : ''}</button>`).join('');
-      box.querySelector('.cd-poll-foot').textContent = pick
-        ? `Your pick: ${opts.find((o) => o.id === pick)?.label || pick} – saved on this device. Tap another option to change it.`
-        : 'Tap an option to lock in your pick. It is saved on this device only.';
+      const showRes = !!(result && pick);
+      const total = result ? result.total : 0;
+      box.querySelector('.cd-poll-opts').innerHTML = opts.map((o) => {
+        const n = result && result.counts[o.id] ? result.counts[o.id] : 0;
+        const pct = total ? Math.round((n / total) * 100) : 0;
+        return `<button type="button" class="cd-opt${showRes ? ' has-res' : ''}" data-id="${esc(o.id)}" aria-pressed="${pick === o.id}"${showRes ? ` style="--pct:${pct}%"` : ''}>
+          <b>${esc(o.label)}</b><small>${showRes ? `${pct}% · ${n}` : esc(o.sub)}</small>${pick === o.id ? icon('star') : ''}</button>`;
+      }).join('');
+      const label = pick ? (opts.find((o) => o.id === pick) || {}).label || pick : '';
+      box.querySelector('.cd-poll-foot').textContent = result
+        ? (pick ? `Your pick: ${label} · ${total} vote${total === 1 ? '' : 's'} so far. Tap another option to change your vote.` : `${total} vote${total === 1 ? '' : 's'} so far – vote to see the results.`)
+        : (pick ? `Your pick: ${label} – saved on this device.` : 'Tap an option to lock in your pick.');
     };
-    box.addEventListener('click', (e) => {
+    box.addEventListener('click', async (e) => {
       const b = e.target.closest('.cd-opt');
       if (!b) return;
       const same = read(key) === b.dataset.id;
@@ -97,10 +125,19 @@
       if (!same) {
         const r = (now || b).getBoundingClientRect();
         confetti(r.left + r.width / 2, r.top + r.height / 2);
-        toast(box, `Locked in: ${opts.find((o) => o.id === b.dataset.id)?.label || b.dataset.id}!`);
+        toast(box, `Locked in: ${(opts.find((o) => o.id === b.dataset.id) || {}).label || b.dataset.id}!`);
+        const j = await api(pollId, b.dataset.id);
+        if (j) { result = j; draw(); }
       }
     });
     draw();
+    api(pollId).then((j) => {
+      if (!j) return;
+      result = j;
+      if (j.mine && j.mine !== read(key)) write(key, j.mine);   // Stimme vom Server übernehmen (z. B. nach Gerätewechsel desselben Browsers)
+      if (!j.mine && read(key)) api(pollId, read(key)).then((k) => { if (k) { result = k; draw(); } });   // lokale Wahl von vorher nachtragen
+      draw();
+    });
   });
 
   /* Klick-Feedback: Konfetti in Grün und Gold und eine kurze Meldung */
