@@ -28,10 +28,16 @@ window.TFTE = {
    */
   articles: [
     {
+      slug: 'tacticians-crown-2026-day-1', cat: 'turniere', date: '2026-11-13', readMin: 5, author: 'TFT E-Sports editors',
+      title: "Tactician's Crown Day 1: Maris and diaomei Lead on 38",
+      teaser: 'Maris climbed from 21st to the top, diaomei led after every game – and a world champion escaped from dead last. Day 1 in stories, charts and the full table.',
+      cover: 'surprised', coverText: 'World Championship · Day 1', top: true
+    },
+    {
       slug: 'tacticians-crown-2026-preview', cat: 'turniere', date: '2026-11-10', readMin: 4, author: 'TFT E-Sports editors',
       title: "Tactician's Crown 2026: Schedule, Players, Stream",
       teaser: 'From Friday, 40 players fight for the Enchanted Wilds title and $470,000. Everything you need for the World Championship weekend.',
-      cover: 'trophy', coverText: 'World Championship · 13–15 Nov', top: true
+      cover: 'trophy', coverText: 'World Championship · 13–15 Nov'
     },
     {
       slug: 'how-tft-esports-works', cat: 'orientierung', date: '2026-11-10', readMin: 6, author: 'TFT E-Sports editors',

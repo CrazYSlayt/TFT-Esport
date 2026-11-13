@@ -79,8 +79,19 @@
       <div id="crown-costreams"></div>
     </section>
 
-    <!-- Ablauf -->
-    <section class="section" aria-labelledby="schedule-title">
+    <!-- Tabelle des Turniers (Daten: assets/data/crown-standings.js) -->
+    <section class="section" id="standings" aria-labelledby="standings-title">
+      <div class="section-head">
+        <div>
+          <h2 class="block-title" id="standings-title">Standings after Day 1</h2>
+          <p class="section-sub">Top 32 advance to Day 2 – points carry over.</p>
+        </div>
+        <a class="link-arrow" href="news/tacticians-crown-2026-day-1.html">Day 1 recap: stories &amp; charts<span data-icon="arrow"></span></a>
+      </div>
+      <div data-standings="1" data-cut="32"></div>
+    </section>
+
+    <!-- Ablauf -->    <section class="section" aria-labelledby="schedule-title">
       <h2 class="block-title" id="schedule-title">Schedule &amp; format</h2>
       <div class="crown-days">
         <article class="crown-day">
@@ -166,7 +177,9 @@
 
   <script src="assets/js/data.js"></script>
   <script src="assets/data/turniere.js"></script>
+  <script src="assets/data/crown-standings.js"></script>
   <script src="assets/js/app.js"></script>
+  <script src="assets/js/standings.js"></script>
   <script src="assets/js/crown.js"></script>
 </body>
 </html>
